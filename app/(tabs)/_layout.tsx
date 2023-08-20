@@ -2,12 +2,15 @@ import { Tabs } from "expo-router/tabs";
 import Icon from '../../components/Icon';
 import styles from '../../styles'
 import { DefaultText } from '../../components/Defaults';
+import { Platform } from "react-native";
 
 
 export default function Main() {
+    const marginBottom = Platform.OS === "ios" ? 40 : styles.tabBarStyle.marginBottom 
+
     return (
         <Tabs
-            screenOptions={{tabBarStyle: styles.tabBarStyle }}
+            screenOptions={{tabBarStyle: [styles.tabBarStyle, {marginBottom}] }}
         >
             <Tabs.Screen
                 name="index"

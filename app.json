@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Gasalt Mobile App",
-    "slug": "gasalt-mobile-app",
+    "name": "Gasalt Mobile Wallet",
+    "slug": "gasalt-mobile-wallet",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -37,6 +37,15 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "4ea2e7f8-119e-4b8f-9e1e-4eff9923c659"
+      }
+    },
+    "owner": "gasalt"
   }
 }
