@@ -1,4 +1,4 @@
-import { Tabs } from "expo-router";
+import { Tabs } from "expo-router/tabs";
 import Icon from '../../components/Icon';
 import styles from '../../styles'
 import { DefaultText } from '../../components/Defaults';

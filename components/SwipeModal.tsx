@@ -37,7 +37,6 @@ const styles2 = StyleSheet.create({
         alignContent: 'center',
         alignItems: 'center',
         justifyContent: 'center',
-        // backgroundColor: '#16133F' 
     },
     headerStyle: {
         marginTop:450,
