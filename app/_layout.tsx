@@ -1,5 +1,7 @@
 import { SplashScreen, Stack } from "expo-router"
 import { useEffect } from "react";
+// import * as NavigationBar from 'expo-navigation-bar';
+
 
 export const unstable_settings = {
     initialRouteName: '(tabs)',
@@ -8,10 +10,18 @@ export const unstable_settings = {
 SplashScreen.preventAutoHideAsync();
 
 export default function GasaltLayout() {
+    // const visibility = NavigationBar.useVisibility()
 
     useEffect(() => {
         SplashScreen.hideAsync();
     }, []);
+
+    // useEffect(() => {
+    //     if (visibility) {
+    //         NavigationBar.setVisibilityAsync("hidden");
+    //         console.log("visible!")
+    //     }
+    // }, [visibility]);
 
     return (
         <Stack>
@@ -19,3 +29,5 @@ export default function GasaltLayout() {
         </Stack>
     )
 }
+
+//https://stackoverflow.com/questions/56729621/change-navigation-bar-on-android-with-rn-with-expo
