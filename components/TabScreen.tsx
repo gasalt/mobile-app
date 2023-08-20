@@ -18,7 +18,7 @@ export default function TabScreen({ children }: any) {
 
     return (
         <SafeAreaView style={styles.tabScreen}>
-            <StatusBar translucent={false} backgroundColor={styles.tabScreen.backgroundColor} />
+            <StatusBar translucent={false} style={'light'} backgroundColor={styles.tabScreen.backgroundColor} />
             {children}
             {isCurrentRoute && <SwipeModal showModal={modalComponent} setShowModal={(value: boolean) => setKeyValue("modalComponent", value)} />}
         </SafeAreaView>
