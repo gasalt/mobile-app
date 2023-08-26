@@ -5,7 +5,7 @@ import SwipeUpDownModal from 'react-native-swipe-modal-up-down';
 export default function SwipeModal({showModal, setShowModal}: {showModal: boolean, setShowModal: Function}) {
     return (
         <SwipeUpDownModal
-            MainContainerModal={{backgroundColor:"rgba(0,0,0,0.1)"}}
+            MainContainerModal={{backgroundColor:"transparent"}}
             modalVisible={showModal}
             PressToanimate={true}
             onClose={() => {

@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-const guide = {
+export const guide = {
     mainBackground: "#0D0C27",
     primary: "#4A41C7", // shade5
     primaryHover: "#1A1467",
@@ -26,17 +26,12 @@ const guide = {
 
 const styles = StyleSheet.create({
     tabBarStyle: {
-        borderTopRightRadius: 80,
-        borderTopLeftRadius: 80,
-        borderBottomRightRadius: 80,
-        borderBottomLeftRadius: 80,
-        marginRight: 20,
-        marginLeft: 20,
+        borderRadius: 80,
+        marginHorizontal: 20,
         marginBottom: 10,
         height: 70,
         paddingBottom: 12,
         paddingTop: 10,
-        shadowColor: "",
         position: "absolute",
         backgroundColor: "#191832",
         outline: "none",

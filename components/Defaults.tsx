@@ -17,5 +17,5 @@ export function DefaultText(props: TextProps) {
 export function DefaultView(props: ViewProps) {
   const { style, lightColor, darkColor, ...otherProps } = props;
 
-  return <View style={[{ backgroundColor: "transperent" }, style]} {...otherProps} />;
+  return <View style={[{ backgroundColor: "transparent" }, style]} {...otherProps} />;
 }

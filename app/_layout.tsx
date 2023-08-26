@@ -4,7 +4,7 @@ import { useEffect } from "react";
 
 
 export const unstable_settings = {
-    initialRouteName: '(tabs)',
+    initialRouteName: '(drawer)',
 };
 
 SplashScreen.preventAutoHideAsync();
@@ -25,7 +25,7 @@ export default function GasaltLayout() {
 
     return (
         <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
         </Stack>
     )
 }
