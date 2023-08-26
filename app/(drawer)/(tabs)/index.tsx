@@ -3,7 +3,7 @@ import { useGlobalState } from "../../../sdk/state";
 import { DefaultText, DefaultView } from "../../../components/Defaults";
 import SwipeModal from "../../../components/SwipeModal";
 import ClosedEye from "../../../assets/svgs/ClosedEye";
-import { Dimensions } from "react-native";
+import { Dimensions, Pressable } from "react-native";
 
 import { guide } from "../../../styles";
 import CryptoDropdown from "../../../components/CryptoDrown";
@@ -12,12 +12,13 @@ import Copy from "../../../assets/svgs/Copy";
 
 const { width } = Dimensions.get("window");
 
-
 export default function App() {
   const { modalComponent, setKeyValue } = useGlobalState();
 
   return (
     <TabScreen>
+
+        {/* Balance view */}
       <DefaultView
         style={{
           backgroundColor: "#191832",
@@ -80,6 +81,39 @@ export default function App() {
       </DefaultView>
 
       {/* Tabs */}
+      <DefaultView style={{ width, marginTop: 50 }}>
+        <DefaultView
+          style={{
+            borderBottomColor: "#403E59",
+            borderBottomWidth: 1,
+            flexDirection: "row",
+            justifyContent: "space-around",
+          }}
+        >
+          <Pressable
+            style={{ borderBottomColor: "#4A41C7", borderBottomWidth: 2 }}
+          >
+            <DefaultText
+              style={{ fontSize: 16, fontWeight: "500", marginBottom: 5 }}
+            >
+              Send
+            </DefaultText>
+          </Pressable>
+
+          <Pressable style={{ borderBottomWidth: 2 }}>
+            <DefaultText
+              style={{
+                fontSize: 16,
+                fontWeight: "500",
+                color: "#868693",
+                marginBottom: 5,
+              }}
+            >
+              Swap
+            </DefaultText>
+          </Pressable>
+        </DefaultView>
+      </DefaultView>
 
       <SwipeModal
         showModal={modalComponent}
