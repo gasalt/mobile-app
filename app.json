@@ -42,10 +42,8 @@
     "extra": {
       "router": {
         "origin": false
-      },
-      "eas": {
-        "projectId": "4ea2e7f8-119e-4b8f-9e1e-4eff9923c659"
       }
+      
     },
     "owner": "gasalt"
   }

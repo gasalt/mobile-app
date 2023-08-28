@@ -1,11 +1,10 @@
 import { Tabs } from "expo-router/tabs";
-import { Platform, Pressable, Text, View } from "react-native";
+import { Platform } from "react-native";
 import { DefaultText } from "../../../components/Defaults";
 import styles from "../../../styles";
 import Icon from "../../../components/Icon";
 import Avatar from "../../../components/Avatar";
 import Polygon from "../../../assets/svgs/Polygon";
-import Dropdown from "../../../assets/svgs/Dropdown";
 import CryptoDropdown from "../../../components/CryptoDrown";
 
 const Label = ({ name, focused }: { name: string; focused: boolean }) => (
@@ -35,7 +34,7 @@ export default function Main() {
             <Label focused={props.focused} name="Wallet" />
           ),
           headerRight: () => (
-           <CryptoDropdown onPress={() => alert("Polygon")} text="Polygon" />
+           <CryptoDropdown onPress={() => alert("Polygon")} text="Polygon" logo={<Polygon />} />
           ),
         }}
       />

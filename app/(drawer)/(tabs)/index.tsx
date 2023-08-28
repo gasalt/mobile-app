@@ -3,41 +3,45 @@ import { useGlobalState } from "../../../sdk/state";
 import { DefaultText, DefaultView } from "../../../components/Defaults";
 import SwipeModal from "../../../components/SwipeModal";
 import ClosedEye from "../../../assets/svgs/ClosedEye";
-import { Dimensions, Pressable } from "react-native";
+import { Dimensions, Platform, Pressable, StyleSheet } from "react-native";
 
 import { guide } from "../../../styles";
 import CryptoDropdown from "../../../components/CryptoDrown";
 import Info from "../../../assets/svgs/Info";
 import Copy from "../../../assets/svgs/Copy";
+import { useState } from "react";
+import Animated, { runOnJS } from "react-native-reanimated";
+import PagerView from "react-native-pager-view";
+import { usePagerScrollHandler } from "../../../hooks/usePagerScrollHandler";
+import Send from "../../../components/Send";
+import Swap from "../../../components/Swap";
+import Polygon from "../../../assets/svgs/Polygon";
 
-const { width } = Dimensions.get("window");
+const { width, height } = Dimensions.get("window");
+
+const AnimatedPager = Animated.createAnimatedComponent(PagerView);
 
 export default function App() {
   const { modalComponent, setKeyValue } = useGlobalState();
 
+  const [tab, setTab] = useState(1);
+
+  const onSelectTab = (value: number) => {
+    setTab(value);
+  };
+
+  const handler = usePagerScrollHandler({
+    onPageScroll: (e: any) => {
+      "worklet";
+      runOnJS(onSelectTab)(e.position + 1);
+    },
+  });
+
   return (
     <TabScreen>
-
-        {/* Balance view */}
-      <DefaultView
-        style={{
-          backgroundColor: "#191832",
-          width: width * 0.9,
-          padding: 20,
-          marginHorizontal: 20,
-          borderRadius: 12,
-          marginTop: -340,
-        }}
-      >
-        <DefaultView
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            gap: 4,
-            justifyContent: "center",
-            marginBottom: 8,
-          }}
-        >
+      {/* Balance view */}
+      <DefaultView style={styles.balanceContainer}>
+        <DefaultView style={styles.totalBalanceContainer}>
           <DefaultText style={{ fontSize: 16, fontWeight: "400" }}>
             Total balance
           </DefaultText>
@@ -51,68 +55,64 @@ export default function App() {
             paddingHorizontal: 20,
           }}
         >
-          <DefaultText style={{ fontSize: 32, fontWeight: "600" }}>
+          <DefaultText
+            style={{ fontSize: 32, lineHeight: 32, fontWeight: "600" }}
+          >
             3,530.84
           </DefaultText>
-          <CryptoDropdown onPress={() => alert("MATIC")} text="MATIC" />
+          <CryptoDropdown
+            onPress={() => alert("MATIC")}
+            text="MATIC"
+            logo={<Polygon />}
+          />
         </DefaultView>
         <DefaultText style={{ color: "#9DF190", marginLeft: 36 }}>
           ~2,234.77 USD
         </DefaultText>
-      </DefaultView>
 
-      <DefaultView
-        style={{
-          backgroundColor: "#BBB8EA",
-          width: width * 0.9,
-          padding: 12,
-          margin: 20,
-          borderRadius: 6,
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <Info />
-        <DefaultText style={{ color: guide.primary }}>
-          0xE7E2cB8c81c10...C9Ce62EC754
-        </DefaultText>
-        <Copy />
+        <DefaultView style={styles.cryptoAddress}>
+          <Info />
+          <DefaultText style={{ color: guide.primary }}>
+            0xE7E2cB8c81c10...C9Ce62EC754
+          </DefaultText>
+          <Copy />
+        </DefaultView>
       </DefaultView>
 
       {/* Tabs */}
-      <DefaultView style={{ width, marginTop: 50 }}>
-        <DefaultView
-          style={{
-            borderBottomColor: "#403E59",
-            borderBottomWidth: 1,
-            flexDirection: "row",
-            justifyContent: "space-around",
-          }}
-        >
+      <DefaultView style={{ width, marginTop: 20 }}>
+        <DefaultView style={styles.tabContainer}>
           <Pressable
-            style={{ borderBottomColor: "#4A41C7", borderBottomWidth: 2 }}
+            onPress={() => onSelectTab(1)}
+            style={[tab === 1 && styles.selectedTab]}
           >
             <DefaultText
-              style={{ fontSize: 16, fontWeight: "500", marginBottom: 5 }}
+              style={[styles.tabText, tab === 1 && styles.activeText]}
             >
               Send
             </DefaultText>
           </Pressable>
 
-          <Pressable style={{ borderBottomWidth: 2 }}>
+          <Pressable
+            onPress={() => onSelectTab(2)}
+            style={[tab === 2 && styles.selectedTab]}
+          >
             <DefaultText
-              style={{
-                fontSize: 16,
-                fontWeight: "500",
-                color: "#868693",
-                marginBottom: 5,
-              }}
+              style={[styles.tabText, tab === 2 && styles.activeText]}
             >
               Swap
             </DefaultText>
           </Pressable>
         </DefaultView>
+
+        <AnimatedPager
+          style={styles.pager}
+          initialPage={0}
+          onPageScroll={handler}
+        >
+          <Send key="1" />
+          <Swap key="2" />
+        </AnimatedPager>
       </DefaultView>
 
       <SwipeModal
@@ -122,3 +122,62 @@ export default function App() {
     </TabScreen>
   );
 }
+
+const styles = StyleSheet.create({
+  balanceContainer: {
+    backgroundColor: "#191832",
+    width: width * 0.9,
+    paddingTop: 20,
+    paddingHorizontal: 12,
+    marginHorizontal: 20,
+    borderRadius: 12,
+    // marginTop: -340,
+  },
+  totalBalanceContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    justifyContent: "center",
+    marginBottom: 8,
+  },
+
+  cryptoAddress: {
+    backgroundColor: "#BBB8EA",
+    paddingVertical: 10,
+    paddingHorizontal: 4,
+    margin: 20,
+    borderRadius: 6,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 2,
+  },
+  tabContainer: {
+    borderBottomColor: "#403E59",
+    borderBottomWidth: 1,
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
+  tabText: {
+    fontSize: 16,
+    fontWeight: "500",
+    marginBottom: 5,
+    lineHeight: 24,
+    width: 88,
+    textAlign: "center",
+    color: "#868693",
+  },
+  activeText: {
+    color: "#fff",
+  },
+
+  selectedTab: {
+    borderBottomColor: "#4A41C7",
+    borderBottomWidth: 2,
+    width: 100,
+  },
+  pager: {
+    height: Platform.OS === "android" ? height * 0.5 : height * 0.45,
+    width,
+  },
+});

@@ -24,7 +24,6 @@ const TabPage2 = () => {
 };
 
 function MyTabs() {
-    console.log("Yes");
   return (
     <Tab.Navigator
       screenOptions={{
