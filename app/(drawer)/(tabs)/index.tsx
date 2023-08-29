@@ -61,7 +61,7 @@ export default function App() {
             3,530.84
           </DefaultText>
           <CryptoDropdown
-            onPress={() => alert("MATIC")}
+            onPress={() => setKeyValue("modalComponent", true)}
             text="MATIC"
             logo={<Polygon />}
           />
