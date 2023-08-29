@@ -23,6 +23,19 @@ export default function App() {
   const PagerRef = useRef<any>();
 
   const [tab, setTab] = useState(0);
+  const [position, setPosition] = useState(0);
+
+  let multiplier = (1)+(4*position);
+
+  if(tab===0 && position <= 0.1){
+    multiplier = 1
+  }
+
+  if(tab===1 && (position >= 0.9 || position === 0)){
+    multiplier = 5
+  }
+
+  const slideBarPosition = width/8 * (multiplier)
 
   const onSelectTab = (value: number) => {
     if (tab === value) return;
@@ -76,7 +89,6 @@ export default function App() {
         <DefaultView style={styles.tabContainer}>
           <Pressable
             onPress={() => onSelectTab(0)}
-            style={[tab === 0 && styles.selectedTab]}
           >
             <DefaultText
               style={[styles.tabText, tab === 0 && styles.activeText]}
@@ -87,7 +99,6 @@ export default function App() {
 
           <Pressable
             onPress={() => onSelectTab(1)}
-            style={[tab === 1 && styles.selectedTab]}
           >
             <DefaultText
               style={[styles.tabText, tab === 1 && styles.activeText]}
@@ -95,13 +106,17 @@ export default function App() {
               Swap
             </DefaultText>
           </Pressable>
+          <DefaultView style={{width:(width/4), borderBottomColor:"#4A41C7", left: slideBarPosition, bottom:-1.5, borderBottomWidth:2, position:"absolute"}}></DefaultView>
         </DefaultView>
 
         <PagerView
         ref={PagerRef}
           style={styles.pager}
           initialPage={0}
-          onPageScroll={(e) => setTab(e.nativeEvent.position)}
+          onPageScroll={(e) => {
+            setTab(e.nativeEvent.position);
+            setPosition(e.nativeEvent.offset);
+          }}
         >
           <Send key={"1"} />
           <Swap key={"2"} />
@@ -149,14 +164,15 @@ const styles = StyleSheet.create({
     borderBottomColor: "#403E59",
     borderBottomWidth: 1,
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "space-between",
+    position: "relative",
   },
   tabText: {
     fontSize: 16,
     fontWeight: "500",
     marginBottom: 5,
     lineHeight: 24,
-    width: 88,
+    width: width/2,
     textAlign: "center",
     color: "#868693",
   },
@@ -164,11 +180,11 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
 
-  selectedTab: {
-    borderBottomColor: "#4A41C7",
-    borderBottomWidth: 2,
-    width: 100,
-  },
+  // selectedTab: {
+  //   borderBottomColor: "#4A41C7",
+  //   borderBottomWidth: 2,
+  //   width: 100,
+  // },
   pager: {
     height: Platform.OS === "android" ? height * 0.5 : height * 0.45,
     width,
