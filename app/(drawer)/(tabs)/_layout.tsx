@@ -23,6 +23,7 @@ export default function Main() {
         headerTransparent: true,
         headerLeft: () => <Avatar />,
         tabBarStyle: [styles.tabBarStyle, { marginBottom }],
+        tabBarHideOnKeyboard: true,
       }}
     >
       <Tabs.Screen
