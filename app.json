@@ -35,7 +35,6 @@
     "experiments": {
       "typedRoutes": true
     },
-    "softwareKeyboardLayoutMode": "pan",
     "extra": {
       "router": {
         "origin": false
