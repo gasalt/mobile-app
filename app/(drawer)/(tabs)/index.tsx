@@ -9,33 +9,25 @@ import { guide } from "../../../styles";
 import CryptoDropdown from "../../../components/CryptoDrown";
 import Info from "../../../assets/svgs/Info";
 import Copy from "../../../assets/svgs/Copy";
-import { useState } from "react";
-import Animated, { runOnJS } from "react-native-reanimated";
+import { useRef, useState } from "react";
 import PagerView from "react-native-pager-view";
-import { usePagerScrollHandler } from "../../../hooks/usePagerScrollHandler";
 import Send from "../../../components/Send";
 import Swap from "../../../components/Swap";
 import Polygon from "../../../assets/svgs/Polygon";
 
 const { width, height } = Dimensions.get("window");
 
-const AnimatedPager = Animated.createAnimatedComponent(PagerView);
 
 export default function App() {
   const { modalComponent, setKeyValue } = useGlobalState();
+  const PagerRef = useRef<any>();
 
-  const [tab, setTab] = useState(1);
+  const [tab, setTab] = useState(0);
 
   const onSelectTab = (value: number) => {
-    setTab(value);
+    if (tab === value) return;
+    PagerRef.current.setPage(value);
   };
-
-  const handler = usePagerScrollHandler({
-    onPageScroll: (e: any) => {
-      "worklet";
-      runOnJS(onSelectTab)(e.position + 1);
-    },
-  });
 
   return (
     <TabScreen>
@@ -83,36 +75,37 @@ export default function App() {
       <DefaultView style={{ width, marginTop: 20 }}>
         <DefaultView style={styles.tabContainer}>
           <Pressable
-            onPress={() => onSelectTab(1)}
-            style={[tab === 1 && styles.selectedTab]}
+            onPress={() => onSelectTab(0)}
+            style={[tab === 0 && styles.selectedTab]}
           >
             <DefaultText
-              style={[styles.tabText, tab === 1 && styles.activeText]}
+              style={[styles.tabText, tab === 0 && styles.activeText]}
             >
               Send
             </DefaultText>
           </Pressable>
 
           <Pressable
-            onPress={() => onSelectTab(2)}
-            style={[tab === 2 && styles.selectedTab]}
+            onPress={() => onSelectTab(1)}
+            style={[tab === 1 && styles.selectedTab]}
           >
             <DefaultText
-              style={[styles.tabText, tab === 2 && styles.activeText]}
+              style={[styles.tabText, tab === 1 && styles.activeText]}
             >
               Swap
             </DefaultText>
           </Pressable>
         </DefaultView>
 
-        <AnimatedPager
+        <PagerView
+        ref={PagerRef}
           style={styles.pager}
           initialPage={0}
-          onPageScroll={handler}
+          onPageScroll={(e) => setTab(e.nativeEvent.position)}
         >
-          <Send key="1" />
-          <Swap key="2" />
-        </AnimatedPager>
+          <Send key={"1"} />
+          <Swap key={"2"} />
+        </PagerView>
       </DefaultView>
 
       <SwipeModal
