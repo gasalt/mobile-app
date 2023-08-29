@@ -3,7 +3,12 @@ import { useGlobalState } from "../../../sdk/state";
 import { DefaultText, DefaultView } from "../../../components/Defaults";
 import SwipeModal from "../../../components/SwipeModal";
 import ClosedEye from "../../../assets/svgs/ClosedEye";
-import { Dimensions, Platform, Pressable, StyleSheet } from "react-native";
+import {
+  Dimensions,
+  Platform,
+  Pressable,
+  StyleSheet,
+} from "react-native";
 
 import { guide } from "../../../styles";
 import CryptoDropdown from "../../../components/CryptoDrown";
@@ -14,9 +19,9 @@ import PagerView from "react-native-pager-view";
 import Send from "../../../components/Send";
 import Swap from "../../../components/Swap";
 import Polygon from "../../../assets/svgs/Polygon";
+import { animatedBottomTabLine } from "../../../utils/fx";
 
 const { width, height } = Dimensions.get("window");
-
 
 export default function App() {
   const { modalComponent, setKeyValue } = useGlobalState();
@@ -25,17 +30,7 @@ export default function App() {
   const [tab, setTab] = useState(0);
   const [position, setPosition] = useState(0);
 
-  let multiplier = (1)+(4*position);
-
-  if(tab===0 && position <= 0.1){
-    multiplier = 1
-  }
-
-  if(tab===1 && (position >= 0.9 || position === 0)){
-    multiplier = 5
-  }
-
-  const slideBarPosition = width/8 * (multiplier)
+ const slideBarPosition = animatedBottomTabLine(tab, position, width);
 
   const onSelectTab = (value: number) => {
     if (tab === value) return;
@@ -87,9 +82,7 @@ export default function App() {
       {/* Tabs */}
       <DefaultView style={{ width, marginTop: 20 }}>
         <DefaultView style={styles.tabContainer}>
-          <Pressable
-            onPress={() => onSelectTab(0)}
-          >
+          <Pressable onPress={() => onSelectTab(0)}>
             <DefaultText
               style={[styles.tabText, tab === 0 && styles.activeText]}
             >
@@ -97,20 +90,27 @@ export default function App() {
             </DefaultText>
           </Pressable>
 
-          <Pressable
-            onPress={() => onSelectTab(1)}
-          >
+          <Pressable onPress={() => onSelectTab(1)}>
             <DefaultText
               style={[styles.tabText, tab === 1 && styles.activeText]}
             >
               Swap
             </DefaultText>
           </Pressable>
-          <DefaultView style={{width:(width/4), borderBottomColor:"#4A41C7", left: slideBarPosition, bottom:-1.5, borderBottomWidth:2, position:"absolute"}}></DefaultView>
+          <DefaultView
+            style={{
+              width: width / 4,
+              borderBottomColor: "#4A41C7",
+              left: slideBarPosition,
+              bottom: -1.5,
+              borderBottomWidth: 2,
+              position: "absolute",
+            }}
+          />
         </DefaultView>
 
         <PagerView
-        ref={PagerRef}
+          ref={PagerRef}
           style={styles.pager}
           initialPage={0}
           onPageScroll={(e) => {
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     marginHorizontal: 20,
     borderRadius: 12,
-    // marginTop: -340,
+    marginTop: 6,
   },
   totalBalanceContainer: {
     flexDirection: "row",
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     marginBottom: 5,
     lineHeight: 24,
-    width: width/2,
+    width: width / 2,
     textAlign: "center",
     color: "#868693",
   },
@@ -180,11 +180,6 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
 
-  // selectedTab: {
-  //   borderBottomColor: "#4A41C7",
-  //   borderBottomWidth: 2,
-  //   width: 100,
-  // },
   pager: {
     height: Platform.OS === "android" ? height * 0.5 : height * 0.45,
     width,
