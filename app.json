@@ -16,18 +16,15 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.gasalt.gasaltmobilewallet"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#0D0C27"
-      }
-    },
-    "web": {
-      "bundler": "metro",
-      "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      },
+      "package": "com.gasalt.gasaltmobilewallet"
     },
     "androidNavigationBar": {
       "backgroundColor": "#0D0C27"
@@ -46,6 +43,12 @@
         "projectId": "4ea2e7f8-119e-4b8f-9e1e-4eff9923c659"
       }
     },
-    "owner": "gasalt"
+    "owner": "gasalt",
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/4ea2e7f8-119e-4b8f-9e1e-4eff9923c659"
+    }
   }
 }
