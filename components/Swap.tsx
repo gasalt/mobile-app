@@ -1,26 +1,20 @@
 import { DefaultText, DefaultView } from "./Defaults";
-import { Pressable, StyleSheet, useWindowDimensions } from "react-native";
+import { Pressable, StyleSheet, TextInput } from "react-native";
 import CustomButton from "./CustomButton";
 import CryptoDropdown from "./CryptoDrown";
 import Polygon from "../assets/svgs/Polygon";
 import BNB from "../assets/svgs/BNB";
 import Refresh from "../assets/svgs/Refresh";
+import { useState } from "react";
 
 export default function Swap() {
-  const { width } = useWindowDimensions();
+  const [from, setFrom] = useState("");
+  const [to, setTo] = useState("");
 
   return (
     <DefaultView style={styles.container}>
       <DefaultView style={{ position: "relative" }}>
-        <DefaultView
-          style={{
-            margin: 10,
-            backgroundColor: "#191832",
-            paddingVertical: 8,
-            paddingHorizontal: 12,
-            borderRadius: 8,
-          }}
-        >
+        <DefaultView style={styles.itemBox}>
           <DefaultView style={styles.item}>
             <DefaultText>From</DefaultText>
             <DefaultText style={{ color: "#9DF190", fontWeight: "500" }}>
@@ -28,9 +22,15 @@ export default function Swap() {
             </DefaultText>
           </DefaultView>
           <DefaultView style={styles.item}>
-            <DefaultText style={{ fontWeight: "500", fontSize: 24 }}>
-              8
-            </DefaultText>
+            <TextInput
+              style={styles.text}
+              value={from}
+              inputMode="decimal"
+              returnKeyType="done"
+              onChangeText={(text) => setFrom(text)}
+              autoFocus
+            />
+
             <CryptoDropdown
               btnStyle={styles.btnStyle}
               onPress={() => alert("MATIC")}
@@ -39,41 +39,25 @@ export default function Swap() {
             />
           </DefaultView>
         </DefaultView>
-        <Pressable
-          style={{
-            position: "absolute",
-            backgroundColor: "#2C257E",
-            width: 48,
-            height: 48,
-            borderRadius: 64,
-            top: 80,
-            left: 150,
-            zIndex: 100,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
+        <Pressable style={styles.refresh}>
           <Refresh />
         </Pressable>
-        <DefaultView
-          style={{
-            margin: 10,
-            backgroundColor: "#191832",
-            marginTop: -2,
-            paddingHorizontal: 12,
-            borderRadius: 8,
-          }}
-        >
+        <DefaultView style={[styles.itemBox, { marginBottom: 8 }]}>
           <DefaultView style={styles.item}>
-            <DefaultText>From</DefaultText>
+            <DefaultText>To</DefaultText>
             <DefaultText
               style={{ color: "#9DF190", fontWeight: "500" }}
             ></DefaultText>
           </DefaultView>
           <DefaultView style={styles.item}>
-            <DefaultText style={{ fontWeight: "500", fontSize: 24 }}>
-              0
-            </DefaultText>
+            <TextInput
+              style={styles.text}
+              value={to}
+              inputMode="decimal"
+              returnKeyType="done"
+              onChangeText={(text) => setTo(text)}
+              autoFocus
+            />
             <CryptoDropdown
               btnStyle={styles.btnStyle}
               onPress={() => alert("BNB")}
@@ -84,15 +68,7 @@ export default function Swap() {
         </DefaultView>
       </DefaultView>
 
-      <DefaultView
-        style={{
-          margin: 10,
-          backgroundColor: "#191832",
-          paddingVertical: 8,
-          paddingHorizontal: 12,
-          borderRadius: 8,
-        }}
-      >
+      <DefaultView style={[styles.itemBox, { marginBottom: 12 }]}>
         <DefaultView style={styles.item}>
           <DefaultText style={{ fontSize: 12 }}>Rate</DefaultText>
           <DefaultView style={{ flexDirection: "row" }}>
@@ -138,6 +114,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     marginVertical: 8,
   },
+  itemBox: {
+    marginHorizontal: 10,
+    marginTop: 5,
+    backgroundColor: "#191832",
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    height:85
+  },
   item: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -148,7 +133,25 @@ const styles = StyleSheet.create({
     color: "#A69FFF",
     fontSize: 10,
   },
+  text: {
+    fontWeight: "500",
+    fontSize: 24,
+    color: "white",
+    flex: 1,
+  },
   btnStyle: {
     right: -20,
+  },
+  refresh: {
+    position: "absolute",
+    backgroundColor: "#2C257E",
+    width: 48,
+    height: 48,
+    borderRadius: 64,
+    top: 70,
+    left: 150,
+    zIndex: 100,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

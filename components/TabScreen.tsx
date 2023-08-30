@@ -4,6 +4,7 @@ import { useRoute } from "@react-navigation/native";
 import { usePathname } from "expo-router";
 import { ReactNode } from "react";
 import { StatusBar } from "expo-status-bar";
+import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 
 export default function TabScreen({ children }: { children: ReactNode }) {
   const pathname = usePathname();
@@ -19,7 +20,13 @@ export default function TabScreen({ children }: { children: ReactNode }) {
         style={"light"}
         backgroundColor={styles.tabScreen.backgroundColor}
       />
-      {children}
+      <ScrollView style={{ marginTop: 50 }}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+        >
+          {children}
+        </KeyboardAvoidingView>
+      </ScrollView>
     </SafeAreaView>
   );
 }
