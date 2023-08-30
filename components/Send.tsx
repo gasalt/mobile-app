@@ -8,8 +8,10 @@ import AddMultiple from "../assets/svgs/AddMultiple";
 import CustomButton from "./CustomButton";
 import CryptoDropdown from "./CryptoDrown";
 import Polygon from "../assets/svgs/Polygon";
+import { useGlobalState } from "../sdk/state";
 
 export default function Send() {
+  const { setKeyValue } = useGlobalState();
   const [address, setAddress] = useState("");
   const [amount, setAmount] = useState("");
 
@@ -60,7 +62,7 @@ export default function Send() {
             <CryptoDropdown
               textStyle={styles.textStyle}
               btnStyle={styles.btnStyle}
-              onPress={() => alert("MATIC")}
+              onPress={() => setKeyValue("modalComponent", true)}
               text="MATIC"
               showLogo={false}
               logo={<Polygon />}
