@@ -1,17 +1,30 @@
 import { useState } from "react";
+import { Pressable, StyleSheet } from "react-native";
+
 import Close from "../assets/svgs/Close";
 import QR from "../assets/svgs/QR";
 import { DefaultText, DefaultView } from "./Defaults";
 import FloatingTextInput from "./inputs/FloatingInput";
-import { Pressable, StyleSheet } from "react-native";
 import AddMultiple from "../assets/svgs/AddMultiple";
 import CustomButton from "./CustomButton";
 import CryptoDropdown from "./CryptoDrown";
 import Polygon from "../assets/svgs/Polygon";
-import { useGlobalState } from "../sdk/state";
+import { DefaultState, ModalType } from "../sdk/state";
 
-export default function Send() {
-  const { setKeyValue } = useGlobalState();
+interface SendProps {
+  onPress: (
+    {
+      type,
+      value,
+    }: {
+      type: keyof DefaultState;
+      value: ModalType;
+    },
+    top: number | undefined
+  ) => void;
+}
+
+export default function Send({ onPress }: SendProps) {
   const [address, setAddress] = useState("");
   const [amount, setAmount] = useState("");
 
@@ -19,7 +32,13 @@ export default function Send() {
     <DefaultView style={styles.container}>
       <FloatingTextInput
         label="Recipient's Address"
-        rightElement={address === "" ? <QR /> : <Close />}
+        rightElement={
+          address === "" ? (
+            <QR onPress={() => onPress({ type: "modalComponent", value: "Scan" }, 100)} />
+          ) : (
+            <Close onPress={() => setAddress("")} />
+          )
+        }
         value={address}
         onChangeText={(text) => setAddress(text)}
       />
@@ -62,7 +81,9 @@ export default function Send() {
             <CryptoDropdown
               textStyle={styles.textStyle}
               btnStyle={styles.btnStyle}
-              onPress={() => setKeyValue("modalComponent", true)}
+              onPress={() =>
+                onPress({ type: "modalComponent", value: "Crypto" }, 200)
+              }
               text="MATIC"
               showLogo={false}
               logo={<Polygon />}
@@ -102,6 +123,6 @@ const styles = StyleSheet.create({
   },
   btnStyle: {
     width: 70,
-    paddingVertical: .5
+    paddingVertical: 0.5,
   },
 });

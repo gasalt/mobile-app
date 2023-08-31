@@ -6,7 +6,8 @@ import Icon from "../../../components/Icon";
 import Avatar from "../../../components/Avatar";
 import Polygon from "../../../assets/svgs/Polygon";
 import CryptoDropdown from "../../../components/CryptoDrown";
-import { useGlobalState } from "../../../sdk/state";
+import { DefaultState, ModalType, useGlobalState } from "../../../sdk/state";
+import { useState } from "react";
 
 const Label = ({ name, focused }: { name: string; focused: boolean }) => (
   <DefaultText style={{ color: focused ? "white" : "gray", fontSize: 10 }}>
@@ -15,9 +16,20 @@ const Label = ({ name, focused }: { name: string; focused: boolean }) => (
 );
 
 export default function Main() {
-  const { modalComponent, setKeyValue } = useGlobalState();
+  const { setKeyValue } = useGlobalState();
   const marginBottom =
     Platform.OS === "ios" ? 40 : styles.tabBarStyle.marginBottom;
+
+  // set marginTop dynamically
+  const [marginTop, setMarginTop] = useState<number | undefined>(undefined);
+
+  const onPress = (
+    { type, value }: { type: keyof DefaultState; value: ModalType },
+    top: number | undefined
+  ) => {
+    setKeyValue(type, value);
+    setMarginTop(top);
+  };
   return (
     <Tabs
       screenOptions={{
@@ -37,7 +49,13 @@ export default function Main() {
             <Label focused={props.focused} name="Wallet" />
           ),
           headerRight: () => (
-           <CryptoDropdown onPress={() => setKeyValue("modalComponent", true)} text="Polygon" logo={<Polygon />} />
+            <CryptoDropdown
+              onPress={() =>
+                onPress({ type: "modalComponent", value: "Crypto" }, 200)
+              }
+              text="Polygon"
+              logo={<Polygon />}
+            />
           ),
         }}
       />

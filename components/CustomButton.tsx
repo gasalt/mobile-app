@@ -10,7 +10,7 @@ interface CustomButtonProps extends PressableProps {
 export default function CustomButton({label, onPress, variant = "primary"}: CustomButtonProps){
   return (
     <Pressable onPress={onPress} style={[styles.button, variant === "cancel" && styles.cancelButton]}>
-        <DefaultText>{label}</DefaultText>
+        <DefaultText style={styles.text}>{label}</DefaultText>
     </Pressable>
   )
 }
@@ -25,6 +25,10 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         fontSize: 16,
         lineHeight: 24,
+    },
+    text: {
+        fontSize: 16,
+        fontWeight: "500",
     },
     cancelButton: {
         backgroundColor: "#262633",

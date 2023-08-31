@@ -1,11 +1,18 @@
 import {create} from "zustand";
 
+
+export const modals = ["QRCode", "Crypto", "Scan"] as const
+export type ModalType = typeof modals[number] | undefined;
+
 const defaultState = {
-    modalComponent: false,
-    value: "hello",
+    modalComponent: undefined,
+    value: {},
+} as {
+    modalComponent: ModalType,
+    value: unknown,
 }
 
-type DefaultState = typeof defaultState
+export type DefaultState = typeof defaultState
 type SetKeyValue = <K extends keyof DefaultState>(key: K, value: DefaultState[K]) => void;
 interface GlobalState extends DefaultState {
     setKeyValue: SetKeyValue
