@@ -218,7 +218,7 @@ export default function App() {
         <DefaultView style={styles.cryptoAddress}>
           <Info
             onPress={() =>
-              onPress({ type: "modalComponent", value: "QRCode" }, 50)
+              onPress({ type: "modalComponent", value: "QRCode" }, 80)
             }
           />
           <DefaultText style={{ color: guide.primary }}>
