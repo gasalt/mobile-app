@@ -3,7 +3,7 @@ import { StyleSheet, Pressable } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { DefaultText, DefaultView } from "./Defaults";
 
-export default function Scanner({ onClose }: { onClose: () => void }) {
+export default function Scanner({ onClose }: ModalProps) {
   const [hasPermission, setHasPermission] = useState(false);
   const [scanned, setScanned] = useState(false);
 
@@ -25,7 +25,7 @@ export default function Scanner({ onClose }: { onClose: () => void }) {
   }) => {
     setScanned(true);
     alert(`Bar code with type ${type} and data ${data} has been scanned!`);
-    onClose();
+    onClose && onClose();
   };
 
   if (hasPermission === null) {

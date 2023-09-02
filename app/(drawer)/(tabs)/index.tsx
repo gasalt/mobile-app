@@ -1,6 +1,5 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Dimensions, Platform, Pressable, StyleSheet } from "react-native";
-import QRCode from "react-native-qrcode-svg";
 import * as Clipboard from "expo-clipboard";
 
 import ClosedEye from "../../../assets/svgs/ClosedEye";
@@ -8,9 +7,6 @@ import { DefaultText, DefaultView } from "../../../components/Defaults";
 import SwipeModal from "../../../components/SwipeModal";
 import TabScreen from "../../../components/TabScreen";
 import {
-  DefaultState,
-  ModalType,
-  modals,
   useGlobalState,
 } from "../../../sdk/state";
 
@@ -23,25 +19,19 @@ import Send from "../../../components/Send";
 import Swap from "../../../components/Swap";
 import { guide } from "../../../styles";
 import { animatedBottomTabLine } from "../../../utils/fx";
-import CustomButton from "../../../components/CustomButton";
-import Scanner from "../../../components/Scanner";
 import CircleChecked from "../../../assets/svgs/CircleChecked";
+import { ModalScreen } from "../../../types/enums";
 
 const { width, height } = Dimensions.get("window");
 
 export default function App() {
-  const { modalComponent, setKeyValue } = useGlobalState();
+  const { setKeyValue } = useGlobalState();
   const PagerRef = useRef<any>();
 
   const [tab, setTab] = useState(0);
   const [position, setPosition] = useState(0);
-  const [selectedButton, setSelectedButton] = useState<"address" | "eth">(
-    "address"
-  );
-  const [copied, setCopied] = useState(false);
 
-  // set marginTop dynamically
-  const [marginTop, setMarginTop] = useState<number | undefined>(undefined);
+  const [copied, setCopied] = useState(false);
 
   const slideBarPosition = animatedBottomTabLine(tab, position, width);
 
@@ -50,135 +40,19 @@ export default function App() {
     PagerRef.current.setPage(value);
   };
 
-  const onClose = () => {
-    onPress({ type: "modalComponent", value: undefined }, undefined);
-  };
-
-  const onPress = (
-    { type, value }: { type: keyof DefaultState; value: ModalType },
-    top: number | undefined
-  ) => {
-    setKeyValue(type, value);
-    setMarginTop(top);
-  };
-
   const copyToClipboard = async (value: string) => {
     await Clipboard.setStringAsync(value);
     setCopied(true);
   };
 
-  const getModalContent = () => {
-    switch (modalComponent) {
-      case "QRCode":
-        return (
-          <DefaultView style={{ flex: 1 }}>
-            <DefaultView
-              style={{
-                alignItems: "center",
-                justifyContent: "center",
-                marginVertical: 48,
-              }}
-            >
-              <DefaultText
-                style={{ fontWeight: "600", fontSize: 24, lineHeight: 24 }}
-              >
-                Scan QR Code
-              </DefaultText>
-              <DefaultText
-                style={{ fontWeight: "400", fontSize: 14, lineHeight: 20 }}
-              >
-                Scan the code to receive your payment
-              </DefaultText>
-            </DefaultView>
+  useEffect(() => {
+    if (!copied) return;
+    const timer = setTimeout(() => {
+      setCopied(false);
+    }, 2000);
 
-            <DefaultView
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Pressable
-                style={[
-                  {
-                    borderWidth: 1,
-                    borderColor: "#4A41C7",
-                    padding: 5,
-                    borderTopLeftRadius: 5,
-                    borderBottomLeftRadius: 5,
-                    borderRightWidth: 0,
-                  },
-                  selectedButton === "address" && {
-                    backgroundColor: "#4A41C7",
-                  },
-                ]}
-                onPress={() => setSelectedButton("address")}
-              >
-                <DefaultText>Address</DefaultText>
-              </Pressable>
-              <Pressable
-                style={[
-                  {
-                    borderWidth: 1,
-                    borderColor: "#4A41C7",
-                    padding: 5,
-                    borderTopRightRadius: 5,
-                    borderBottomRightRadius: 5,
-                    borderLeftWidth: 0,
-                  },
-                  selectedButton === "eth" && {
-                    backgroundColor: "#4A41C7",
-                  },
-                ]}
-                onPress={() => setSelectedButton("eth")}
-              >
-                <DefaultText>Eth Domain</DefaultText>
-              </Pressable>
-            </DefaultView>
-
-            <DefaultView
-              style={{
-                marginVertical: 50,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <QRCode value="https://" size={200} />
-            </DefaultView>
-
-            <DefaultView
-              style={{
-                backgroundColor: "#BBB8EA",
-                paddingVertical: 12,
-                paddingHorizontal: 16,
-                marginHorizontal: 20,
-                borderRadius: 6,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <DefaultText style={{ color: guide.primary, lineHeight: 24 }}>
-                TRY2Pczuiuadsak3VcQSmupPwtVUTYPq2X
-              </DefaultText>
-            </DefaultView>
-
-            <DefaultView style={{ paddingHorizontal: 16, marginTop: 24 }}>
-              <CustomButton label="Copy" variant="primary" />
-            </DefaultView>
-          </DefaultView>
-        );
-
-      case "Scan":
-        return <Scanner onClose={onClose} />;
-
-      default:
-        return (
-          <DefaultView>
-            <DefaultText>Default modal view</DefaultText>
-          </DefaultView>
-        );
-    }
-  };
+    return () => clearTimeout(timer);
+  }, [copied])
 
   return (
     <TabScreen>
@@ -204,9 +78,7 @@ export default function App() {
             3,530.84
           </DefaultText>
           <CryptoDropdown
-            onPress={() =>
-              onPress({ type: "modalComponent", value: "Crypto" }, 50)
-            }
+            onPress={() => setKeyValue("modalComponent", {screen: ModalScreen.Crypto, values: {}})}
             text="MATIC"
             logo={<Polygon />}
           />
@@ -217,9 +89,8 @@ export default function App() {
 
         <DefaultView style={styles.cryptoAddress}>
           <Info
-            onPress={() =>
-              onPress({ type: "modalComponent", value: "QRCode" }, 80)
-            }
+            onPress={() => setKeyValue("modalComponent", {screen: ModalScreen.AddressInfo, values: {}})}
+
           />
           <DefaultText style={{ color: guide.primary }}>
             0xE7E2cB8c81c10...C9Ce62EC754
@@ -274,18 +145,12 @@ export default function App() {
             setPosition(e.nativeEvent.offset);
           }}
         >
-          <Send key={"1"} onPress={onPress} />
-          <Swap key={"2"} onPress={onPress} />
+          <Send key={"1"} />
+          <Swap key={"2"} />
         </PagerView>
       </DefaultView>
 
-      <SwipeModal
-        showModal={modals.includes(modalComponent as (typeof modals)[number])}
-        onClose={onClose}
-        headerStyle={{ marginTop }}
-        contentModal={getModalContent()}
-        contentModalStyle={{ marginTop }}
-      />
+      <SwipeModal/>
     </TabScreen>
   );
 }

@@ -1,15 +1,12 @@
 import {create} from "zustand";
+import { ModalScreen } from "../../types/enums";
 
-
-export const modals = ["QRCode", "Crypto", "Scan"] as const
-export type ModalType = typeof modals[number] | undefined;
 
 const defaultState = {
-    modalComponent: undefined,
-    value: {},
-} as {
-    modalComponent: ModalType,
-    value: unknown,
+    modalComponent: {
+        screen: ModalScreen.None,
+        values: {} as unknown
+    },
 }
 
 export type DefaultState = typeof defaultState
