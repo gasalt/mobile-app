@@ -6,24 +6,15 @@ import Polygon from "../assets/svgs/Polygon";
 import BNB from "../assets/svgs/BNB";
 import Refresh from "../assets/svgs/Refresh";
 import { useState } from "react";
-import { DefaultState, ModalType } from "../sdk/state";
+import { useGlobalState } from "../sdk/state";
+import { ModalScreen } from "../types/enums";
 
 
-interface SwapProps {
-  onPress: (
-    {
-      type,
-      value,
-    }: {
-      type: keyof DefaultState;
-      value: ModalType;
-    },
-    top: number | undefined
-  ) => void;
-}
-export default function Swap({onPress}: SwapProps) {
+export default function Swap() {
+  const {setKeyValue} = useGlobalState();
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
+  const onPress = () => setKeyValue("modalComponent", {values: {}, screen: ModalScreen.Crypto})
 
   return (
     <DefaultView style={styles.container}>
@@ -47,7 +38,7 @@ export default function Swap({onPress}: SwapProps) {
 
             <CryptoDropdown
               btnStyle={styles.btnStyle}
-              onPress={() => onPress({ type: "modalComponent", value: "Crypto" }, 200)}
+              onPress={onPress}
               text="MATIC"
               logo={<Polygon />}
             />
@@ -74,7 +65,7 @@ export default function Swap({onPress}: SwapProps) {
             />
             <CryptoDropdown
               btnStyle={styles.btnStyle}
-              onPress={() => onPress({ type: "modalComponent", value: "Crypto" }, 200)}
+              onPress={onPress}
               text="BNB"
               logo={<BNB />}
             />
@@ -104,7 +95,7 @@ export default function Swap({onPress}: SwapProps) {
             <CryptoDropdown
               textStyle={styles.textStyle}
               btnStyle={styles.btnStyle}
-              onPress={() => onPress({ type: "modalComponent", value: "Crypto" }, 200)}
+              onPress={onPress}
               text="MATIC"
               showLogo={false}
               logo={<Polygon />}

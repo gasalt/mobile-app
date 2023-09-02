@@ -9,24 +9,16 @@ import AddMultiple from "../assets/svgs/AddMultiple";
 import CustomButton from "./CustomButton";
 import CryptoDropdown from "./CryptoDrown";
 import Polygon from "../assets/svgs/Polygon";
-import { DefaultState, ModalType } from "../sdk/state";
+import { useGlobalState } from "../sdk/state";
+import { ModalScreen } from "../types/enums";
 
-interface SendProps {
-  onPress: (
-    {
-      type,
-      value,
-    }: {
-      type: keyof DefaultState;
-      value: ModalType;
-    },
-    top: number | undefined
-  ) => void;
-}
 
-export default function Send({ onPress }: SendProps) {
+export default function Send() {
+  const {setKeyValue} = useGlobalState();
   const [address, setAddress] = useState("");
   const [amount, setAmount] = useState("");
+
+  const onPress = () => setKeyValue("modalComponent", {values: {}, screen: ModalScreen.Crypto})
 
   return (
     <DefaultView style={styles.container}>
@@ -34,7 +26,7 @@ export default function Send({ onPress }: SendProps) {
         label="Recipient's Address"
         rightElement={
           address === "" ? (
-            <QR onPress={() => onPress({ type: "modalComponent", value: "Scan" }, 100)} />
+            <QR onPress={() => setKeyValue("modalComponent", {values: {}, screen: ModalScreen.QRCodeScan})} />
           ) : (
             <Close onPress={() => setAddress("")} />
           )
@@ -81,9 +73,7 @@ export default function Send({ onPress }: SendProps) {
             <CryptoDropdown
               textStyle={styles.textStyle}
               btnStyle={styles.btnStyle}
-              onPress={() =>
-                onPress({ type: "modalComponent", value: "Crypto" }, 200)
-              }
+              onPress={onPress}
               text="MATIC"
               showLogo={false}
               logo={<Polygon />}

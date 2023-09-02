@@ -1,38 +1,34 @@
-import { ReactNode } from "react";
-import { StyleSheet, Text, View, ViewStyle } from "react-native";
+import { StyleSheet, View } from "react-native";
 import SwipeUpDownModal from "react-native-swipe-modal-up-down";
+import { useGlobalState } from "../sdk/state";
+import { ModalScreen, ModalType } from "../types/enums";
+import getModalContent from "./Modals/getModalContent";
 
-interface SwipeModalProps {
-  showModal: boolean;
-  onClose: () => void;
-  contentModal: ReactNode;
-  headerStyle?: ViewStyle;
-  contentModalStyle: ViewStyle;
-}
 
-export default function SwipeModal({
-  showModal,
-  onClose,
-  contentModal,
-  headerStyle,
-  contentModalStyle,
-}: SwipeModalProps) {
+export default function SwipeModal() {
+  const {modalComponent, setKeyValue} = useGlobalState()
+  const {Screen, size} = getModalContent(modalComponent.screen)
+
+  const onClose = () => {
+    setKeyValue("modalComponent", {screen: ModalScreen.None, values: {}})
+  }
+
   return (
     <SwipeUpDownModal
       MainContainerModal={{ backgroundColor: "transparent" }}
-      modalVisible={showModal}
+      modalVisible={size !== ModalType.None}
       PressToanimate
-      onClose={onClose}
+      onClose={() => setKeyValue("modalComponent", {screen: ModalScreen.None, values: {}})}
       //if you don't pass HeaderContent you should pass
       //marginTop in view of ContentModel to Make modal swipeable
+      ContentModal={<Screen values={modalComponent.values} onClose={onClose} />}
       HeaderContent={
         <View style={styles.headerContainer}>
           <View style={styles.closeBar} />
         </View>
       }
-      ContentModal={contentModal}
-      HeaderStyle={[ headerStyle]}
-      ContentModalStyle={[styles.modalStyle, contentModalStyle]}
+      HeaderStyle={[{ marginTop: size }]}
+      ContentModalStyle={[styles.modalStyle, {marginTop: size}]}
     />
   );
 }
