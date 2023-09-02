@@ -1,41 +1,58 @@
-import TabScreen from "../../../components/TabScreen";
-import { useGlobalState } from "../../../sdk/state";
+import { useEffect, useRef, useState } from "react";
+import { Dimensions, Platform, Pressable, StyleSheet } from "react-native";
+import * as Clipboard from "expo-clipboard";
+
+import ClosedEye from "../../../assets/svgs/ClosedEye";
 import { DefaultText, DefaultView } from "../../../components/Defaults";
 import SwipeModal from "../../../components/SwipeModal";
-import ClosedEye from "../../../assets/svgs/ClosedEye";
+import TabScreen from "../../../components/TabScreen";
 import {
-  Dimensions,
-  Platform,
-  Pressable,
-  StyleSheet,
-} from "react-native";
+  useGlobalState,
+} from "../../../sdk/state";
 
-import { guide } from "../../../styles";
-import CryptoDropdown from "../../../components/CryptoDrown";
-import Info from "../../../assets/svgs/Info";
-import Copy from "../../../assets/svgs/Copy";
-import { useRef, useState } from "react";
 import PagerView from "react-native-pager-view";
+import Copy from "../../../assets/svgs/Copy";
+import Info from "../../../assets/svgs/Info";
+import Polygon from "../../../assets/svgs/Polygon";
+import CryptoDropdown from "../../../components/CryptoDrown";
 import Send from "../../../components/Send";
 import Swap from "../../../components/Swap";
-import Polygon from "../../../assets/svgs/Polygon";
+import { guide } from "../../../styles";
 import { animatedBottomTabLine } from "../../../utils/fx";
+import CircleChecked from "../../../assets/svgs/CircleChecked";
+import { ModalScreen } from "../../../types/enums";
 
 const { width, height } = Dimensions.get("window");
 
 export default function App() {
-  const { modalComponent, setKeyValue } = useGlobalState();
+  const { setKeyValue } = useGlobalState();
   const PagerRef = useRef<any>();
 
   const [tab, setTab] = useState(0);
   const [position, setPosition] = useState(0);
 
- const slideBarPosition = animatedBottomTabLine(tab, position, width);
+  const [copied, setCopied] = useState(false);
+
+  const slideBarPosition = animatedBottomTabLine(tab, position, width);
 
   const onSelectTab = (value: number) => {
     if (tab === value) return;
     PagerRef.current.setPage(value);
   };
+
+  const copyToClipboard = async (value: string) => {
+    await Clipboard.setStringAsync(value);
+    setCopied(true);
+  };
+
+  useEffect(() => {
+    if (!copied) return;
+    const timer = setTimeout(() => {
+      setCopied(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, [copied])
 
   return (
     <TabScreen>
@@ -61,7 +78,7 @@ export default function App() {
             3,530.84
           </DefaultText>
           <CryptoDropdown
-            onPress={() => setKeyValue("modalComponent", true)}
+            onPress={() => setKeyValue("modalComponent", {screen: ModalScreen.Crypto, values: {}})}
             text="MATIC"
             logo={<Polygon />}
           />
@@ -71,11 +88,21 @@ export default function App() {
         </DefaultText>
 
         <DefaultView style={styles.cryptoAddress}>
-          <Info />
+          <Info
+            onPress={() => setKeyValue("modalComponent", {screen: ModalScreen.AddressInfo, values: {}})}
+
+          />
           <DefaultText style={{ color: guide.primary }}>
             0xE7E2cB8c81c10...C9Ce62EC754
           </DefaultText>
-          <Copy />
+
+          {copied ? (
+            <CircleChecked />
+          ) : (
+            <Copy
+              onPress={() => copyToClipboard("0xE7E2cB8c81c10...C9Ce62EC754")}
+            />
+          )}
         </DefaultView>
       </DefaultView>
 
@@ -123,10 +150,7 @@ export default function App() {
         </PagerView>
       </DefaultView>
 
-      <SwipeModal
-        showModal={modalComponent}
-        setShowModal={(value: boolean) => setKeyValue("modalComponent", value)}
-      />
+      <SwipeModal/>
     </TabScreen>
   );
 }

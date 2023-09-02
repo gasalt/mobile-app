@@ -1,11 +1,15 @@
 import {create} from "zustand";
+import { ModalScreen } from "../../types/enums";
+
 
 const defaultState = {
-    modalComponent: false,
-    value: "hello",
+    modalComponent: {
+        screen: ModalScreen.None,
+        values: {} as unknown
+    },
 }
 
-type DefaultState = typeof defaultState
+export type DefaultState = typeof defaultState
 type SetKeyValue = <K extends keyof DefaultState>(key: K, value: DefaultState[K]) => void;
 interface GlobalState extends DefaultState {
     setKeyValue: SetKeyValue

@@ -26,7 +26,7 @@ const FloatingTextInput = ({
   mode = "text",
   rightElement,
   value,
-  onChangeText
+  onChangeText,
 }: FloatingTextInputProps) => {
   const animatedValue = useRef(new Animated.Value(0));
 

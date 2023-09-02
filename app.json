@@ -30,7 +30,13 @@
       "backgroundColor": "#0D0C27"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      [
+        "expo-barcode-scanner",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access camera."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

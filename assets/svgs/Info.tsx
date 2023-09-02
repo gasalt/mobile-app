@@ -2,7 +2,7 @@ import Svg, { SvgProps, Path } from "react-native-svg"
 const Info = (props: SvgProps) => (
   <Svg
     width={17}
-    height={16}
+    height={17}
     fill="none"
     {...props}
   >

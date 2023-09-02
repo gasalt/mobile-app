@@ -7,6 +7,7 @@ import Avatar from "../../../components/Avatar";
 import Polygon from "../../../assets/svgs/Polygon";
 import CryptoDropdown from "../../../components/CryptoDrown";
 import { useGlobalState } from "../../../sdk/state";
+import { ModalScreen } from "../../../types/enums";
 
 const Label = ({ name, focused }: { name: string; focused: boolean }) => (
   <DefaultText style={{ color: focused ? "white" : "gray", fontSize: 10 }}>
@@ -15,9 +16,15 @@ const Label = ({ name, focused }: { name: string; focused: boolean }) => (
 );
 
 export default function Main() {
-  const { modalComponent, setKeyValue } = useGlobalState();
+  const { setKeyValue } = useGlobalState();
   const marginBottom =
     Platform.OS === "ios" ? 40 : styles.tabBarStyle.marginBottom;
+
+
+  const onPress = () => {
+    setKeyValue("modalComponent", {screen: ModalScreen.Crypto, values: {}});
+  };
+
   return (
     <Tabs
       screenOptions={{
@@ -37,7 +44,11 @@ export default function Main() {
             <Label focused={props.focused} name="Wallet" />
           ),
           headerRight: () => (
-           <CryptoDropdown onPress={() => setKeyValue("modalComponent", true)} text="Polygon" logo={<Polygon />} />
+            <CryptoDropdown
+              onPress={onPress}
+              text="Polygon"
+              logo={<Polygon />}
+            />
           ),
         }}
       />

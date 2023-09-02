@@ -1,25 +1,36 @@
 import { useState } from "react";
+import { Pressable, StyleSheet } from "react-native";
+
 import Close from "../assets/svgs/Close";
 import QR from "../assets/svgs/QR";
 import { DefaultText, DefaultView } from "./Defaults";
 import FloatingTextInput from "./inputs/FloatingInput";
-import { Pressable, StyleSheet } from "react-native";
 import AddMultiple from "../assets/svgs/AddMultiple";
 import CustomButton from "./CustomButton";
 import CryptoDropdown from "./CryptoDrown";
 import Polygon from "../assets/svgs/Polygon";
 import { useGlobalState } from "../sdk/state";
+import { ModalScreen } from "../types/enums";
+
 
 export default function Send() {
-  const { setKeyValue } = useGlobalState();
+  const {setKeyValue} = useGlobalState();
   const [address, setAddress] = useState("");
   const [amount, setAmount] = useState("");
+
+  const onPress = () => setKeyValue("modalComponent", {values: {}, screen: ModalScreen.Crypto})
 
   return (
     <DefaultView style={styles.container}>
       <FloatingTextInput
         label="Recipient's Address"
-        rightElement={address === "" ? <QR /> : <Close />}
+        rightElement={
+          address === "" ? (
+            <QR onPress={() => setKeyValue("modalComponent", {values: {}, screen: ModalScreen.QRCodeScan})} />
+          ) : (
+            <Close onPress={() => setAddress("")} />
+          )
+        }
         value={address}
         onChangeText={(text) => setAddress(text)}
       />
@@ -62,7 +73,7 @@ export default function Send() {
             <CryptoDropdown
               textStyle={styles.textStyle}
               btnStyle={styles.btnStyle}
-              onPress={() => setKeyValue("modalComponent", true)}
+              onPress={onPress}
               text="MATIC"
               showLogo={false}
               logo={<Polygon />}
@@ -102,6 +113,6 @@ const styles = StyleSheet.create({
   },
   btnStyle: {
     width: 70,
-    paddingVertical: .5
+    paddingVertical: 0.5,
   },
 });
