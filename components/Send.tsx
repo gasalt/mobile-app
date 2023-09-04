@@ -12,13 +12,13 @@ import Polygon from "../assets/svgs/Polygon";
 import { useGlobalState } from "../sdk/state";
 import { ModalScreen } from "../types/enums";
 
-
 export default function Send() {
-  const {setKeyValue} = useGlobalState();
+  const { setKeyValue } = useGlobalState();
   const [address, setAddress] = useState("");
   const [amount, setAmount] = useState("");
 
-  const onPress = () => setKeyValue("modalComponent", {values: {}, screen: ModalScreen.Crypto})
+  const onPress = () =>
+    setKeyValue("modalComponent", { values: {}, screen: ModalScreen.Crypto });
 
   return (
     <DefaultView style={styles.container}>
@@ -26,7 +26,14 @@ export default function Send() {
         label="Recipient's Address"
         rightElement={
           address === "" ? (
-            <QR onPress={() => setKeyValue("modalComponent", {values: {}, screen: ModalScreen.QRCodeScan})} />
+            <QR
+              onPress={() =>
+                setKeyValue("modalComponent", {
+                  values: {},
+                  screen: ModalScreen.QRCodeScan,
+                })
+              }
+            />
           ) : (
             <Close onPress={() => setAddress("")} />
           )
@@ -87,7 +94,16 @@ export default function Send() {
       </DefaultView>
 
       <DefaultView style={{ paddingHorizontal: 12 }}>
-        <CustomButton label="Send" variant="primary" />
+        <CustomButton
+          label="Send"
+          variant="primary"
+          onPress={() =>
+            setKeyValue("modalComponent", {
+              screen: ModalScreen.SendModal,
+              values: {},
+            })
+          }
+        />
       </DefaultView>
     </DefaultView>
   );

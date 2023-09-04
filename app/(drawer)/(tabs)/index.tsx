@@ -6,9 +6,7 @@ import ClosedEye from "../../../assets/svgs/ClosedEye";
 import { DefaultText, DefaultView } from "../../../components/Defaults";
 import SwipeModal from "../../../components/SwipeModal";
 import TabScreen from "../../../components/TabScreen";
-import {
-  useGlobalState,
-} from "../../../sdk/state";
+import { useGlobalState } from "../../../sdk/state";
 
 import PagerView from "react-native-pager-view";
 import Copy from "../../../assets/svgs/Copy";
@@ -21,6 +19,7 @@ import { guide } from "../../../styles";
 import { animatedBottomTabLine } from "../../../utils/fx";
 import CircleChecked from "../../../assets/svgs/CircleChecked";
 import { ModalScreen } from "../../../types/enums";
+import Eye from "../../../assets/svgs/Eye";
 
 const { width, height } = Dimensions.get("window");
 
@@ -31,6 +30,7 @@ export default function App() {
   const [tab, setTab] = useState(0);
   const [position, setPosition] = useState(0);
 
+  const [hideBalance, setHideBalance] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const slideBarPosition = animatedBottomTabLine(tab, position, width);
@@ -52,7 +52,7 @@ export default function App() {
     }, 2000);
 
     return () => clearTimeout(timer);
-  }, [copied])
+  }, [copied]);
 
   return (
     <TabScreen>
@@ -62,7 +62,11 @@ export default function App() {
           <DefaultText style={{ fontSize: 16, fontWeight: "400" }}>
             Total balance
           </DefaultText>
-          <ClosedEye />
+          {hideBalance ? (
+            <Eye onPress={() => setHideBalance(false)} />
+          ) : (
+            <ClosedEye onPress={() => setHideBalance(true)} />
+          )}
         </DefaultView>
 
         <DefaultView
@@ -70,27 +74,47 @@ export default function App() {
             alignItems: "center",
             flexDirection: "row",
             paddingHorizontal: 20,
+            alignSelf: "center",
           }}
         >
-          <DefaultText
-            style={{ fontSize: 32, lineHeight: 32, fontWeight: "600" }}
-          >
-            3,530.84
-          </DefaultText>
+          {hideBalance ? (
+            <DefaultText
+              style={{ fontSize: 32, lineHeight: 32, top: 8, fontWeight: "600" }}
+            >
+              ******
+            </DefaultText>
+          ) : (
+            <DefaultText
+              style={{ fontSize: 32, lineHeight: 32, fontWeight: "600" }}
+            >
+              3,530.84
+            </DefaultText>
+          )}
           <CryptoDropdown
-            onPress={() => setKeyValue("modalComponent", {screen: ModalScreen.Crypto, values: {}})}
+            onPress={() =>
+              setKeyValue("modalComponent", {
+                screen: ModalScreen.Crypto,
+                values: {},
+              })
+            }
             text="MATIC"
             logo={<Polygon />}
           />
         </DefaultView>
-        <DefaultText style={{ color: "#9DF190", marginLeft: 36 }}>
+        {hideBalance ? <DefaultText style={{ color: "#9DF190", marginLeft: 72 }}>
+          *******
+        </DefaultText>: <DefaultText style={{ color: "#9DF190", marginLeft: 36 }}>
           ~2,234.77 USD
-        </DefaultText>
+        </DefaultText>}
 
         <DefaultView style={styles.cryptoAddress}>
           <Info
-            onPress={() => setKeyValue("modalComponent", {screen: ModalScreen.AddressInfo, values: {}})}
-
+            onPress={() =>
+              setKeyValue("modalComponent", {
+                screen: ModalScreen.AddressInfo,
+                values: {},
+              })
+            }
           />
           <DefaultText style={{ color: guide.primary }}>
             0xE7E2cB8c81c10...C9Ce62EC754
@@ -150,7 +174,7 @@ export default function App() {
         </PagerView>
       </DefaultView>
 
-      <SwipeModal/>
+      <SwipeModal />
     </TabScreen>
   );
 }
@@ -168,7 +192,7 @@ const styles = StyleSheet.create({
   totalBalanceContainer: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 4,
+    gap: 8,
     justifyContent: "center",
     marginBottom: 8,
   },

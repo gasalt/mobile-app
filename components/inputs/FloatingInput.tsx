@@ -1,4 +1,4 @@
-import {  useRef, ReactNode } from "react";
+import { useRef, ReactNode } from "react";
 import {
   Animated,
   Easing,
@@ -6,7 +6,7 @@ import {
   StyleSheet,
   InputModeOptions,
 } from "react-native";
-import {  DefaultView } from "../Defaults";
+import { DefaultView } from "../Defaults";
 
 const titleActiveSize = 14,
   titleInActiveSize = 14,
@@ -19,6 +19,7 @@ interface FloatingTextInputProps {
   rightElement?: ReactNode;
   value: string;
   onChangeText: (value: string) => void;
+  placeholder?: string;
 }
 
 const FloatingTextInput = ({
@@ -27,6 +28,7 @@ const FloatingTextInput = ({
   rightElement,
   value,
   onChangeText,
+  placeholder = "",
 }: FloatingTextInputProps) => {
   const animatedValue = useRef(new Animated.Value(0));
 
@@ -84,10 +86,9 @@ const FloatingTextInput = ({
         onFocus={onFocus}
         inputMode={mode}
         returnKeyType="done"
+        placeholder={placeholder}
       />
-      <DefaultView style={styles.right}>
-        {rightElement}
-      </DefaultView>
+      <DefaultView style={styles.right}>{rightElement}</DefaultView>
     </Animated.View>
   );
 };
@@ -95,7 +96,7 @@ const FloatingTextInput = ({
 const styles = StyleSheet.create({
   subContainer: {
     marginHorizontal: 8,
-    position: "relative"
+    position: "relative",
   },
   label: {
     marginHorizontal: 12,
@@ -111,7 +112,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     height: 56,
   },
-  right: { position: "absolute", right: 10, top: 35 }
+  right: { position: "absolute", right: 10, top: 35 },
 });
 
 export default FloatingTextInput;
