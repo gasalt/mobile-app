@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Pressable } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { DefaultText, DefaultView } from "./Defaults";
+import CustomButton from "./CustomButton";
 
 export default function Scanner({ onClose }: ModalProps) {
   const [hasPermission, setHasPermission] = useState(false);
@@ -37,22 +37,51 @@ export default function Scanner({ onClose }: ModalProps) {
 
   return (
     <DefaultView style={{ flex: 1 }}>
+      <DefaultView
+        style={{
+          alignItems: "center",
+          justifyContent: "center",
+          marginVertical: 48,
+        }}
+      >
+        <DefaultText
+          style={{ fontWeight: "600", fontSize: 24, lineHeight: 24 }}
+        >
+          Scan QR Code
+        </DefaultText>
+      </DefaultView>
       <BarCodeScanner
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-        style={StyleSheet.absoluteFillObject}
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+          height: 500,
+          marginHorizontal: 20,
+        }}
       />
-      {scanned && (
-        <Pressable
-          style={{
-            marginTop: 300,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-          onPress={() => setScanned(false)}
-        >
-          <DefaultText>Tap to scan again</DefaultText>
-        </Pressable>
-      )}
+      <DefaultView
+        style={{
+          alignItems: "center",
+          justifyContent: "center",
+          marginVertical: 30,
+        }}
+      >
+        {scanned ? (
+          <CustomButton
+            label="Tap to scan again"
+            onPress={() => setScanned(false)}
+            variant="primary"
+            btnStyle={{ width: "50%" }}
+          />
+        ) : (
+          <CustomButton
+            label="Close"
+            onPress={onClose}
+            variant="cancel"
+            btnStyle={{ width: "50%" }}
+          />
+        )}
+      </DefaultView>
     </DefaultView>
   );
 }
