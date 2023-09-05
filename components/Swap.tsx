@@ -9,12 +9,12 @@ import { useState } from "react";
 import { useGlobalState } from "../sdk/state";
 import { ModalScreen } from "../types/enums";
 
-
 export default function Swap() {
-  const {setKeyValue} = useGlobalState();
+  const { setKeyValue } = useGlobalState();
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
-  const onPress = () => setKeyValue("modalComponent", {values: {}, screen: ModalScreen.Crypto})
+  const onPress = () =>
+    setKeyValue("modalComponent", { values: {}, screen: ModalScreen.Crypto });
 
   return (
     <DefaultView style={styles.container}>
@@ -105,7 +105,7 @@ export default function Swap() {
       </DefaultView>
 
       <DefaultView style={{ paddingHorizontal: 12 }}>
-        <CustomButton label="Send" variant="primary" />
+        <CustomButton label="Swap" variant="primary" />
       </DefaultView>
     </DefaultView>
   );
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderRadius: 8,
-    height:85
+    height: 85,
   },
   item: {
     flexDirection: "row",
