@@ -10,5 +10,6 @@ export enum ModalScreen {
     AddressInfo,
     QRCodeScan,
     Crypto,
-    SendModal
+    SendModal,
+    MultiAddress
 }

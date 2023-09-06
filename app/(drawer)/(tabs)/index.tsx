@@ -63,9 +63,13 @@ export default function App() {
             Total balance
           </DefaultText>
           {hideBalance ? (
-            <Eye onPress={() => setHideBalance(false)} />
+            <Pressable onPress={() => setHideBalance(false)}>
+              <Eye />
+            </Pressable>
           ) : (
-            <ClosedEye onPress={() => setHideBalance(true)} />
+            <Pressable onPress={() => setHideBalance(true)}>
+              <ClosedEye />
+            </Pressable>
           )}
         </DefaultView>
 
@@ -79,7 +83,12 @@ export default function App() {
         >
           {hideBalance ? (
             <DefaultText
-              style={{ fontSize: 32, lineHeight: 32, top: 8, fontWeight: "600" }}
+              style={{
+                fontSize: 32,
+                lineHeight: 32,
+                top: 8,
+                fontWeight: "600",
+              }}
             >
               ******
             </DefaultText>
@@ -101,11 +110,15 @@ export default function App() {
             logo={<Polygon />}
           />
         </DefaultView>
-        {hideBalance ? <DefaultText style={{ color: "#9DF190", marginLeft: 72 }}>
-          *******
-        </DefaultText>: <DefaultText style={{ color: "#9DF190", marginLeft: 36 }}>
-          ~2,234.77 USD
-        </DefaultText>}
+        {hideBalance ? (
+          <DefaultText style={{ color: "#9DF190", marginLeft: 72 }}>
+            *******
+          </DefaultText>
+        ) : (
+          <DefaultText style={{ color: "#9DF190", marginLeft: 36 }}>
+            ~2,234.77 USD
+          </DefaultText>
+        )}
 
         <DefaultView style={styles.cryptoAddress}>
           <Info

@@ -26,22 +26,34 @@ export default function Send() {
         label="Recipient's Address"
         rightElement={
           address === "" ? (
-            <QR
+            <Pressable
               onPress={() =>
                 setKeyValue("modalComponent", {
                   values: {},
                   screen: ModalScreen.QRCodeScan,
                 })
               }
-            />
+            >
+              <QR />
+            </Pressable>
           ) : (
-            <Close onPress={() => setAddress("")} />
+            <Pressable onPress={() => setAddress("")}>
+              <Close />
+            </Pressable>
           )
         }
         value={address}
         onChangeText={(text) => setAddress(text)}
       />
-      <Pressable style={styles.multiple}>
+      <Pressable
+        style={styles.multiple}
+        onPress={() =>
+          setKeyValue("modalComponent", {
+            values: {},
+            screen: ModalScreen.MultiAddress,
+          })
+        }
+      >
         <AddMultiple />
         <DefaultText>Send to multiple addresses</DefaultText>
       </Pressable>
