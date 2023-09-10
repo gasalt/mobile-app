@@ -2,8 +2,8 @@ import { Pressable } from "react-native";
 import * as Clipboard from "expo-clipboard";
 import { DefaultText, DefaultView } from "../Defaults";
 import QRCode from "react-native-qrcode-svg";
-import { guide } from "../../styles";
-import CustomButton from "../CustomButton";
+import { guide } from "@/styles";
+import CustomButton from "@/components/CustomButton";
 import { useState } from "react";
 
 const buttons = [

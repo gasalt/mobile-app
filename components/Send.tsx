@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { Pressable, StyleSheet } from "react-native";
 
-import Close from "../assets/svgs/Close";
-import QR from "../assets/svgs/QR";
-import { DefaultText, DefaultView } from "./Defaults";
-import FloatingTextInput from "./inputs/FloatingInput";
-import AddMultiple from "../assets/svgs/AddMultiple";
-import CustomButton from "./CustomButton";
-import CryptoDropdown from "./CryptoDrown";
-import Polygon from "../assets/svgs/Polygon";
-import { useGlobalState } from "../sdk/state";
-import { ModalScreen } from "../types/enums";
+import Close from "@/assets/svgs/Close";
+import QR from "@/assets/svgs/QR";
+import { DefaultText, DefaultView } from "@/components/Defaults";
+import FloatingTextInput from "@/components/inputs/FloatingInput";
+import AddMultiple from "@/assets/svgs/AddMultiple";
+import CustomButton from "@/components/CustomButton";
+import CryptoDropdown from "@/components/CryptoDrown";
+import Polygon from "@/assets/svgs/Polygon";
+import { useGlobalState } from "@/sdk/state";
+import { ModalScreen } from "@/types/enums";
 
 export default function Send() {
   const { setKeyValue } = useGlobalState();

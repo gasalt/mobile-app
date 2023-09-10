@@ -1,8 +1,8 @@
 import { FlatList, Pressable, StyleSheet } from "react-native";
 import { DefaultText, DefaultView } from "../Defaults";
-import FloatingTextInput from "../inputs/FloatingInput";
-import { cryptoData } from "../../utils/data";
-import CircleChecked from "../../assets/svgs/CircleChecked";
+import FloatingTextInput from "@/components/inputs/FloatingInput";
+import { cryptoData } from "@/utils/data";
+import CircleChecked from "@/assets/svgs/CircleChecked";
 import { useState } from "react";
 
 export default function Crypto() {

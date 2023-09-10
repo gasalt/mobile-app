@@ -1,5 +1,5 @@
 import {create} from "zustand";
-import { ModalScreen } from "../../types/enums";
+import { ModalScreen } from "@/types/enums";
 
 
 const defaultState = {

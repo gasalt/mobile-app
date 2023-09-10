@@ -1,18 +1,18 @@
 import { useState } from "react";
 import { FlatList, Pressable } from "react-native";
-import Close from "../../assets/svgs/Close";
-import QR from "../../assets/svgs/QR";
-import RoundedCancel from "../../assets/svgs/RoundedCancel";
+import Close from "@/assets/svgs/Close";
+import QR from "@/assets/svgs/QR";
+import RoundedCancel from "@/assets/svgs/RoundedCancel";
 import {
   useOpenFileExplorer,
   useReadLocalData,
   useReadRemoteData,
-} from "../../hooks/useFileExplorer";
-import { useGlobalState } from "../../sdk/state";
-import { ModalScreen } from "../../types/enums";
-import CustomButton from "../CustomButton";
-import { DefaultText, DefaultView } from "../Defaults";
-import FloatingTextInput from "../inputs/FloatingInput";
+} from "@/hooks/useFileExplorer";
+import { useGlobalState } from "@/sdk/state";
+import { ModalScreen } from "@/types/enums";
+import CustomButton from "@/components/CustomButton";
+import { DefaultText, DefaultView } from "@/components/Defaults";
+import FloatingTextInput from "@/components/inputs/FloatingInput";
 
 export default function MultiAddress() {
   const { setKeyValue } = useGlobalState();

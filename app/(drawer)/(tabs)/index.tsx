@@ -8,24 +8,24 @@ import {
 } from "react-native";
 import * as Clipboard from "expo-clipboard";
 
-import ClosedEye from "../../../assets/svgs/ClosedEye";
-import { DefaultText, DefaultView } from "../../../components/Defaults";
-import SwipeModal from "../../../components/SwipeModal";
-import TabScreen from "../../../components/TabScreen";
-import { useGlobalState } from "../../../sdk/state";
+import ClosedEye from "@/assets/svgs/ClosedEye";
+import { DefaultText, DefaultView } from "@/components/Defaults";
+import SwipeModal from "@/components/SwipeModal";
+import TabScreen from "@/components/TabScreen";
+import { useGlobalState } from "@/sdk/state";
 
 import PagerView from "react-native-pager-view";
-import Copy from "../../../assets/svgs/Copy";
-import Info from "../../../assets/svgs/Info";
-import Polygon from "../../../assets/svgs/Polygon";
-import CryptoDropdown from "../../../components/CryptoDrown";
-import Send from "../../../components/Send";
-import Swap from "../../../components/Swap";
-import { guide } from "../../../styles";
-import { animatedBottomTabLine } from "../../../utils/fx";
-import CircleChecked from "../../../assets/svgs/CircleChecked";
-import { ModalScreen } from "../../../types/enums";
-import Eye from "../../../assets/svgs/Eye";
+import Copy from "@/assets/svgs/Copy";
+import Info from "@/assets/svgs/Info";
+import Polygon from "@/assets/svgs/Polygon";
+import CryptoDropdown from "@/components/CryptoDrown";
+import Send from "@/components/Send";
+import Swap from "@/components/Swap";
+import { guide } from "@/styles";
+import { animatedBottomTabLine } from "@/utils/fx";
+import CircleChecked from "@/assets/svgs/CircleChecked";
+import { ModalScreen } from "@/types/enums";
+import Eye from "@/assets/svgs/Eye";
 import { ScrollView } from "react-native-gesture-handler";
 
 const { width, height } = Dimensions.get("window");

@@ -1,6 +1,6 @@
 
-import TabScreen from '../../../components/TabScreen';
-import { DefaultText, DefaultView } from '../../../components/Defaults';
+import TabScreen from '@/components/TabScreen';
+import { DefaultText, DefaultView } from '@/components/Defaults';
 
 
 

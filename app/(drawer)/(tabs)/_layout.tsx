@@ -1,13 +1,13 @@
 import { Tabs } from "expo-router/tabs";
 import { Platform } from "react-native";
-import { DefaultText } from "../../../components/Defaults";
-import styles from "../../../styles";
-import Icon from "../../../components/Icon";
-import Avatar from "../../../components/Avatar";
-import Polygon from "../../../assets/svgs/Polygon";
-import CryptoDropdown from "../../../components/CryptoDrown";
-import { useGlobalState } from "../../../sdk/state";
-import { ModalScreen } from "../../../types/enums";
+import { DefaultText } from "@/components/Defaults";
+import styles from "@/styles";
+import Icon from "@/components/Icon";
+import Avatar from "@/components/Avatar";
+import Polygon from "@/assets/svgs/Polygon";
+import CryptoDropdown from "@/components/CryptoDrown";
+import { useGlobalState } from "@/sdk/state";
+import { ModalScreen } from "@/types/enums";
 
 const Label = ({ name, focused }: { name: string; focused: boolean }) => (
   <DefaultText style={{ color: focused ? "white" : "gray", fontSize: 10 }}>

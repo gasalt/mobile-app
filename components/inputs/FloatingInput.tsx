@@ -7,7 +7,9 @@ import {
   InputModeOptions,
   TextInputProps,
 } from "react-native";
-import { DefaultView } from "../Defaults";
+
+import { DefaultView } from '@/components/Defaults';
+
 
 const titleActiveSize = 14,
   titleInActiveSize = 14,

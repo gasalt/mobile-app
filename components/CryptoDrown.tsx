@@ -5,9 +5,9 @@ import {
   TextStyle,
   ViewStyle,
 } from "react-native";
-import styles_ from "../styles";
-import { DefaultText } from "./Defaults";
-import Dropdown from "../assets/svgs/Dropdown";
+import styles_ from "@/styles";
+import { DefaultText } from "@/components/Defaults";
+import Dropdown from "@/assets/svgs/Dropdown";
 import { ReactNode } from "react";
 
 interface CryptoDropdownProps {
