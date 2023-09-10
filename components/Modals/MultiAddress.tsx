@@ -194,7 +194,7 @@ export default function MultiAddress() {
           <CustomButton
             label="Import addresses from phone"
             variant="primary"
-            onPress={() => useReadLocalData(address)}
+            onPress={() => useReadLocalData(address,setData, setAddress)}
           />
         )}
         {isGoogleLink(address) && (

@@ -34,7 +34,6 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.72.4",
-    "react-native-csv": "^0.2.0",
     "react-native-gesture-handler": "~2.12.0",
     "react-native-pager-view": "6.2.0",
     "react-native-qrcode-svg": "^6.2.0",
@@ -45,6 +44,7 @@
     "react-native-swipe-modal-up-down": "^1.1.0",
     "react-native-tab-view": "^3.5.2",
     "react-native-web": "~0.19.6",
+    "xlsx": "^0.18.5",
     "zustand": "^4.4.1"
   },
   "devDependencies": {

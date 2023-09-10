@@ -1,5 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { Dimensions, Platform, Pressable, StyleSheet } from "react-native";
+import {
+  Dimensions,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  StyleSheet,
+} from "react-native";
 import * as Clipboard from "expo-clipboard";
 
 import ClosedEye from "../../../assets/svgs/ClosedEye";
@@ -20,6 +26,7 @@ import { animatedBottomTabLine } from "../../../utils/fx";
 import CircleChecked from "../../../assets/svgs/CircleChecked";
 import { ModalScreen } from "../../../types/enums";
 import Eye from "../../../assets/svgs/Eye";
+import { ScrollView } from "react-native-gesture-handler";
 
 const { width, height } = Dimensions.get("window");
 
@@ -56,138 +63,146 @@ export default function App() {
 
   return (
     <TabScreen>
-      {/* Balance view */}
-      <DefaultView style={styles.balanceContainer}>
-        <DefaultView style={styles.totalBalanceContainer}>
-          <DefaultText style={{ fontSize: 16, fontWeight: "400" }}>
-            Total balance
-          </DefaultText>
-          {hideBalance ? (
-            <Pressable onPress={() => setHideBalance(false)}>
-              <Eye />
-            </Pressable>
-          ) : (
-            <Pressable onPress={() => setHideBalance(true)}>
-              <ClosedEye />
-            </Pressable>
-          )}
-        </DefaultView>
-
-        <DefaultView
-          style={{
-            alignItems: "center",
-            flexDirection: "row",
-            paddingHorizontal: 20,
-            alignSelf: "center",
-          }}
+      <ScrollView style={{ marginTop: 50 }} contentContainerStyle={{ flex: 1 }}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
-          {hideBalance ? (
-            <DefaultText
+          {/* Balance view */}
+          <DefaultView style={styles.balanceContainer}>
+            <DefaultView style={styles.totalBalanceContainer}>
+              <DefaultText style={{ fontSize: 16, fontWeight: "400" }}>
+                Total balance
+              </DefaultText>
+              {hideBalance ? (
+                <Pressable onPress={() => setHideBalance(false)}>
+                  <Eye />
+                </Pressable>
+              ) : (
+                <Pressable onPress={() => setHideBalance(true)}>
+                  <ClosedEye />
+                </Pressable>
+              )}
+            </DefaultView>
+
+            <DefaultView
               style={{
-                fontSize: 32,
-                lineHeight: 32,
-                top: 8,
-                fontWeight: "600",
+                alignItems: "center",
+                flexDirection: "row",
+                paddingHorizontal: 20,
+                alignSelf: "center",
               }}
             >
-              ******
-            </DefaultText>
-          ) : (
-            <DefaultText
-              style={{ fontSize: 32, lineHeight: 32, fontWeight: "600" }}
+              {hideBalance ? (
+                <DefaultText
+                  style={{
+                    fontSize: 32,
+                    lineHeight: 32,
+                    top: 8,
+                    fontWeight: "600",
+                  }}
+                >
+                  ******
+                </DefaultText>
+              ) : (
+                <DefaultText
+                  style={{ fontSize: 32, lineHeight: 32, fontWeight: "600" }}
+                >
+                  3,530.84
+                </DefaultText>
+              )}
+              <CryptoDropdown
+                onPress={() =>
+                  setKeyValue("modalComponent", {
+                    screen: ModalScreen.Crypto,
+                    values: {},
+                  })
+                }
+                text="MATIC"
+                logo={<Polygon />}
+              />
+            </DefaultView>
+            {hideBalance ? (
+              <DefaultText style={{ color: "#9DF190", marginLeft: 72 }}>
+                *******
+              </DefaultText>
+            ) : (
+              <DefaultText style={{ color: "#9DF190", marginLeft: 36 }}>
+                ~2,234.77 USD
+              </DefaultText>
+            )}
+
+            <DefaultView style={styles.cryptoAddress}>
+              <Info
+                onPress={() =>
+                  setKeyValue("modalComponent", {
+                    screen: ModalScreen.AddressInfo,
+                    values: {},
+                  })
+                }
+              />
+              <DefaultText style={{ color: guide.primary }}>
+                0xE7E2cB8c81c10...C9Ce62EC754
+              </DefaultText>
+
+              {copied ? (
+                <CircleChecked />
+              ) : (
+                <Copy
+                  onPress={() =>
+                    copyToClipboard("0xE7E2cB8c81c10...C9Ce62EC754")
+                  }
+                />
+              )}
+            </DefaultView>
+          </DefaultView>
+
+          {/* Tabs */}
+          <DefaultView style={{ width, marginTop: 20 }}>
+            <DefaultView style={styles.tabContainer}>
+              <Pressable onPress={() => onSelectTab(0)}>
+                <DefaultText
+                  style={[styles.tabText, tab === 0 && styles.activeText]}
+                >
+                  Send
+                </DefaultText>
+              </Pressable>
+
+              <Pressable onPress={() => onSelectTab(1)}>
+                <DefaultText
+                  style={[styles.tabText, tab === 1 && styles.activeText]}
+                >
+                  Swap
+                </DefaultText>
+              </Pressable>
+              <DefaultView
+                style={{
+                  width: width / 4,
+                  borderBottomColor: "#4A41C7",
+                  left: slideBarPosition,
+                  bottom: -1.5,
+                  borderBottomWidth: 2,
+                  position: "absolute",
+                }}
+              />
+            </DefaultView>
+
+            <PagerView
+              ref={PagerRef}
+              style={styles.pager}
+              initialPage={0}
+              onPageScroll={(e) => {
+                setTab(e.nativeEvent.position);
+                setPosition(e.nativeEvent.offset);
+              }}
             >
-              3,530.84
-            </DefaultText>
-          )}
-          <CryptoDropdown
-            onPress={() =>
-              setKeyValue("modalComponent", {
-                screen: ModalScreen.Crypto,
-                values: {},
-              })
-            }
-            text="MATIC"
-            logo={<Polygon />}
-          />
-        </DefaultView>
-        {hideBalance ? (
-          <DefaultText style={{ color: "#9DF190", marginLeft: 72 }}>
-            *******
-          </DefaultText>
-        ) : (
-          <DefaultText style={{ color: "#9DF190", marginLeft: 36 }}>
-            ~2,234.77 USD
-          </DefaultText>
-        )}
+              <Send key={"1"} />
+              <Swap key={"2"} />
+            </PagerView>
+          </DefaultView>
 
-        <DefaultView style={styles.cryptoAddress}>
-          <Info
-            onPress={() =>
-              setKeyValue("modalComponent", {
-                screen: ModalScreen.AddressInfo,
-                values: {},
-              })
-            }
-          />
-          <DefaultText style={{ color: guide.primary }}>
-            0xE7E2cB8c81c10...C9Ce62EC754
-          </DefaultText>
-
-          {copied ? (
-            <CircleChecked />
-          ) : (
-            <Copy
-              onPress={() => copyToClipboard("0xE7E2cB8c81c10...C9Ce62EC754")}
-            />
-          )}
-        </DefaultView>
-      </DefaultView>
-
-      {/* Tabs */}
-      <DefaultView style={{ width, marginTop: 20 }}>
-        <DefaultView style={styles.tabContainer}>
-          <Pressable onPress={() => onSelectTab(0)}>
-            <DefaultText
-              style={[styles.tabText, tab === 0 && styles.activeText]}
-            >
-              Send
-            </DefaultText>
-          </Pressable>
-
-          <Pressable onPress={() => onSelectTab(1)}>
-            <DefaultText
-              style={[styles.tabText, tab === 1 && styles.activeText]}
-            >
-              Swap
-            </DefaultText>
-          </Pressable>
-          <DefaultView
-            style={{
-              width: width / 4,
-              borderBottomColor: "#4A41C7",
-              left: slideBarPosition,
-              bottom: -1.5,
-              borderBottomWidth: 2,
-              position: "absolute",
-            }}
-          />
-        </DefaultView>
-
-        <PagerView
-          ref={PagerRef}
-          style={styles.pager}
-          initialPage={0}
-          onPageScroll={(e) => {
-            setTab(e.nativeEvent.position);
-            setPosition(e.nativeEvent.offset);
-          }}
-        >
-          <Send key={"1"} />
-          <Swap key={"2"} />
-        </PagerView>
-      </DefaultView>
-
-      <SwipeModal />
+          <SwipeModal />
+        </KeyboardAvoidingView>
+      </ScrollView>
     </TabScreen>
   );
 }

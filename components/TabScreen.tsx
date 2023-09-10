@@ -20,13 +20,7 @@ export default function TabScreen({ children }: { children: ReactNode }) {
         style={"light"}
         backgroundColor={styles.tabScreen.backgroundColor}
       />
-      <ScrollView style={{ marginTop: 50 }}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-        >
-          {children}
-        </KeyboardAvoidingView>
-      </ScrollView>
+      {children}
     </SafeAreaView>
   );
 }

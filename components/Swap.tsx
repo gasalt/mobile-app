@@ -112,7 +112,7 @@ export default function Swap() {
 }
 
 const styles = StyleSheet.create({
-  container: { paddingHorizontal: 12 },
+  container: { paddingHorizontal: 12, marginTop: 10 },
   multiple: {
     flexDirection: "row",
     gap: 4,
