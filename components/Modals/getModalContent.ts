@@ -1,8 +1,9 @@
 import { ModalScreen, ModalType } from "../../types/enums";
 import AddressInfo from "./AddressInfo";
-import Crypto from "./Crypto";
-import QrCodeScan from "./QRCodeScan";
-import SendModal from "./SendModal";
+import Crypto from "@/components/Modals/Crypto";
+import MultiAddress from "@/components/Modals/MultiAddress";
+import QrCodeScan from "@/components/Modals/QRCodeScan";
+import SendModal from "@/components/Modals/SendModal";
 
 
 const modals: Record<ModalScreen, ModalsValue> = {
@@ -21,6 +22,10 @@ const modals: Record<ModalScreen, ModalsValue> = {
     [ModalScreen.Crypto]: {
         size: ModalType.Big,
         Screen: Crypto
+    },
+    [ModalScreen.MultiAddress]: {
+        size: ModalType.Big,
+        Screen: MultiAddress
     },
     [ModalScreen.None]: {
         size: ModalType.None,

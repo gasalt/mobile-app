@@ -1,19 +1,22 @@
-import { useRef, ReactNode } from "react";
+import { useRef, ReactNode, useState } from "react";
 import {
   Animated,
   Easing,
   TextInput,
   StyleSheet,
   InputModeOptions,
+  TextInputProps,
 } from "react-native";
-import { DefaultView } from "../Defaults";
+
+import { DefaultView } from '@/components/Defaults';
+
 
 const titleActiveSize = 14,
   titleInActiveSize = 14,
   titleActiveColor = "#8987AB",
   titleInactiveColor = "#403E59";
 
-interface FloatingTextInputProps {
+interface FloatingTextInputProps extends TextInputProps {
   label: string;
   mode?: InputModeOptions;
   rightElement?: ReactNode;
@@ -31,6 +34,7 @@ const FloatingTextInput = ({
   placeholder = "",
 }: FloatingTextInputProps) => {
   const animatedValue = useRef(new Animated.Value(0));
+  const [active, setActive] = useState(false);
 
   const returnAnimatedTitleStyles = {
     transform: [
@@ -60,6 +64,8 @@ const FloatingTextInput = ({
       easing: Easing.bezier(0.4, 0.0, 0.2, 1),
       useNativeDriver: false,
     }).start();
+
+    setActive(true);
   };
 
   const onBlur = () => {
@@ -71,6 +77,7 @@ const FloatingTextInput = ({
         useNativeDriver: false,
       }).start();
     }
+    setActive(false);
   };
 
   return (
@@ -81,7 +88,7 @@ const FloatingTextInput = ({
       <TextInput
         onChangeText={onChangeText}
         value={value}
-        style={styles.textStyle}
+        style={[styles.textStyle, active && {borderColor: "#627EEA"}]}
         onBlur={onBlur}
         onFocus={onFocus}
         inputMode={mode}

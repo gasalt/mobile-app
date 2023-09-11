@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { Pressable, StyleSheet } from "react-native";
 
-import Close from "../assets/svgs/Close";
-import QR from "../assets/svgs/QR";
-import { DefaultText, DefaultView } from "./Defaults";
-import FloatingTextInput from "./inputs/FloatingInput";
-import AddMultiple from "../assets/svgs/AddMultiple";
-import CustomButton from "./CustomButton";
-import CryptoDropdown from "./CryptoDrown";
-import Polygon from "../assets/svgs/Polygon";
-import { useGlobalState } from "../sdk/state";
-import { ModalScreen } from "../types/enums";
+import Close from "@/assets/svgs/Close";
+import QR from "@/assets/svgs/QR";
+import { DefaultText, DefaultView } from "@/components/Defaults";
+import FloatingTextInput from "@/components/inputs/FloatingInput";
+import AddMultiple from "@/assets/svgs/AddMultiple";
+import CustomButton from "@/components/CustomButton";
+import CryptoDropdown from "@/components/CryptoDrown";
+import Polygon from "@/assets/svgs/Polygon";
+import { useGlobalState } from "@/sdk/state";
+import { ModalScreen } from "@/types/enums";
 
 export default function Send() {
   const { setKeyValue } = useGlobalState();
@@ -26,22 +26,34 @@ export default function Send() {
         label="Recipient's Address"
         rightElement={
           address === "" ? (
-            <QR
+            <Pressable
               onPress={() =>
                 setKeyValue("modalComponent", {
                   values: {},
                   screen: ModalScreen.QRCodeScan,
                 })
               }
-            />
+            >
+              <QR />
+            </Pressable>
           ) : (
-            <Close onPress={() => setAddress("")} />
+            <Pressable onPress={() => setAddress("")}>
+              <Close />
+            </Pressable>
           )
         }
         value={address}
         onChangeText={(text) => setAddress(text)}
       />
-      <Pressable style={styles.multiple}>
+      <Pressable
+        style={styles.multiple}
+        onPress={() =>
+          setKeyValue("modalComponent", {
+            values: {},
+            screen: ModalScreen.MultiAddress,
+          })
+        }
+      >
         <AddMultiple />
         <DefaultText>Send to multiple addresses</DefaultText>
       </Pressable>

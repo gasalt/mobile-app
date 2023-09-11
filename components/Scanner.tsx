@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BarCodeScanner } from "expo-barcode-scanner";
-import { DefaultText, DefaultView } from "./Defaults";
-import CustomButton from "./CustomButton";
+import { DefaultText, DefaultView } from "@/components/Defaults";
+import CustomButton from "@/components/CustomButton";
 
 export default function Scanner({ onClose }: ModalProps) {
   const [hasPermission, setHasPermission] = useState(false);

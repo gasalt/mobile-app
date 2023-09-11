@@ -1,5 +1,5 @@
 import { Drawer} from "expo-router/drawer";
-import styles from "../../styles";
+import styles from "@/styles";
 
 export const unstable_settings = {
   initialRouteName: "(tabs)",

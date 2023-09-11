@@ -6,7 +6,7 @@ import {
   StyleSheet,
   ViewStyle,
 } from "react-native";
-import { DefaultText } from "./Defaults";
+import { DefaultText } from "@/components/Defaults";
 
 interface CustomButtonProps extends PressableProps {
   label: string;

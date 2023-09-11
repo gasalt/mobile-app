@@ -1,13 +1,13 @@
 import { DefaultText, DefaultView } from "./Defaults";
 import { Pressable, StyleSheet, TextInput } from "react-native";
-import CustomButton from "./CustomButton";
-import CryptoDropdown from "./CryptoDrown";
-import Polygon from "../assets/svgs/Polygon";
-import BNB from "../assets/svgs/BNB";
-import Refresh from "../assets/svgs/Refresh";
+import CustomButton from "@/components/CustomButton";
+import CryptoDropdown from "@/components/CryptoDrown";
+import Polygon from "@/assets/svgs/Polygon";
+import BNB from "@/assets/svgs/BNB";
+import Refresh from "@/assets/svgs/Refresh";
 import { useState } from "react";
-import { useGlobalState } from "../sdk/state";
-import { ModalScreen } from "../types/enums";
+import { useGlobalState } from "@/sdk/state";
+import { ModalScreen } from "@/types/enums";
 
 export default function Swap() {
   const { setKeyValue } = useGlobalState();
@@ -112,7 +112,7 @@ export default function Swap() {
 }
 
 const styles = StyleSheet.create({
-  container: { paddingHorizontal: 12 },
+  container: { paddingHorizontal: 12, marginTop: 10 },
   multiple: {
     flexDirection: "row",
     gap: 4,

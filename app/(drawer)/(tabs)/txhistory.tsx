@@ -1,9 +1,9 @@
 import { StyleSheet, Text, View } from 'react-native';
-import TabScreen from '../../../components/TabScreen';
+import TabScreen from '@/components/TabScreen';
 
 
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { DefaultText, DefaultView } from '../../../components/Defaults';
+import { DefaultText, DefaultView } from '@/components/Defaults';
 
 const Tab = createMaterialTopTabNavigator();
 

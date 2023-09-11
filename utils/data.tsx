@@ -1,10 +1,10 @@
-import BigArbitrum from "../assets/svgs/BigArbi";
-import BigAvalanche from "../assets/svgs/BigAvalanche";
-import BigCelo from "../assets/svgs/BigCelo";
-import BigEth from "../assets/svgs/BigEth";
-import BigOptimism from "../assets/svgs/BigOptimism";
-import BigPolygon from "../assets/svgs/BigPolygon";
-import BigSolana from "../assets/svgs/BigSolana";
+import BigArbitrum from "@/assets/svgs/BigArbi";
+import BigAvalanche from "@/assets/svgs/BigAvalanche";
+import BigCelo from "@/assets/svgs/BigCelo";
+import BigEth from "@/assets/svgs/BigEth";
+import BigOptimism from "@/assets/svgs/BigOptimism";
+import BigPolygon from "@/assets/svgs/BigPolygon";
+import BigSolana from "@/assets/svgs/BigSolana";
 
 export const cryptoData = [
   {

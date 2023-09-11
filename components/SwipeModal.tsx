@@ -1,8 +1,8 @@
 import { StyleSheet, View } from "react-native";
 import SwipeUpDownModal from "react-native-swipe-modal-up-down";
-import { useGlobalState } from "../sdk/state";
-import { ModalScreen, ModalType } from "../types/enums";
-import getModalContent from "./Modals/getModalContent";
+import { useGlobalState } from "@/sdk/state";
+import { ModalScreen, ModalType } from "@/types/enums";
+import getModalContent from "@/components/Modals/getModalContent";
 
 
 export default function SwipeModal() {
