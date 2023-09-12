@@ -20,9 +20,8 @@ export default function Main() {
   const marginBottom =
     Platform.OS === "ios" ? 40 : styles.tabBarStyle.marginBottom;
 
-
   const onPress = () => {
-    setKeyValue("modalComponent", {screen: ModalScreen.Crypto, values: {}});
+    setKeyValue("modalComponent", { screen: ModalScreen.Crypto, values: {} });
   };
 
   return (
@@ -63,7 +62,12 @@ export default function Main() {
             <Label focused={props.focused} name="History" />
           ),
           headerTitle: "Transactions",
-          headerTitleStyle: {color: "white", fontSize: 16, fontWeight: "500"}
+          headerTitleStyle: {
+            color: "white",
+            fontSize: 16,
+            fontWeight: "500",
+          },
+          headerTitleAlign: "center",
         }}
       />
       <Tabs.Screen

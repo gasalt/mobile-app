@@ -1,10 +1,10 @@
-import { Text, View } from "react-native";
+import { DefaultText, DefaultView } from "@/components/Defaults";
 
 
 export default function ProfileLayout() {
   return (
-    <View>
-        <Text>ProfileLayout</Text>
-    </View>
+    <DefaultView>
+      <DefaultText>ProfileLayout</DefaultText>
+    </DefaultView>
   )
 }
