@@ -13,7 +13,11 @@ export default function DrawerLayout() {
         drawerStyle: {
           backgroundColor: styles.tabScreen.backgroundColor,
         },
+        drawerLabelStyle: {
+          color: "white",
+        }
       }}
+      
       
     >
       <Drawer.Screen

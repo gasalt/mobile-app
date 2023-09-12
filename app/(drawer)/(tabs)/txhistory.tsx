@@ -1,23 +1,17 @@
-import { StyleSheet, Text, View } from 'react-native';
-import TabScreen from '@/components/TabScreen';
-
+import { StyleSheet } from "react-native";
 
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { DefaultText, DefaultView } from '@/components/Defaults';
+import { DefaultText, DefaultView } from "@/components/Defaults";
+import { guide } from "@/styles";
+import All from "@/components/transactions/All";
 
 const Tab = createMaterialTopTabNavigator();
 
-const TabPage1 = () => {
-  return (
-    <DefaultView style={{ backgroundColor: "white" }}>
-      <DefaultText>Top 1</DefaultText>
-    </DefaultView>
-  );
-};
+
 
 const TabPage2 = () => {
   return (
-    <DefaultView style={{ backgroundColor: "white" }}>
+    <DefaultView style={{ alignItems: "center", justifyContent: "center" }}>
       <DefaultText>Top 2</DefaultText>
     </DefaultView>
   );
@@ -29,52 +23,42 @@ function MyTabs() {
       screenOptions={{
         lazy: true,
         tabBarPressOpacity: 1,
-        tabBarPressColor: "rgba(0,0,0,0)",
+        tabBarActiveTintColor: "#fff",
+        tabBarInactiveTintColor: "#868693",
         tabBarContentContainerStyle: {
+          flex: 1,
           alignItems: "center",
           justifyContent: "center",
-        },
-        tabBarIndicatorStyle: {
-          display: "none",
-        },
-        tabBarItemStyle: {
-          width: 70,
-          paddingHorizontal: 0,
-          position: "relative",
-          padding: 0,
-          height: 45,
+          marginTop: 100,
+          borderBottomColor: "#868693",
+          borderBottomWidth: 0.19,
         },
         tabBarLabelStyle: {
-          fontSize: 15,
+          fontWeight: "500",
+          fontSize: 16,
+          textTransform: "capitalize",
         },
-        tabBarStyle: {
-          width: "auto",
-          height: 45,
-          borderBottomColor: "red",
-          backgroundColor: "#fff",
-        },
+        tabBarIndicatorStyle: { backgroundColor: "#4A41C7", height: 3 },
+        tabBarStyle: { backgroundColor: guide.mainBackground },
       }}
+      sceneContainerStyle={{ backgroundColor: guide.mainBackground }}
     >
-      <Tab.Screen name="Page1" component={TabPage1} />
-      <Tab.Screen name="Page2" component={TabPage2} />
+      <Tab.Screen name="All" component={All} />
+      <Tab.Screen name="Sent" component={TabPage2} />
+      <Tab.Screen name="Received" component={TabPage2} />
     </Tab.Navigator>
   );
 }
 
 export default function App() {
-    return (
-        <TabScreen>
-           <MyTabs />
-        </TabScreen>
-
-    );
+  return <MyTabs />;
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });

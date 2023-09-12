@@ -30,7 +30,6 @@ export default function Main() {
       screenOptions={{
         headerTitle: "",
         headerTransparent: true,
-        headerLeft: () => <Avatar />,
         tabBarStyle: [styles.tabBarStyle, { marginBottom }],
         tabBarHideOnKeyboard: true,
       }}
@@ -43,6 +42,7 @@ export default function Main() {
           tabBarLabel: (props) => (
             <Label focused={props.focused} name="Wallet" />
           ),
+          headerLeft: () => <Avatar />,
           headerRight: () => (
             <CryptoDropdown
               onPress={onPress}
@@ -62,6 +62,8 @@ export default function Main() {
           tabBarLabel: (props) => (
             <Label focused={props.focused} name="History" />
           ),
+          headerTitle: "Transactions",
+          headerTitleStyle: {color: "white", fontSize: 16, fontWeight: "500"}
         }}
       />
       <Tabs.Screen
