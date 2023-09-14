@@ -59,7 +59,7 @@ const Empty = () => (
 const All = () => {
   const [data] = useState([]);
 
-  if (data.length === 0) {
+  if (data.length !== 0) {
     return <Empty />;
   }
 
@@ -138,6 +138,7 @@ export default All;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginBottom: 120
   },
   emptyContainer: {
     flex: 1,

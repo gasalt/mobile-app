@@ -1,5 +1,5 @@
 import { Tabs } from "expo-router/tabs";
-import { Platform } from "react-native";
+import { Dimensions, Platform } from "react-native";
 import { DefaultText } from "@/components/Defaults";
 import styles from "@/styles";
 import Icon from "@/components/Icon";
@@ -23,8 +23,10 @@ export default function Main() {
   const onPress = () => {
     setKeyValue("modalComponent", { screen: ModalScreen.Crypto, values: {} });
   };
+  const {width, height} = Dimensions.get("window");
 
   return (
+ 
     <Tabs
       screenOptions={{
         headerTitle: "",
