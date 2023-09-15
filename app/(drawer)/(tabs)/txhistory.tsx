@@ -9,8 +9,14 @@ const Tab = createMaterialTopTabNavigator();
 
 const TabPage2 = () => {
   return (
+    <All useData={true} />
+  );
+};
+
+const TabPage3 = () => {
+  return (
     <DefaultView style={{ alignItems: "center", justifyContent: "center" }}>
-      <DefaultText>Top 2</DefaultText>
+      <DefaultText>Top 3</DefaultText>
     </DefaultView>
   );
 };
@@ -27,7 +33,7 @@ function MyTabs() {
           flex: 1,
           alignItems: "center",
           justifyContent: "center",
-          marginTop: Platform.OS === "android" ? 60 : 100,
+          marginTop: Platform.OS === "android" ? 80 : 100,
           borderBottomColor: "#868693",
           borderBottomWidth: 0.19,
         },
@@ -46,7 +52,7 @@ function MyTabs() {
     >
       <Tab.Screen name="All" component={All} />
       <Tab.Screen name="Sent" component={TabPage2} />
-      <Tab.Screen name="Received" component={TabPage2} />
+      <Tab.Screen name="Received" component={TabPage3} />
     </Tab.Navigator>
   );
 }

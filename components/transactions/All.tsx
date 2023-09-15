@@ -12,7 +12,7 @@ type transType = "inflow" | "outflow" | "swap"
 const transactions = [
   {
     id: 1,
-    amount: "40000 GST",
+    amount: "40001 GST",
     address: "0Xfghjo...bn67Addv",
     status: "SUCCESSFUL",
     type: "inflow",
@@ -31,6 +31,50 @@ const transactions = [
     status: "FAILED",
     type: "swap",
   },
+  {
+    id: 4,
+    amount: "70000 GST",
+    address: "0Xfghj...bn67Addv",
+    status: "SUCCESSFUL",
+    type: "inflow",
+  },
+  {
+    id: 5,
+    amount: "80000 GST",
+    address: "0Xfghj...bn67Addv",
+    status: "SUCCESSFUL",
+    type: "outflow",
+  },
+  {
+    id: 6,
+    amount: "70000 GST",
+    address: "0Xfghj...bn67Addv",
+    status: "SUCCESSFUL",
+    type: "inflow",
+  },
+  {
+    id: 7,
+    amount: "80000 GST",
+    address: "0Xfghj...bn67Addv",
+    status: "SUCCESSFUL",
+    type: "outflow",
+  },
+  {
+    id: 8,
+    amount: "70000 GST",
+    address: "0Xfghj...bn67Addv",
+    status: "SUCCESSFUL",
+    type: "inflow",
+  },
+  {
+    id: 9,
+    amount: "80000 GST",
+    address: "0Xfghj...bn67Addv",
+    status: "SUCCESSFUL",
+    type: "outflow",
+  },
+  // generate 5 more
+
 ];
 
 const getColor: Record<transType, string> = {
@@ -56,10 +100,10 @@ const Empty = () => (
   </DefaultView>
 );
 
-const All = () => {
-  const [data] = useState([]);
+const All = ({useData=false}: {useData?: boolean}) => {
+  // const [data] = useState([]);
 
-  if (data.length !== 0) {
+  if (!useData) {
     return <Empty />;
   }
 
