@@ -1,5 +1,5 @@
 import { Tabs } from "expo-router/tabs";
-import { Platform } from "react-native";
+import { Dimensions, Platform } from "react-native";
 import { DefaultText } from "@/components/Defaults";
 import styles from "@/styles";
 import Icon from "@/components/Icon";
@@ -20,17 +20,17 @@ export default function Main() {
   const marginBottom =
     Platform.OS === "ios" ? 40 : styles.tabBarStyle.marginBottom;
 
-
   const onPress = () => {
-    setKeyValue("modalComponent", {screen: ModalScreen.Crypto, values: {}});
+    setKeyValue("modalComponent", { screen: ModalScreen.Crypto, values: {} });
   };
+  const {width, height} = Dimensions.get("window");
 
   return (
+ 
     <Tabs
       screenOptions={{
         headerTitle: "",
         headerTransparent: true,
-        headerLeft: () => <Avatar />,
         tabBarStyle: [styles.tabBarStyle, { marginBottom }],
         tabBarHideOnKeyboard: true,
       }}
@@ -43,6 +43,7 @@ export default function Main() {
           tabBarLabel: (props) => (
             <Label focused={props.focused} name="Wallet" />
           ),
+          headerLeft: () => <Avatar />,
           headerRight: () => (
             <CryptoDropdown
               onPress={onPress}
@@ -62,6 +63,13 @@ export default function Main() {
           tabBarLabel: (props) => (
             <Label focused={props.focused} name="History" />
           ),
+          headerTitle: "Transactions",
+          headerTitleStyle: {
+            color: "white",
+            fontSize: 16,
+            fontWeight: "500",
+          },
+          headerTitleAlign: "center",
         }}
       />
       <Tabs.Screen

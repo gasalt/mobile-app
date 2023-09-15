@@ -1,10 +1,10 @@
-import { Text, View } from "react-native";
+import { DefaultText, DefaultView } from "@/components/Defaults";
 
 
 export default function SettingsLayout() {
   return (
-    <View>
-        <Text>SettingsLayout</Text>
-    </View>
+    <DefaultView>
+        <DefaultText>SettingsLayout</DefaultText>
+    </DefaultView>
   )
 }

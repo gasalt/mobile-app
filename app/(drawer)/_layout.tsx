@@ -1,5 +1,6 @@
-import { Drawer} from "expo-router/drawer";
-import styles from "@/styles";
+import { Drawer } from "expo-router/drawer";
+import styles, { guide } from "@/styles";
+import Avatar from "@/components/Avatar";
 
 export const unstable_settings = {
   initialRouteName: "(tabs)",
@@ -13,8 +14,10 @@ export default function DrawerLayout() {
         drawerStyle: {
           backgroundColor: styles.tabScreen.backgroundColor,
         },
+        drawerLabelStyle: {
+          color: "white",
+        },
       }}
-      
     >
       <Drawer.Screen
         name="(tabs)"
@@ -28,6 +31,17 @@ export default function DrawerLayout() {
         options={{
           drawerLabel: "Profile",
           title: "Profile",
+          headerTintColor: "#fff",
+          headerLeft: () => <Avatar />,
+          headerStyle: {
+            backgroundColor: guide.mainBackground,
+            shadowColor: "transparent",
+            elevation: 0,
+          },
+          sceneContainerStyle: {
+            backgroundColor: guide.mainBackground,
+          },
+          headerShadowVisible: false,
         }}
       />
 
@@ -36,6 +50,17 @@ export default function DrawerLayout() {
         options={{
           drawerLabel: "Settings",
           title: "Settings",
+          headerTintColor: "#fff",
+          headerLeft: () => <Avatar />,
+          headerStyle: {
+            backgroundColor: guide.mainBackground,
+            shadowColor: "transparent",
+            elevation: 0,
+          },
+          sceneContainerStyle: {
+            backgroundColor: guide.mainBackground,
+          },
+          headerShadowVisible: false,
         }}
       />
     </Drawer>

@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Dimensions,
   KeyboardAvoidingView,
   Platform,
   Pressable,
+  ScrollView,
   StyleSheet,
 } from "react-native";
 import * as Clipboard from "expo-clipboard";
@@ -14,7 +15,6 @@ import SwipeModal from "@/components/SwipeModal";
 import TabScreen from "@/components/TabScreen";
 import { useGlobalState } from "@/sdk/state";
 
-import PagerView from "react-native-pager-view";
 import Copy from "@/assets/svgs/Copy";
 import Info from "@/assets/svgs/Info";
 import Polygon from "@/assets/svgs/Polygon";
@@ -22,30 +22,20 @@ import CryptoDropdown from "@/components/CryptoDrown";
 import Send from "@/components/Send";
 import Swap from "@/components/Swap";
 import { guide } from "@/styles";
-import { animatedBottomTabLine } from "@/utils/fx";
 import CircleChecked from "@/assets/svgs/CircleChecked";
 import { ModalScreen } from "@/types/enums";
 import Eye from "@/assets/svgs/Eye";
-import { ScrollView } from "react-native-gesture-handler";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
 const { width, height } = Dimensions.get("window");
 
+const Tab = createMaterialTopTabNavigator();
+
 export default function App() {
   const { setKeyValue } = useGlobalState();
-  const PagerRef = useRef<any>();
-
-  const [tab, setTab] = useState(0);
-  const [position, setPosition] = useState(0);
 
   const [hideBalance, setHideBalance] = useState(false);
   const [copied, setCopied] = useState(false);
-
-  const slideBarPosition = animatedBottomTabLine(tab, position, width);
-
-  const onSelectTab = (value: number) => {
-    if (tab === value) return;
-    PagerRef.current.setPage(value);
-  };
 
   const copyToClipboard = async (value: string) => {
     await Clipboard.setStringAsync(value);
@@ -63,12 +53,13 @@ export default function App() {
 
   return (
     <TabScreen>
-      <ScrollView style={{ marginTop: 50 }} contentContainerStyle={{ flex: 1 }}>
+      <ScrollView style={{marginTop: 50}} contentContainerStyle={{flex: 1}}>
         <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          behavior={Platform.OS === "ios" ? "padding" : undefined }
+          style={{flex: 1}}
         >
-          {/* Balance view */}
-          <DefaultView style={styles.balanceContainer}>
+           {/* Balance view */}
+           <DefaultView style={styles.balanceContainer}>
             <DefaultView style={styles.totalBalanceContainer}>
               <DefaultText style={{ fontSize: 16, fontWeight: "400" }}>
                 Total balance
@@ -157,48 +148,41 @@ export default function App() {
           </DefaultView>
 
           {/* Tabs */}
-          <DefaultView style={{ width, marginTop: 20 }}>
-            <DefaultView style={styles.tabContainer}>
-              <Pressable onPress={() => onSelectTab(0)}>
-                <DefaultText
-                  style={[styles.tabText, tab === 0 && styles.activeText]}
-                >
-                  Send
-                </DefaultText>
-              </Pressable>
-
-              <Pressable onPress={() => onSelectTab(1)}>
-                <DefaultText
-                  style={[styles.tabText, tab === 1 && styles.activeText]}
-                >
-                  Swap
-                </DefaultText>
-              </Pressable>
-              <DefaultView
-                style={{
-                  width: width / 4,
-                  borderBottomColor: "#4A41C7",
-                  left: slideBarPosition,
-                  bottom: -1.5,
-                  borderBottomWidth: 2,
-                  position: "absolute",
-                }}
-              />
-            </DefaultView>
-
-            <PagerView
-              ref={PagerRef}
-              style={styles.pager}
-              initialPage={0}
-              onPageScroll={(e) => {
-                setTab(e.nativeEvent.position);
-                setPosition(e.nativeEvent.offset);
-              }}
-            >
-              <Send key={"1"} />
-              <Swap key={"2"} />
-            </PagerView>
-          </DefaultView>
+          <Tab.Navigator
+            screenOptions={{
+              lazy: true,
+              tabBarPressOpacity: 1,
+              tabBarActiveTintColor: "#fff",
+              tabBarInactiveTintColor: "#868693",
+              tabBarContentContainerStyle: {
+                flex: 1,
+                alignItems: "center",
+                justifyContent: "center",
+                marginTop: Platform.OS === "android" ? 10 : 20,
+                borderBottomColor: "#868693",
+                borderBottomWidth: 0.19,
+              },
+              tabBarLabelStyle: {
+                fontWeight: "500",
+                fontSize: 16,
+                textTransform: "capitalize",
+              },
+              tabBarIndicatorStyle: { backgroundColor: "#4A41C7", height: 3 },
+              tabBarStyle: {
+                backgroundColor: guide.mainBackground,
+                borderBottomWidth: 0.19,
+                borderBottomColor: "#868693",
+              },
+            }}
+            sceneContainerStyle={{
+              backgroundColor: guide.mainBackground,
+              marginTop: Platform.OS === "android" ? -5 : 0,
+            }}
+            keyboardDismissMode="on-drag"
+          >
+            <Tab.Screen name="Send" component={Send} />
+            <Tab.Screen name="Swap" component={Swap} />
+          </Tab.Navigator>
 
           <SwipeModal />
         </KeyboardAvoidingView>
