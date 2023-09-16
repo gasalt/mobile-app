@@ -124,11 +124,6 @@ export default function Browser() {
   );
   return (
     <TabScreen>
-      <Stack.Screen
-        options={{
-          headerShown: false,
-        }}
-      />
       <DefaultView style={styles.container}>
         <FloatingTextInput
           label=""
