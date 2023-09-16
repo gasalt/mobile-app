@@ -94,6 +94,7 @@ const FloatingTextInput = ({
         inputMode={mode}
         returnKeyType="done"
         placeholder={placeholder}
+        placeholderTextColor={"#403E59"}
       />
       <DefaultView style={styles.right}>{rightElement}</DefaultView>
     </Animated.View>

@@ -1,5 +1,5 @@
 import { Tabs } from "expo-router/tabs";
-import { Dimensions, Platform } from "react-native";
+import {  Platform } from "react-native";
 import { DefaultText } from "@/components/Defaults";
 import styles from "@/styles";
 import Icon from "@/components/Icon";
@@ -23,7 +23,6 @@ export default function Main() {
   const onPress = () => {
     setKeyValue("modalComponent", { screen: ModalScreen.Crypto, values: {} });
   };
-  const {width, height} = Dimensions.get("window");
 
   return (
  
@@ -73,9 +72,9 @@ export default function Main() {
         }}
       />
       <Tabs.Screen
-        name="browser"
+        name="(browser)"
         options={{
-          href: "/browser",
+          href: "/",
           tabBarIcon: (props) => (
             <Icon focused={props.focused} name="browser" />
           ),
