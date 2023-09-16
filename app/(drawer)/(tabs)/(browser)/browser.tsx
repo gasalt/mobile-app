@@ -18,6 +18,7 @@ import LargePolygon from "@/assets/svgs/LargePolygon";
 import UpRight from "@/assets/svgs/UpRight";
 import { useRouter } from "expo-router";
 import { Stack } from "expo-router";
+import { SafeAreaView, } from "react-native-safe-area-context";
 
 const { width } = Dimensions.get("window");
 
@@ -52,6 +53,7 @@ const visited = [
 export default function Browser() {
   const [search, setSearch] = useState("");
   const router = useRouter();
+
 
   const renderItem = ({ item }: { [key: string]: any }) => (
     <DefaultView
@@ -128,6 +130,7 @@ export default function Browser() {
         options={{
           headerShown: false,
         }}
+        
       />
       <DefaultView style={styles.container}>
         <FloatingTextInput

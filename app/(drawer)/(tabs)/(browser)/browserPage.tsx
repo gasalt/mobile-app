@@ -8,12 +8,19 @@ import { useGlobalState } from "@/sdk/state";
 import { guide } from "@/styles";
 import { ModalScreen } from "@/types/enums";
 import { Stack, useLocalSearchParams, useNavigation } from "expo-router";
-import { Platform, Pressable, StyleSheet, useWindowDimensions } from "react-native";
+import {
+  Platform,
+  Pressable,
+  StyleSheet,
+  useWindowDimensions,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import WebView from "react-native-webview";
+import Constants from "expo-constants";
 
 export default function BrowserPage() {
   const { setKeyValue } = useGlobalState();
-  const {width} = useWindowDimensions();
+  const { width } = useWindowDimensions();
   const onPress = () => {
     setKeyValue("modalComponent", { screen: ModalScreen.Crypto, values: {} });
   };
@@ -21,13 +28,8 @@ export default function BrowserPage() {
 
   const navigation = useNavigation();
   return (
-    <DefaultView style={styles.container}>
-      <Stack.Screen
-        options={{
-          title: "",
-          headerShown: false,
-        }}
-      />
+    <SafeAreaView style={styles.container}>
+      <Stack.Screen options={{ title: "", headerShown: false }} />
       <DefaultView
         style={{
           flexDirection: "row",
@@ -73,7 +75,7 @@ export default function BrowserPage() {
         originWhitelist={["*"]}
       />
       <SwipeModal />
-    </DefaultView>
+    </SafeAreaView>
   );
 }
 
@@ -81,6 +83,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: guide.mainBackground,
-    marginTop: Platform.OS === "android" ? 0 : -70,
+    marginTop: Platform.OS === "android" ? 0 : -120,
+    paddingTop: Platform.OS === "android" ? Constants.statusBarHeight : 0,
   },
 });

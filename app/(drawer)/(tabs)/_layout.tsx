@@ -25,7 +25,6 @@ export default function Main() {
   };
 
   return (
- 
     <Tabs
       screenOptions={{
         headerTitle: "",
@@ -74,7 +73,7 @@ export default function Main() {
       <Tabs.Screen
         name="(browser)"
         options={{
-          href: "/",
+          href: "/browser",
           tabBarIcon: (props) => (
             <Icon focused={props.focused} name="browser" />
           ),
