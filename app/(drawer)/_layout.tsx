@@ -1,6 +1,6 @@
 import { Drawer } from "expo-router/drawer";
 import styles, { guide } from "@/styles";
-import Avatar from "@/components/Avatar";
+import BackButton from "@/components/BackButton";
 
 export const unstable_settings = {
   initialRouteName: "(tabs)",
@@ -10,6 +10,7 @@ export default function DrawerLayout() {
   return (
     <Drawer
       screenOptions={{
+        headerShown: false,
         swipeEdgeWidth: 0,
         drawerStyle: {
           backgroundColor: styles.tabScreen.backgroundColor,
@@ -32,7 +33,7 @@ export default function DrawerLayout() {
           drawerLabel: "Profile",
           title: "Profile",
           headerTintColor: "#fff",
-          headerLeft: () => <Avatar />,
+          headerLeft: () => <BackButton />,
           headerStyle: {
             backgroundColor: guide.mainBackground,
             shadowColor: "transparent",
@@ -51,7 +52,7 @@ export default function DrawerLayout() {
           drawerLabel: "Settings",
           title: "Settings",
           headerTintColor: "#fff",
-          headerLeft: () => <Avatar />,
+          headerLeft: () => <BackButton />,
           headerStyle: {
             backgroundColor: guide.mainBackground,
             shadowColor: "transparent",

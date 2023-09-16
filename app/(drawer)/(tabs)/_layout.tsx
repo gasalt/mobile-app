@@ -1,5 +1,5 @@
 import { Tabs } from "expo-router/tabs";
-import { Dimensions, Platform } from "react-native";
+import {  Platform } from "react-native";
 import { DefaultText } from "@/components/Defaults";
 import styles from "@/styles";
 import Icon from "@/components/Icon";
@@ -8,6 +8,10 @@ import Polygon from "@/assets/svgs/Polygon";
 import CryptoDropdown from "@/components/CryptoDrown";
 import { useGlobalState } from "@/sdk/state";
 import { ModalScreen } from "@/types/enums";
+
+export const unstable_settings = {
+  initialRouteName: "/",
+};
 
 const Label = ({ name, focused }: { name: string; focused: boolean }) => (
   <DefaultText style={{ color: focused ? "white" : "gray", fontSize: 10 }}>
@@ -23,13 +27,13 @@ export default function Main() {
   const onPress = () => {
     setKeyValue("modalComponent", { screen: ModalScreen.Crypto, values: {} });
   };
-  const {width, height} = Dimensions.get("window");
 
   return (
  
     <Tabs
       screenOptions={{
         headerTitle: "",
+        headerShown: false,
         headerTransparent: true,
         tabBarStyle: [styles.tabBarStyle, { marginBottom }],
         tabBarHideOnKeyboard: true,
@@ -38,6 +42,7 @@ export default function Main() {
       <Tabs.Screen
         name="index"
         options={{
+          headerShown: true,
           href: "/",
           tabBarIcon: (props) => <Icon focused={props.focused} name="wallet" />,
           tabBarLabel: (props) => (
@@ -56,6 +61,7 @@ export default function Main() {
       <Tabs.Screen
         name="txhistory"
         options={{
+          headerShown: true,
           href: "/txhistory",
           tabBarIcon: (props) => (
             <Icon focused={props.focused} name="history" />

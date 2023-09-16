@@ -1,6 +1,5 @@
 import { SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
-// import * as NavigationBar from 'expo-navigation-bar';
 
 export const unstable_settings = {
   initialRouteName: "(drawer)",
