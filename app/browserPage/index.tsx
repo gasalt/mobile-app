@@ -5,19 +5,15 @@ import CryptoDropdown from "@/components/CryptoDrown";
 import { DefaultText, DefaultView } from "@/components/Defaults";
 import SwipeModal from "@/components/SwipeModal";
 import { useGlobalState } from "@/sdk/state";
-import { guide } from "@/styles";
 import { ModalScreen } from "@/types/enums";
 import { Stack, useLocalSearchParams, useNavigation } from "expo-router";
-import { Platform, Pressable, StyleSheet, useWindowDimensions } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Platform, Pressable } from "react-native";
 import WebView from "react-native-webview";
-import ss from "@/styles";
 import TabScreen from "@/components/TabScreen";
 
 
 export default function BrowserPage() {
   const { setKeyValue } = useGlobalState();
-  const { width } = useWindowDimensions();
   const onPress = () => {
     setKeyValue("modalComponent", { screen: ModalScreen.Crypto, values: {} });
   };
@@ -26,20 +22,16 @@ export default function BrowserPage() {
   const navigation = useNavigation();
   return (
     <TabScreen style={{ alignItems: "stretch" }}>
+    <Stack.Screen options={{headerShown: false}} />
       <DefaultView
         style={{
           flexDirection: "row",
           justifyContent: "space-between",
           alignItems: "center",
-
-          marginTop: 32,
-          // height: 50,
           top: 0,
           left: 0,
-          // position:"absolute",
           width: "100%",
-          zIndex: 100,
-          // marginBottom: 10,
+          marginBottom: 10,
           paddingHorizontal: 16,
         }}
       >
@@ -63,14 +55,13 @@ export default function BrowserPage() {
         <CryptoDropdown onPress={onPress} text="Polygon" logo={<Polygon />} />
       </DefaultView>
       <WebView
-        // style={{marginTop: 70}}
         source={{ uri: url as string }}
         allowFileAccess
         scalesPageToFit
         originWhitelist={["*"]}
         setSupportMultipleWindows={false}
       />
-      <SwipeModal />
+      {Platform.OS === "ios" && <SwipeModal />}
     </TabScreen>
   );
 }

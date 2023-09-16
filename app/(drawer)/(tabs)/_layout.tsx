@@ -33,6 +33,7 @@ export default function Main() {
     <Tabs
       screenOptions={{
         headerTitle: "",
+        headerShown: false,
         headerTransparent: true,
         tabBarStyle: [styles.tabBarStyle, { marginBottom }],
         tabBarHideOnKeyboard: true,
@@ -41,6 +42,7 @@ export default function Main() {
       <Tabs.Screen
         name="index"
         options={{
+          headerShown: true,
           href: "/",
           tabBarIcon: (props) => <Icon focused={props.focused} name="wallet" />,
           tabBarLabel: (props) => (
@@ -59,6 +61,7 @@ export default function Main() {
       <Tabs.Screen
         name="txhistory"
         options={{
+          headerShown: true,
           href: "/txhistory",
           tabBarIcon: (props) => (
             <Icon focused={props.focused} name="history" />
@@ -76,7 +79,7 @@ export default function Main() {
         }}
       />
       <Tabs.Screen
-        name="(browser)"
+        name="browser"
         options={{
           href: "/browser",
           tabBarIcon: (props) => (

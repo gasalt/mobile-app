@@ -10,6 +10,7 @@ export default function DrawerLayout() {
   return (
     <Drawer
       screenOptions={{
+        headerShown: false,
         swipeEdgeWidth: 0,
         drawerStyle: {
           backgroundColor: styles.tabScreen.backgroundColor,

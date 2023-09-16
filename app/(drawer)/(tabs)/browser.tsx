@@ -90,9 +90,10 @@ export default function Browser() {
 
   const renderVisitedItem = ({ item }: { [key: string]: any }) => (
     <Pressable
-      onPress={() =>
-        router.push({ pathname: "/browserPage", params: { ...item } })
-      }
+      onPress={() =>{
+        const params: any = { pathname: "/browserPage", params: item }
+        router.push(params)
+      }}
     >
       <DefaultView
         style={{
@@ -176,7 +177,7 @@ export default function Browser() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, width: width * 0.95, marginTop: 20 },
+  container: { flex: 1, width: width * 0.95, marginTop: 0 },
   header: {
     fontSize: 16,
     fontWeight: "500",
