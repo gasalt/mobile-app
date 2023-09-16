@@ -8,11 +8,12 @@ import { useGlobalState } from "@/sdk/state";
 import { guide } from "@/styles";
 import { ModalScreen } from "@/types/enums";
 import { Stack, useLocalSearchParams, useNavigation } from "expo-router";
-import { Platform, Pressable, StyleSheet } from "react-native";
+import { Platform, Pressable, StyleSheet, useWindowDimensions } from "react-native";
 import WebView from "react-native-webview";
 
 export default function BrowserPage() {
   const { setKeyValue } = useGlobalState();
+  const {width} = useWindowDimensions();
   const onPress = () => {
     setKeyValue("modalComponent", { screen: ModalScreen.Crypto, values: {} });
   };
@@ -23,8 +24,8 @@ export default function BrowserPage() {
     <DefaultView style={styles.container}>
       <Stack.Screen
         options={{
-          headerShown: false,
           title: "",
+          headerShown: false,
         }}
       />
       <DefaultView
@@ -32,15 +33,25 @@ export default function BrowserPage() {
           flexDirection: "row",
           justifyContent: "space-between",
           alignItems: "center",
-          marginTop: Platform.OS === "ios" ? 70 : 30,
-          marginBottom: 10,
+          marginTop: Platform.OS === "ios" ? 150 : 30,
+          marginBottom: 15,
           paddingHorizontal: 16,
+          position: "relative",
         }}
       >
         <DefaultView
-          style={{ flexDirection: "row", alignItems: "center", gap: 16 }}
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 16,
+            position: "absolute",
+            marginLeft: 20,
+          }}
         >
-          <Pressable onPress={() => navigation?.goBack()}>
+          <Pressable
+            hitSlop={{ top: 300, left: 100, bottom: 100, right: 100 }}
+            onPress={() => navigation?.goBack()}
+          >
             <Close />
           </Pressable>
           <DefaultView
@@ -51,7 +62,9 @@ export default function BrowserPage() {
           </DefaultView>
         </DefaultView>
 
-        <CryptoDropdown onPress={onPress} text="Polygon" logo={<Polygon />} />
+        <DefaultView style={{ marginLeft: width * 0.55 }}>
+          <CryptoDropdown onPress={onPress} text="Polygon" logo={<Polygon />} />
+        </DefaultView>
       </DefaultView>
       <WebView
         source={{ uri: url as string }}
@@ -65,5 +78,9 @@ export default function BrowserPage() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: guide.mainBackground },
+  container: {
+    flex: 1,
+    backgroundColor: guide.mainBackground,
+    marginTop: Platform.OS === "android" ? 0 : -70,
+  },
 });
