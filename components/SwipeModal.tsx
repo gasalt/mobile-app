@@ -1,34 +1,56 @@
-import { StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet, TouchableOpacity, View } from "react-native";
 import SwipeUpDownModal from "react-native-swipe-modal-up-down";
 import { useGlobalState } from "@/sdk/state";
 import { ModalScreen, ModalType } from "@/types/enums";
 import getModalContent from "@/components/Modals/getModalContent";
+import { useState } from "react";
+
+const { height } = Dimensions.get("window");
 
 
 export default function SwipeModal() {
-  const {modalComponent, setKeyValue} = useGlobalState()
-  const {Screen, size} = getModalContent(modalComponent.screen)
+  const { modalComponent, setKeyValue } = useGlobalState()
+  const { Screen, size } = getModalContent(modalComponent.screen)
+  const [animate, setAnimate] = useState(false)
 
   const onClose = () => {
-    setKeyValue("modalComponent", {screen: ModalScreen.None, values: {}})
+    setKeyValue("modalComponent", { screen: ModalScreen.None, values: {} })
   }
 
   return (
     <SwipeUpDownModal
-      MainContainerModal={{ backgroundColor: "transparent" }}
+      MainContainerModal={{ backgroundColor: "transparent", }}
       modalVisible={size !== ModalType.None}
-      PressToanimate
-      onClose={() => setKeyValue("modalComponent", {screen: ModalScreen.None, values: {}})}
+      PressToanimate={animate}
+      onClose={() => {
+        setKeyValue("modalComponent", { screen: ModalScreen.None, values: {} })
+        setAnimate(false)
+      }}
       //if you don't pass HeaderContent you should pass
       //marginTop in view of ContentModel to Make modal swipeable
       ContentModal={<Screen values={modalComponent.values} onClose={onClose} />}
       HeaderContent={
-        <View style={styles.headerContainer}>
-          <View style={styles.closeBar} />
-        </View>
+        <TouchableOpacity
+          activeOpacity={1}
+          onPress={() => {
+            setAnimate(true)
+          }}
+        >
+          <View style={styles.headerContainer}>
+            <View style={styles.closeBar} />
+          </View>
+          <View style={{
+            position:"absolute", backgroundColor: "rgba(0,0,0,0.3)", top:-height, left:0,
+            height: height, width:"100%",
+          }} />
+          <View style={{
+            position:"absolute", backgroundColor: "transparent", top:-35, left:0,
+            height: 35, width:"100%",
+          }} />
+        </TouchableOpacity>
       }
       HeaderStyle={[{ marginTop: size }]}
-      ContentModalStyle={[styles.modalStyle, {marginTop: size}]}
+      ContentModalStyle={[styles.modalStyle, { marginTop: size }]}
     />
   );
 }
@@ -48,7 +70,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     height: 30,
   },
- 
+
   modalStyle: {
     flex: 1,
     alignContent: "center",
@@ -62,7 +84,7 @@ const styles = StyleSheet.create({
   closeBar: {
     width: 100,
     height: 4,
-    borderRadius: 4,    
+    borderRadius: 4,
     backgroundColor: "white",
   },
 });
