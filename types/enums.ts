@@ -1,5 +1,7 @@
+import {  Platform } from "react-native";
+
 export enum ModalType {
-    Big = 80,
+    Big = Platform.OS === "ios" ? 160 : 100,
     Mid = 300,
     Small = 450,
     None = 0

@@ -43,9 +43,9 @@
     "react-native-swipe-modal-up-down": "^1.1.0",
     "react-native-tab-view": "^3.5.2",
     "react-native-web": "~0.19.6",
+    "react-native-webview": "13.2.2",
     "xlsx": "^0.18.5",
-    "zustand": "^4.4.1",
-    "react-native-webview": "13.2.2"
+    "zustand": "^4.4.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
