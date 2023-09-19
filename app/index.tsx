@@ -7,11 +7,11 @@ const Index = () => {
     const {  session } = useGlobalState();
 
   if(session.loggedInBefore) {
-    return <Redirect href={"/login"} />;
+    return <Redirect href={"/(public)/login"} />;
   }
 
   if(session.isFirstTimeUser) {
-    return <Redirect href={"/onboarding"} />;
+    return <Redirect href={"/(public)/onboarding"} />;
   }
 
   // Redirecting to tabs causes infinite error. Need to find a solution for this.

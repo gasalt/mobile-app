@@ -9,9 +9,7 @@ import CryptoDropdown from "@/components/CryptoDrown";
 import { useGlobalState } from "@/sdk/state";
 import { ModalScreen } from "@/types/enums";
 
-export const unstable_settings = {
-  initialRouteName: "/browser",
-};
+
 
 const Label = ({ name, focused }: { name: string; focused: boolean }) => (
   <DefaultText style={{ color: focused ? "white" : "gray", fontSize: 10 }}>
