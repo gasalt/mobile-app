@@ -13,3 +13,5 @@ interface ModalsValue {
     size: ModalType,
     Screen: React.FC<ModalProps>
 }
+
+type Nullable<T> = T | null;

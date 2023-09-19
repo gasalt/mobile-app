@@ -7,6 +7,11 @@ const defaultState = {
         screen: ModalScreen.None,
         values: {} as unknown
     },
+    session: {
+        isFirstTimeUser: true,
+        loggedInBefore: false,
+        currentlyLoggedIn: false
+    }
 }
 
 export type DefaultState = typeof defaultState

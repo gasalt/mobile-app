@@ -103,7 +103,6 @@ const FloatingTextInput = ({
 
 const styles = StyleSheet.create({
   subContainer: {
-    marginHorizontal: 8,
     position: "relative",
   },
   label: {

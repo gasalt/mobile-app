@@ -2,7 +2,7 @@ import { SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
 
 export const unstable_settings = {
-  initialRouteName: "(drawer)",
+  initialRouteName: "onboarding",
 };
 
 SplashScreen.preventAutoHideAsync();
@@ -20,10 +20,20 @@ export default function GasaltLayout() {
   //         console.log("visible!")
   //     }
   // }, [visibility]);
-
   return (
     <Stack>
-      <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
+      {/* Public routes */}
+      <Stack.Screen name="onboarding" options={{ headerShown: false }} />
+      <Stack.Screen name="login" options={{ headerShown: false }} />
+      <Stack.Screen name="sendCode" options={{ headerShown: false }} />
+      <Stack.Screen name="loginCode" options={{ headerShown: false }} />
+      <Stack.Screen name="setDomain" options={{ headerShown: false }} />
+      <Stack.Screen name="domainSet" options={{ headerShown: false }} />
+      <Stack.Screen name="transactionPin" options={{ headerShown: false }} />
+      <Stack.Screen name="congratulations" options={{ headerShown: false }} />
+
+     {/* Authenticated routes */}
+     <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
     </Stack>
   );
 }
