@@ -26,14 +26,13 @@ import CircleChecked from "@/assets/svgs/CircleChecked";
 import { ModalScreen } from "@/types/enums";
 import Eye from "@/assets/svgs/Eye";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { Redirect } from "expo-router";
 
 const { width, height } = Dimensions.get("window");
 
 const Tab = createMaterialTopTabNavigator();
 
 export default function App() {
-  const { setKeyValue, session } = useGlobalState();
+  const { setKeyValue } = useGlobalState();
 
   const [hideBalance, setHideBalance] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -51,13 +50,7 @@ export default function App() {
 
     return () => clearTimeout(timer);
   }, [copied]);
-  if(session.loggedInBefore) {
-    return <Redirect href={"/login"} />;
-  }
-
-  if(session.isFirstTimeUser) {
-    return <Redirect href={"/onboarding"} />;
-  }
+ 
 
   return (
     <TabScreen>
