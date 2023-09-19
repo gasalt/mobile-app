@@ -3,7 +3,7 @@ import {
   FlatList,
   NativeScrollEvent,
   NativeSyntheticEvent,
-  Pressable,
+  Platform,
   SafeAreaView,
   StyleSheet,
 } from "react-native";
@@ -11,7 +11,7 @@ import { StatusBar } from "expo-status-bar";
 import { slides } from "@/utils/slides";
 import { useState } from "react";
 import { DefaultText, DefaultView } from "@/components/Defaults";
-import { Redirect, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import CustomButton from "@/components/CustomButton";
 
 const { width, height } = Dimensions.get("window");
@@ -23,7 +23,7 @@ const Slide = ({ item }: { [key: string]: any }) => {
         alignItems: "flex-start",
         width,
         justifyContent: "center",
-        marginTop: -30,
+        marginTop: -50,
       }}
     >
       {/* marginLeft was added cos of the size of the second image. Design need to ensure the images are of equal width */}
@@ -45,7 +45,6 @@ export default function Onboarding() {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const router = useRouter();
 
-  
   const Footer = () => {
     const onPress = () => {
       router.push("/login");
@@ -97,7 +96,7 @@ export default function Onboarding() {
         pagingEnabled
         contentContainerStyle={{
           height: height * 0.5,
-          padding: 20,
+          paddingHorizontal: 20,
         }}
         keyExtractor={(item) => `${item.id}`}
         horizontal
@@ -121,7 +120,7 @@ const styles = StyleSheet.create({
     fontSize: 32,
     color: "#fff",
     fontWeight: "600",
-    marginTop: 20,
+    marginTop: Platform.OS === "ios" ? 20 : 40,
     padding: 20,
   },
 
@@ -132,7 +131,7 @@ const styles = StyleSheet.create({
     lineHeight: 40,
     width: width * 0.75,
     textAlign: "left",
-    marginTop: 40,
+    marginTop: Platform.OS === "ios" ? 40 : 80,
   },
   footer: {
     height: height * 0.16,
@@ -151,7 +150,7 @@ const styles = StyleSheet.create({
     width: 10,
     backgroundColor: "#68687b",
     marginHorizontal: 3,
-    marginTop: -40,
+    marginTop: -50,
     borderRadius: 50,
   },
   button: {
