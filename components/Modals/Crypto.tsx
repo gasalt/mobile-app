@@ -29,6 +29,7 @@ export default function Crypto() {
         value={search}
         onChangeText={(text) => setSearch(text)}
         placeholder="Search"
+        inputStyle={{marginHorizontal: 8}}
       />
 
       <FlatList

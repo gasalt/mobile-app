@@ -6,6 +6,8 @@ import {
   StyleSheet,
   InputModeOptions,
   TextInputProps,
+  StyleProp,
+  TextStyle,
 } from "react-native";
 
 import { DefaultView } from '@/components/Defaults';
@@ -23,6 +25,7 @@ interface FloatingTextInputProps extends TextInputProps {
   value: string;
   onChangeText: (value: string) => void;
   placeholder?: string;
+  inputStyle?: StyleProp<TextStyle>;
 }
 
 const FloatingTextInput = ({
@@ -32,6 +35,8 @@ const FloatingTextInput = ({
   value,
   onChangeText,
   placeholder = "",
+  inputStyle = {}
+
 }: FloatingTextInputProps) => {
   const animatedValue = useRef(new Animated.Value(0));
   const [active, setActive] = useState(false);
@@ -88,7 +93,7 @@ const FloatingTextInput = ({
       <TextInput
         onChangeText={onChangeText}
         value={value}
-        style={[styles.textStyle, active && {borderColor: "#627EEA"}]}
+        style={[styles.textStyle, inputStyle, active && {borderColor: "#627EEA"}]}
         onBlur={onBlur}
         onFocus={onFocus}
         inputMode={mode}
@@ -106,7 +111,7 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   label: {
-    marginHorizontal: 12,
+    marginHorizontal: 18,
     top: 14,
   },
   textStyle: {
@@ -119,7 +124,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     height: 56,
   },
-  right: { position: "absolute", right: 10, top: 35 },
+  right: { position: "absolute", right: 14, top: 35 },
 });
 
 export default FloatingTextInput;

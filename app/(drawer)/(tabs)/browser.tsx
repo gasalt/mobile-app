@@ -140,6 +140,7 @@ export default function Browser() {
               <Search />
             )
           }
+          inputStyle={{marginHorizontal: 8}}
         />
         <DefaultView style={{ flex: 1, marginBottom: 30 }}>
           <DefaultText style={styles.header}>Favorites</DefaultText>

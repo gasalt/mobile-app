@@ -150,6 +150,7 @@ export default function MultiAddress() {
           }
           value={address}
           onChangeText={(text) => setAddress(text)}
+          inputStyle={{marginHorizontal: 8}}
         />
       </DefaultView>
 
@@ -171,6 +172,7 @@ export default function MultiAddress() {
             value={amount}
             onChangeText={(text) => setAmount(text)}
             mode="decimal"
+            inputStyle={{marginHorizontal: 8}}
           />
         </DefaultView>
       )}
