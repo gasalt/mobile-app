@@ -9,9 +9,9 @@ import CryptoDropdown from "@/components/CryptoDrown";
 import { useGlobalState } from "@/sdk/state";
 import { ModalScreen } from "@/types/enums";
 
-export const unstable_settings = {
-  initialRouteName: "/",
-};
+// export const unstable_settings = {
+//   initialRouteName: "/browser",
+// };
 
 const Label = ({ name, focused }: { name: string; focused: boolean }) => (
   <DefaultText style={{ color: focused ? "white" : "gray", fontSize: 10 }}>
@@ -40,10 +40,10 @@ export default function Main() {
       }}
     >
       <Tabs.Screen
-        name="index"
+        name="wallet"
         options={{
           headerShown: true,
-          href: "/",
+          href: "/wallet",
           tabBarIcon: (props) => <Icon focused={props.focused} name="wallet" />,
           tabBarLabel: (props) => (
             <Label focused={props.focused} name="Wallet" />

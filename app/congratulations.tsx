@@ -68,7 +68,9 @@ export default function Congratulations() {
 
           <CustomButton
             label="Skip"
-            onPress={() => router.push("/sendCode")}
+            onPress={() => {
+              router.replace("/wallet")
+            }}
             variant="cancel"
           />
         </DefaultView>
