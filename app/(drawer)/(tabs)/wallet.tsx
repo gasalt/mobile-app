@@ -32,6 +32,7 @@ const { width, height } = Dimensions.get("window");
 const Tab = createMaterialTopTabNavigator();
 
 export default function App() {
+  console.log("wallet page")
   const { setKeyValue } = useGlobalState();
 
   const [hideBalance, setHideBalance] = useState(false);
@@ -41,6 +42,10 @@ export default function App() {
     await Clipboard.setStringAsync(value);
     setCopied(true);
   };
+
+  useEffect(() => {
+    console.log("wallet page effect")
+  }, [])
 
   useEffect(() => {
     if (!copied) return;
