@@ -10,9 +10,9 @@ import { Stack, useLocalSearchParams, useNavigation } from "expo-router";
 import { Platform, Pressable, Share } from "react-native";
 import WebView from "react-native-webview";
 import TabScreen from "@/components/TabScreen";
-import * as NavigationBar from 'expo-navigation-bar';
+import * as NavigationBar from "expo-navigation-bar";
 import { useEffect, useRef, useState } from "react";
-import { AntDesign, Ionicons, Feather, Octicons } from '@expo/vector-icons';
+import { AntDesign, Ionicons, Feather, Octicons } from "@expo/vector-icons";
 import runFirst from "@/utils/runjs";
 
 
@@ -37,32 +37,35 @@ export default function BrowserPage() {
         await NavigationBar.setVisibilityAsync("hidden");
         await NavigationBar.setBackgroundColorAsync("#0D0C27");
       }
-    })()
+    })();
     return () => {
       Platform.OS === "android" && NavigationBar.setVisibilityAsync("visible");
-    }
-  }, [])
+    };
+  }, []);
 
   const onMessage = (payload: any) => {
     let dataPayload;
     try {
       dataPayload = JSON.parse(payload.nativeEvent.data);
-    } catch (e) { }
+    } catch (e) {}
 
     if (dataPayload) {
-      if (dataPayload.type === 'Console') {
+      if (dataPayload.type === "Console") {
         console.info(`[Console] ${JSON.stringify(dataPayload.data)}`);
-      } else if (dataPayload.type === 'Share') {
-        if (dataPayload.data?.currentURL){
-          Share.share({message: dataPayload.data.currentURL, title: "Shared link from Gasalt Wallet"})
+      } else if (dataPayload.type === "Share") {
+        if (dataPayload.data?.currentURL) {
+          Share.share({
+            message: dataPayload.data.currentURL,
+            title: "Shared link from Gasalt Wallet",
+          });
         }
       }
     }
   };
 
   const handleShare = async () => {
-    webViewRef?.current?.injectJavaScript(`window.shareURL();`)
-  }
+    webViewRef?.current?.injectJavaScript(`window.shareURL();`);
+  };
 
   return (
     <TabScreen style={{ alignItems: "stretch" }}>
@@ -105,43 +108,85 @@ export default function BrowserPage() {
         scalesPageToFit
         originWhitelist={["*"]}
         setSupportMultipleWindows={false}
-        onLoadStart={() => { setPageLoading(true) }}
-        onLoad={() => { setPageLoading(false) }}
-
+        onLoadStart={() => {
+          setPageLoading(true);
+        }}
+        onLoad={() => {
+          setPageLoading(false);
+        }}
         injectedJavaScript={`${runFirst}`}
         onMessage={onMessage}
         injectedJavaScriptBeforeContentLoaded={`true;`}
         javaScriptEnabled={true}
       />
       {Platform.OS === "ios" && <SwipeModal />}
-      {visibility === "hidden" && <DefaultView style={{ height: 60, paddingHorizontal: 20, paddingTop: 15, flexDirection: "row", justifyContent: "space-between" }}>
-        <Pressable onPress={() => { webViewRef.current?.goBack() }}>
-          <AntDesign name="left" size={24} color="white" />
-        </Pressable>
-        <Pressable onPress={() => { webViewRef.current?.goForward() }}>
-          <AntDesign name="right" size={24} color="white" />
-        </Pressable>
-        {pageLoading
-          ? <Pressable onPress={() => { webViewRef?.current?.stopLoading() }}>
-            <Feather name="x" size={24} color="white" />
+      {visibility === "hidden" && (
+        <DefaultView
+          style={{
+            height: 60,
+            paddingHorizontal: 20,
+            paddingTop: 15,
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <Pressable
+            onPress={() => {
+              webViewRef.current?.goBack();
+            }}
+          >
+            <AntDesign name="left" size={24} color="white" />
           </Pressable>
-          : <Pressable onPress={() => { webViewRef?.current?.reload() }}>
-            <Ionicons name="reload-outline" size={24} color="white" />
+          <Pressable
+            onPress={() => {
+              webViewRef.current?.goForward();
+            }}
+          >
+            <AntDesign name="right" size={24} color="white" />
           </Pressable>
-        }
-        <Pressable onPress={() => { handleShare() }}>
-          <Octicons name="share" size={24} color="white" />
-        </Pressable>
-        {
-          fav
-            ? <Pressable onPress={() => { setFav(false) }}>
+          {pageLoading ? (
+            <Pressable
+              onPress={() => {
+                webViewRef?.current?.stopLoading();
+              }}
+            >
+              <Feather name="x" size={24} color="white" />
+            </Pressable>
+          ) : (
+            <Pressable
+              onPress={() => {
+                webViewRef?.current?.reload();
+              }}
+            >
+              <Ionicons name="reload-outline" size={24} color="white" />
+            </Pressable>
+          )}
+          <Pressable
+            onPress={() => {
+              handleShare();
+            }}
+          >
+            <Octicons name="share" size={24} color="white" />
+          </Pressable>
+          {fav ? (
+            <Pressable
+              onPress={() => {
+                setFav(false);
+              }}
+            >
               <AntDesign name="star" size={24} color="white" />
             </Pressable>
-            : <Pressable onPress={() => { setFav(true) }}>
+          ) : (
+            <Pressable
+              onPress={() => {
+                setFav(true);
+              }}
+            >
               <AntDesign name="staro" size={24} color="white" />
             </Pressable>
-        }
-      </DefaultView>}
+          )}
+        </DefaultView>
+      )}
     </TabScreen>
   );
 }

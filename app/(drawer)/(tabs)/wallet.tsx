@@ -50,6 +50,7 @@ export default function App() {
 
     return () => clearTimeout(timer);
   }, [copied]);
+ 
 
   return (
     <TabScreen>
