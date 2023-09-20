@@ -1,9 +1,9 @@
 import { SplashScreen, Stack, } from "expo-router";
 import { useEffect } from "react";
 
-export const unstable_settings = {
-  initialRouteName: "(public)/onboarding",
-};
+// export const unstable_settings = {
+//   initialRouteName: "onboarding",
+// };
 
 SplashScreen.preventAutoHideAsync();
 

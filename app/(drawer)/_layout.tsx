@@ -2,6 +2,9 @@ import { Drawer } from "expo-router/drawer";
 import styles, { guide } from "@/styles";
 import BackButton from "@/components/BackButton";
 
+// export const unstable_settings = {
+//   initialRouteName: "(tabs)",
+// };
 
 export default function DrawerLayout() {
   return (
