@@ -1,4 +1,4 @@
-import { SplashScreen, Stack } from "expo-router";
+import { SplashScreen, Stack, } from "expo-router";
 import { useEffect } from "react";
 
 export const unstable_settings = {
@@ -8,18 +8,11 @@ export const unstable_settings = {
 SplashScreen.preventAutoHideAsync();
 
 export default function GasaltLayout() {
-  // const visibility = NavigationBar.useVisibility()
 
   useEffect(() => {
     SplashScreen.hideAsync();
   }, []);
-
-  // useEffect(() => {
-  //     if (visibility) {
-  //         NavigationBar.setVisibilityAsync("hidden");
-  //         console.log("visible!")
-  //     }
-  // }, [visibility]);
+  
   return (
     <Stack screenOptions={{headerShown: false}}>
       {/* Public routes */}
