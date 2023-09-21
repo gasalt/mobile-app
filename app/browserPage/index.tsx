@@ -6,7 +6,7 @@ import { DefaultText, DefaultView } from "@/components/Defaults";
 import SwipeModal from "@/components/SwipeModal";
 import { useGlobalState } from "@/sdk/state";
 import { ModalScreen } from "@/types/enums";
-import { Stack, useLocalSearchParams, useNavigation } from "expo-router";
+import { useLocalSearchParams, useNavigation } from "expo-router";
 import { Platform, Pressable, Share } from "react-native";
 import WebView from "react-native-webview";
 import TabScreen from "@/components/TabScreen";
@@ -16,11 +16,13 @@ import { AntDesign, Ionicons, Feather, Octicons } from "@expo/vector-icons";
 import runFirst from "@/utils/runjs";
 
 
+
 export default function BrowserPage() {
   const { setKeyValue } = useGlobalState();
   const visibility = NavigationBar.useVisibility();
   const [pageLoading, setPageLoading] = useState(false);
   const [fav, setFav] = useState(false);
+  const [initialised, setInitialised] = useState(false);
 
   const webViewRef = useRef<WebView>(null);
 
@@ -32,10 +34,20 @@ export default function BrowserPage() {
   const navigation = useNavigation();
 
   useEffect(() => {
+    if (!initialised || Platform.OS !== "android") return;
+    if (visibility === "visible") {
+      setTimeout(async () => {
+        await NavigationBar.setVisibilityAsync("hidden");
+      }, 3000)
+    }
+  }, [visibility]);
+
+  useEffect(() => {
     (async () => {
       if (Platform.OS === "android") {
-        await NavigationBar.setVisibilityAsync("hidden");
         await NavigationBar.setBackgroundColorAsync("#0D0C27");
+        await NavigationBar.setVisibilityAsync("hidden");
+        setInitialised(true);
       }
     })();
     return () => {
@@ -47,7 +59,7 @@ export default function BrowserPage() {
     let dataPayload;
     try {
       dataPayload = JSON.parse(payload.nativeEvent.data);
-    } catch (e) {}
+    } catch (e) { }
 
     if (dataPayload) {
       if (dataPayload.type === "Console") {
@@ -69,7 +81,6 @@ export default function BrowserPage() {
 
   return (
     <TabScreen style={{ alignItems: "stretch" }}>
-      <Stack.Screen options={{ headerShown: false }} />
       <DefaultView
         style={{
           flexDirection: "row",

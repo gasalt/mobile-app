@@ -17,7 +17,6 @@ import MetaMask from "@/assets/svgs/MetaMask";
 import LargePolygon from "@/assets/svgs/LargePolygon";
 import UpRight from "@/assets/svgs/UpRight";
 import { useRouter } from "expo-router";
-import { Stack } from "expo-router";
 
 const { width } = Dimensions.get("window");
 
@@ -140,6 +139,7 @@ export default function Browser() {
               <Search />
             )
           }
+          inputStyle={{marginHorizontal: 8}}
         />
         <DefaultView style={{ flex: 1, marginBottom: 30 }}>
           <DefaultText style={styles.header}>Favorites</DefaultText>

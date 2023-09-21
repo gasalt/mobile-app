@@ -44,6 +44,7 @@ export default function Send() {
         }
         value={address}
         onChangeText={(text) => setAddress(text)}
+        inputStyle={{marginHorizontal: 8}}
       />
       <Pressable
         style={styles.multiple}
@@ -68,6 +69,7 @@ export default function Send() {
         value={amount}
         onChangeText={(text) => setAmount(text)}
         mode="decimal"
+        inputStyle={{marginHorizontal: 8}}
       />
 
       <DefaultView
@@ -126,8 +128,8 @@ const styles = StyleSheet.create({
   multiple: {
     flexDirection: "row",
     gap: 4,
-    marginHorizontal: 10,
-    marginVertical: 8,
+    marginHorizontal: 8,
+    marginVertical: 8
   },
   item: {
     flexDirection: "row",
