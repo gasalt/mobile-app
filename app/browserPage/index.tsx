@@ -59,7 +59,7 @@ export default function BrowserPage() {
     let dataPayload;
     try {
       dataPayload = JSON.parse(payload.nativeEvent.data);
-    } catch (e) { }
+    } catch (e) {}
 
     if (dataPayload) {
       if (dataPayload.type === "Console") {
