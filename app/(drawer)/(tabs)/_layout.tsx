@@ -10,7 +10,7 @@ import { useGlobalState } from "@/sdk/state";
 import { ModalScreen } from "@/types/enums";
 
 export const unstable_settings = {
-  initialRouteName: "/browser",
+  initialRouteName: "/wallet",
 };
 
 const Label = ({ name, focused }: { name: string; focused: boolean }) => (
