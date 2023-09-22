@@ -1,11 +1,14 @@
 import { SplashScreen, Stack, } from "expo-router";
 import { useEffect } from "react";
+import * as SystemUI from 'expo-system-ui';
 
 export const unstable_settings = {
   initialRouteName: "(public)/onboarding",
 };
 
 SplashScreen.preventAutoHideAsync();
+
+SystemUI.setBackgroundColorAsync("#0D0C27");
 
 export default function GasaltLayout() {
 
