@@ -1,5 +1,6 @@
 import {create} from "zustand";
 import { ModalScreen } from "@/types/enums";
+import { zeroAddress } from "@/utils/constants";
 
 
 const defaultState = {
@@ -13,6 +14,8 @@ const defaultState = {
     },
     privateKey: "",
     email: "",
+    masterAddress: zeroAddress,
+    address: zeroAddress,
 }
 
 export type DefaultState = typeof defaultState

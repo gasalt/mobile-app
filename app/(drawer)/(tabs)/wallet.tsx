@@ -26,15 +26,16 @@ import CircleChecked from "@/assets/svgs/CircleChecked";
 import { ModalScreen } from "@/types/enums";
 import Eye from "@/assets/svgs/Eye";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import useWeb3 from "@/sdk/web3";
+import formatAddress from "@/utils/formatAddress";
 
 const { width, height } = Dimensions.get("window");
 
 const Tab = createMaterialTopTabNavigator();
 
 export default function App() {
-  const { setKeyValue, privateKey, email } = useGlobalState();
-
-  console.log({privateKey, email})
+  const { setKeyValue, address } = useGlobalState();
+  useWeb3()
 
   const [hideBalance, setHideBalance] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -135,7 +136,7 @@ export default function App() {
                 }
               />
               <DefaultText style={{ color: guide.primary }}>
-                0xE7E2cB8c81c10...C9Ce62EC754
+                {formatAddress(address)}
               </DefaultText>
 
               {copied ? (

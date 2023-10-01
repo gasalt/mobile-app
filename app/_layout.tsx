@@ -23,7 +23,6 @@ export default function GasaltLayout() {
 
   useEffect(() => {
     (async () => {
-      console.log(await AsyncStorage.getItem("completedOnboarding"))
       const completedOnboarding = (await AsyncStorage.getItem("completedOnboarding")) === "true"
       const isLoggedIn = (await AsyncStorage.getItem("isLoggedIn")) === "true"
       if (completedOnboarding && isLoggedIn) {

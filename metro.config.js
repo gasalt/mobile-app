@@ -18,7 +18,7 @@ module.exports = (async () => {
         zlib: require.resolve("empty-module"), // browserify-zlib can be polyfilled here if needed
         path: require.resolve("empty-module"),
         crypto: require.resolve("crypto-browserify"),
-        stream: require.resolve("readable-stream"),
+        // stream: require.resolve("readable-stream"),
       },
 
       assetExts: assetExts.filter((ext) => ext !== "svg"),
