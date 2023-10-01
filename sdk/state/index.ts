@@ -10,7 +10,9 @@ const defaultState = {
     session: {
         completedOnboarding: false,
         isLoggedIn: false,
-    }
+    },
+    privateKey: "",
+    email: "",
 }
 
 export type DefaultState = typeof defaultState

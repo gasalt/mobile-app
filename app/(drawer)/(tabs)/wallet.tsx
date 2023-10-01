@@ -32,7 +32,9 @@ const { width, height } = Dimensions.get("window");
 const Tab = createMaterialTopTabNavigator();
 
 export default function App() {
-  const { setKeyValue } = useGlobalState();
+  const { setKeyValue, privateKey, email } = useGlobalState();
+
+  console.log({privateKey, email})
 
   const [hideBalance, setHideBalance] = useState(false);
   const [copied, setCopied] = useState(false);
