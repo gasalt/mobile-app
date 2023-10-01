@@ -8,9 +8,8 @@ const defaultState = {
         values: {} as unknown
     },
     session: {
-        isFirstTimeUser: true,
-        loggedInBefore: false,
-        currentlyLoggedIn: false
+        completedOnboarding: false,
+        isLoggedIn: false,
     }
 }
 

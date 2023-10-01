@@ -1,6 +1,11 @@
+// import "../global"
+// import "@ethersproject/shims"
+// import "react-native-get-random-values"
 import { SplashScreen, Stack, } from "expo-router";
 import { useEffect } from "react";
 import * as SystemUI from 'expo-system-ui';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useGlobalState } from "@/sdk/state";
 
 export const unstable_settings = {
   initialRouteName: "(public)/onboarding",
@@ -12,8 +17,17 @@ SystemUI.setBackgroundColorAsync("#0D0C27");
 
 export default function GasaltLayout() {
 
+  const { setKeyValue } = useGlobalState();
+
   useEffect(() => {
-    SplashScreen.hideAsync();
+    (async () => {
+      const completedOnboarding = (await AsyncStorage.getItem("completedOnboarding")) === "true"
+      const isLoggedIn = (await AsyncStorage.getItem("isLoggedIn")) === "true"
+      setKeyValue("session", {completedOnboarding, isLoggedIn})
+      setTimeout(() => {
+        SplashScreen.hideAsync();
+      }, 5000)
+    })()
   }, []);
   
   return (
