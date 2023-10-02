@@ -51,7 +51,6 @@ export default function useAuth() {
             const auth = web3auth?.userInfo()
             email = auth?.email
         }
-        console.log({privateKey})
         await AsyncStorage.setItem("completedOnboarding", "true")
         await AsyncStorage.setItem("isLoggedIn", "true")
         setKeyValue("session", {completedOnboarding: true, isLoggedIn: true})
