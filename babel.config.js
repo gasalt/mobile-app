@@ -18,7 +18,7 @@ module.exports = function (api) {
     ],
     overrides: [
       {
-        test: './node_modules/ethers',
+        include: './node_modules/ethers',
         plugins: [
           ['@babel/plugin-transform-private-methods', { "loose": true }],
           [
@@ -32,7 +32,7 @@ module.exports = function (api) {
         ]
       },
       {
-        test: './node_modules/@opengsn/provider/node_modules/ethers-v6',
+        include: './node_modules/@opengsn/provider/node_modules/ethers-v6',
         plugins: [
           ['@babel/plugin-transform-private-methods', { "loose": true }],
           [
@@ -46,8 +46,10 @@ module.exports = function (api) {
         ]
       },
       {
-        test: './node_modules/@opengsn/provider/dist/RelayProvider.js',
+        include: './node_modules/@opengsn/provider/dist/RelayProvider.js',
         plugins: [
+          "@babel/plugin-transform-modules-commonjs",
+          "@babel/plugin-proposal-dynamic-import",
           [
             "module-resolver",
             {
