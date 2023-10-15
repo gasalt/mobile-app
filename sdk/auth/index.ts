@@ -20,7 +20,7 @@ export default function useAuth() {
                 ? Linking.createURL("(drawer)/(tabs)/wallet", {})
                 : Linking.createURL("(public)/transactionPin", { scheme: "gasalt" });
 
-        const clientId = "BN0QFLBGd6Sbmis2QU55rcXfCMEKLDvmICcYKqN7QESQwtsnSuLiQiFJ3ha3ztauecwfWYfDw4DrjSl8POxqkiA";
+        const clientId = process.env.EXPO_PUBLIC_WEB3AUTH_CLIENTID!;
 
         const _web3auth = new Web3Auth(WebBrowser, SecureStore, {
             clientId,

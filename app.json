@@ -17,14 +17,21 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.gasalt.gasaltmobilewallet"
+      "bundleIdentifier": "com.gasalt.gasaltmobilewallet",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Allow $(PRODUCT_NAME) to access camera.",
+        "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#0D0C27"
       },
-      "package": "com.gasalt.gasaltmobilewallet"
+      "package": "com.gasalt.gasaltmobilewallet",
+      "permissions": [
+        "android.permission.CAMERA"
+      ]
     },
     "androidNavigationBar": {
       "backgroundColor": "#0D0C27"
@@ -45,6 +52,9 @@
     "extra": {
       "router": {
         "origin": false
+      },
+      "eas": {
+        "projectId": "4ea2e7f8-119e-4b8f-9e1e-4eff9923c659"
       }
     },
     "owner": "gasalt",
