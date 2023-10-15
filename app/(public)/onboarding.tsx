@@ -9,10 +9,11 @@ import {
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { slides } from "@/utils/slides";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DefaultText, DefaultView } from "@/components/Defaults";
 import { useRouter } from "expo-router";
 import CustomButton from "@/components/CustomButton";
+import { useGlobalState } from "@/sdk/state";
 
 const { width, height } = Dimensions.get("window");
 
@@ -44,10 +45,18 @@ const Slide = ({ item }: { [key: string]: any }) => {
 export default function Onboarding() {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const router = useRouter();
+  const { session: {completedOnboarding, isLoggedIn} } = useGlobalState();
+
+  useEffect(() => {
+    if(completedOnboarding && isLoggedIn){
+      router.push("/(drawer)/(tabs)/wallet")
+    }
+  },[completedOnboarding, isLoggedIn])
+
 
   const Footer = () => {
     const onPress = () => {
-      router.push("/login");
+      router.push("/(public)/login");
     };
     return (
       <DefaultView style={styles.footer}>

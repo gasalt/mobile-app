@@ -1,5 +1,6 @@
 import {create} from "zustand";
 import { ModalScreen } from "@/types/enums";
+import { zeroAddress } from "@/utils/constants";
 
 
 const defaultState = {
@@ -8,10 +9,13 @@ const defaultState = {
         values: {} as unknown
     },
     session: {
-        isFirstTimeUser: true,
-        loggedInBefore: false,
-        currentlyLoggedIn: false
-    }
+        completedOnboarding: false,
+        isLoggedIn: false,
+    },
+    privateKey: "",
+    email: "",
+    masterAddress: zeroAddress,
+    address: zeroAddress,
 }
 
 export type DefaultState = typeof defaultState

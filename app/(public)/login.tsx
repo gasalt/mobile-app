@@ -1,20 +1,23 @@
-import { Pressable, StyleSheet, Text } from "react-native";
+import "../../globals"
+import "react-native-get-random-values"
+import { Pressable, StyleSheet } from "react-native";
 import { useState } from "react";
 import Back from "@/assets/svgs/Back";
 import Google from "@/assets/svgs/Google";
 import Apple from "@/assets/svgs/Apple";
 import TabScreen from "@/components/TabScreen";
-import { useNavigation, useRouter } from "expo-router";
+import { useNavigation } from "expo-router";
 import CustomButton from "@/components/CustomButton";
 import FloatingTextInput from "@/components/inputs/FloatingInput";
 import { DefaultText, DefaultView } from "@/components/Defaults";
+import useAuth from "@/sdk/auth";
 
 export default function Login() {
   const navigation = useNavigation();
 
-  const router = useRouter();
-
   const [email, setEmail] = useState("");
+
+  const {login} = useAuth()
 
   return (
     <TabScreen>
@@ -35,8 +38,8 @@ export default function Login() {
           />
 
           <CustomButton
-            label="Send code"
-            onPress={() => router.push("/sendCode")}
+            label="Login"
+            onPress={() => login({email, authType:"email"})}
             variant="primary"
           />
         </DefaultView>
@@ -48,13 +51,13 @@ export default function Login() {
         </DefaultView>
 
         <DefaultView style={styles.btnContainer}>
-          <Pressable style={styles.authBtn}>
+          <Pressable style={styles.authBtn} onPress={() => login({authType:"gmail"})}>
             <Google />
             <DefaultText style={styles.authBtnText}>
               Continue with Google
             </DefaultText>
           </Pressable>
-          <Pressable style={styles.authBtn}>
+          <Pressable style={styles.authBtn} onPress={() => login({authType:"apple"})}>
             <Apple />
             <DefaultText style={styles.authBtnText}>
               Continue with Apple
