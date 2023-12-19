@@ -71,6 +71,28 @@ export default function BrowserPage() {
             title: "Shared link from Gasalt Wallet",
           });
         }
+      } else if (dataPayload.type === "ethereum") {
+        const { method, params, id } = dataPayload.data;
+        // console.log("from ethereum")
+        // console.log(dataPayload.data)
+        if(method === "eth_sendTransaction") {
+          console.log("gaslessExecute")
+          const {to, value, data, gas, from} = params[0];
+          const tokenFee = (16*10**18).toString();
+          gasalt.gaslessExecute(to, 0, tokenFee, "0", to, data, {from}).then(res => {
+            console.log("gasless executed")
+            webviewRef.current.injectJavaScript(`window.ethereum.resolve(${id}, ${JSON.stringify(res)})`)
+          })
+          return
+        }
+        provider.send(method, params).then((res) => {
+          console.log("provider responded!", id)
+          webviewRef.current.injectJavaScript(`window.ethereum.resolve(${id}, ${JSON.stringify(res)})`)
+          console.log("done!!")
+        })
+      } else {
+        console.log(dataPayload)
+
       }
     }
   };
