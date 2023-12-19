@@ -17,7 +17,6 @@ import MetaMask from "@/assets/svgs/MetaMask";
 import LargePolygon from "@/assets/svgs/LargePolygon";
 import UpRight from "@/assets/svgs/UpRight";
 import { useRouter } from "expo-router";
-import useWeb3 from "@/sdk/web3";
 
 const { width } = Dimensions.get("window");
 
@@ -52,7 +51,6 @@ const visited = [
 export default function Browser() {
   const [search, setSearch] = useState("");
   const router = useRouter();
-  useWeb3()
 
 
   const renderItem = ({ item }: { [key: string]: any }) => (

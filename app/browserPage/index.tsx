@@ -18,7 +18,7 @@ import runFirst from "@/utils/runjs";
 
 
 export default function BrowserPage() {
-  const { setKeyValue } = useGlobalState();
+  const { setKeyValue, gsnProvider, } = useGlobalState();
   const visibility = NavigationBar.useVisibility();
   const [pageLoading, setPageLoading] = useState(false);
   const [fav, setFav] = useState(false);
@@ -59,10 +59,13 @@ export default function BrowserPage() {
     let dataPayload;
     try {
       dataPayload = JSON.parse(payload.nativeEvent.data);
-    } catch (e) { }
+    } catch (e) {
+      console.log("error parsing payload", e);
+      return;
+     }
 
     if (dataPayload) {
-      if (dataPayload.type === "Console") {
+      if (dataPayload.type === "Console" && dataPayload.data.type === "print") {
         console.info(`[Console] ${JSON.stringify(dataPayload.data)}`);
       } else if (dataPayload.type === "Share") {
         if (dataPayload.data?.currentURL) {
@@ -75,24 +78,20 @@ export default function BrowserPage() {
         const { method, params, id } = dataPayload.data;
         // console.log("from ethereum")
         // console.log(dataPayload.data)
-        if(method === "eth_sendTransaction") {
-          console.log("gaslessExecute")
-          const {to, value, data, gas, from} = params[0];
-          const tokenFee = (16*10**18).toString();
-          gasalt.gaslessExecute(to, 0, tokenFee, "0", to, data, {from}).then(res => {
-            console.log("gasless executed")
-            webviewRef.current.injectJavaScript(`window.ethereum.resolve(${id}, ${JSON.stringify(res)})`)
-          })
-          return
-        }
-        provider.send(method, params).then((res) => {
-          console.log("provider responded!", id)
-          webviewRef.current.injectJavaScript(`window.ethereum.resolve(${id}, ${JSON.stringify(res)})`)
-          console.log("done!!")
+        // if(method === "eth_sendTransaction") {
+        //   console.log("gaslessExecute")
+        //   const {to, value, data, gas, from} = params[0];
+        //   const tokenFee = (16*10**18).toString();
+        //   gasalt.gaslessExecute(to, 0, tokenFee, "0", to, data, {from}).then(res => {
+        //     console.log("gasless executed")
+        //     webviewRef.current.injectJavaScript(`window.ethereum.resolve(${id}, ${JSON.stringify(res)})`)
+        //   })
+        //   return
+        // }
+        gsnProvider.send(method, params).then((res) => {
+          console.log("provider responded!", method, id, res)
+          webViewRef?.current?.injectJavaScript(`window.ethereum.resolveQuery(${id}, ${JSON.stringify(res)})`)
         })
-      } else {
-        console.log(dataPayload)
-
       }
     }
   };
