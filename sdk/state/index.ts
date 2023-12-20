@@ -1,7 +1,12 @@
 import {create} from "zustand";
 import { ModalScreen } from "@/types/enums";
 import { zeroAddress } from "@/utils/constants";
+import { BrowserProvider, Signer as SignerV6 } from "ethers";
+import { RelayProvider, } from "@opengsn/provider"
 
+let gsnProvider: BrowserProvider = null as unknown as BrowserProvider,
+    gsnSigner: SignerV6 = null as unknown as SignerV6 ,
+    relayProvider: RelayProvider = null as unknown as RelayProvider;
 
 const defaultState = {
     modalComponent: {
@@ -16,6 +21,9 @@ const defaultState = {
     email: "",
     masterAddress: zeroAddress,
     address: zeroAddress,
+    gsnProvider,
+    gsnSigner,
+    relayProvider,
 }
 
 export type DefaultState = typeof defaultState

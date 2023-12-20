@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { JsonRpcProvider, Wallet, BrowserProvider, Signer as SignerV6,  } from "ethers";
 import { useGlobalState } from "../state";
-// /Users/orewoley/prjct/apps/gasalt/gasalt_mobile_app/node_modules/@opengsn/provider/dist/RelayProvider.js
-// Change dynamic import in newEthersV6Provider to const { BrowserProvider } = require('ethers-v6/providers');
 
 import { RelayProvider, } from "@opengsn/provider"
 
@@ -45,6 +43,9 @@ export default function useWeb3() {
                         }
                     });
                     setGsn({gsnProvider: _gsnProvider, gsnSigner: _gsnSigner, relayProvider: _relayProvider})
+                    setKeyValue("gsnProvider", _gsnProvider)
+                    setKeyValue("gsnSigner", _gsnSigner)
+                    setKeyValue("relayProvider", _relayProvider)
                 } catch (error) {
                     console.log("gsn error => ",error)
                 }
