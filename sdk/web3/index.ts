@@ -1,10 +1,23 @@
 import { useEffect, useState } from "react";
-import { JsonRpcProvider, Wallet, BrowserProvider, Signer as SignerV6, keccak256, AbiCoder, getAddress } from "ethers";
+import {
+    JsonRpcProvider,
+    Wallet,
+    BrowserProvider,
+    Signer as SignerV6,
+    keccak256,
+    AbiCoder,
+    getAddress
+} from "ethers";
 import { useGlobalState } from "../state";
 
 import { RelayProvider, } from "@opengsn/provider"
-// import { ERC20__factory, GasaltPaymaster__factory, WalletFactory__factory } from '../../typechain-types';
+import {
+    WalletFactory__factory,
+    // ERC20__factory,
+    // GasaltPaymaster__factory
+} from '../../typechain-types';
 import bytecode from "./bytecode";
+import { zeroAddress } from "@/utils/constants";
 
 
 
@@ -27,7 +40,7 @@ function calcSalt(sender = "", index = 0) {
     );
 }
 
-const walletFactorAddress = "0xBe463ba8a009256aE7711532dE6d030AB8719e27"
+const walletFactoryAddress = "0xBE463ba8a009256aE7711532dE6d030AB8719e27"
 const paymasterAddress = "0x8579c062A2229acBc5D397Db8679Fd4A21FcC8aF"
 const preferredRelays = ["https://gsn-v3-beta-goerli.prjct.dev"]
 
@@ -39,26 +52,32 @@ export default function useWeb3() {
 
     useEffect(() => {
         // get gasalt address balance
-        if (gsnProvider && address) {
+        if (gsnProvider && address !== zeroAddress) {
             console.log("gasalt address", address)
             gsnProvider.getBalance(address).then(balance => {
                 console.log("balance", balance.toString())
             })
         }
-    }, [gsnProvider, gsnSigner, relayProvider])
+    }, [gsnProvider, address])
 
     useEffect(() => {
         // get gasalt address
-        if (masterAddress) {
-            const address = getAddress(buildCreate2Address(walletFactorAddress, calcSalt(masterAddress, 0), bytecode))
-            console.log("address", address, masterAddress)
-            setKeyValue("address", address)
-        }
-    }, [masterAddress])
+        (async () => {
+            if (masterAddress && gsnSigner) {
+                const address = getAddress(buildCreate2Address(walletFactoryAddress, calcSalt(masterAddress, 0), bytecode))
+                console.log("address", address, masterAddress)
+                setKeyValue("address", address)
+                const walletFactory = WalletFactory__factory.connect(walletFactoryAddress, gsnSigner)
+                const gasaltAddr = await walletFactory.getGaslessAddress(masterAddress, 0)
+                console.log("gasalt address==>", gasaltAddr)
+            }
+        })()
+
+    }, [masterAddress, gsnSigner])
 
     useEffect(() => {
         (async () => {
-            if (gsnProvider) {
+            if (gsnProvider && gsnSigner) {
                 console.log("provider exists")
                 return
             }
