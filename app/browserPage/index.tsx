@@ -1,3 +1,4 @@
+import "react-native-url-polyfill/auto"
 import Close from "@/assets/svgs/Close";
 import Lock from "@/assets/svgs/Lock";
 import Polygon from "@/assets/svgs/Polygon";
@@ -14,11 +15,12 @@ import * as NavigationBar from "expo-navigation-bar";
 import { useEffect, useRef, useState } from "react";
 import { AntDesign, Ionicons, Feather, Octicons } from "@expo/vector-icons";
 import runFirst from "@/utils/runjs";
+import { gstTokenAddress } from "@/utils/constants";
 
 
 
 export default function BrowserPage() {
-  const { setKeyValue, gsnProvider, } = useGlobalState();
+  const { setKeyValue, gsnProvider, address, gasalt, masterAddress, gsnSigner, masterSigner } = useGlobalState();
   const visibility = NavigationBar.useVisibility();
   const [pageLoading, setPageLoading] = useState(false);
   const [fav, setFav] = useState(false);
@@ -66,7 +68,7 @@ export default function BrowserPage() {
 
     if (dataPayload) {
       if (dataPayload.type === "Console" && dataPayload.data.type === "print") {
-        console.info(`[Console] ${JSON.stringify(dataPayload.data)}`);
+        // console.info(`[Console] ${JSON.stringify(dataPayload.data)}`);
       } else if (dataPayload.type === "Share") {
         if (dataPayload.data?.currentURL) {
           Share.share({
@@ -76,21 +78,44 @@ export default function BrowserPage() {
         }
       } else if (dataPayload.type === "ethereum") {
         const { method, params, id } = dataPayload.data;
+        if (method === "eth_requestAccounts" || method === "eth_accounts") {
+          const res = [address]
+          webViewRef?.current?.injectJavaScript(`window.ethereum.resolveQuery(${id}, ${JSON.stringify(res)})`)
+          return;
+        }
         // console.log("from ethereum")
         // console.log(dataPayload.data)
-        // if(method === "eth_sendTransaction") {
-        //   console.log("gaslessExecute")
-        //   const {to, value, data, gas, from} = params[0];
-        //   const tokenFee = (16*10**18).toString();
-        //   gasalt.gaslessExecute(to, 0, tokenFee, "0", to, data, {from}).then(res => {
-        //     console.log("gasless executed")
-        //     webviewRef.current.injectJavaScript(`window.ethereum.resolve(${id}, ${JSON.stringify(res)})`)
-        //   })
-        //   return
-        // }
+        if(method === "eth_sendTransaction") {
+          console.log("gaslessExecute")
+          console.log(params)
+          const {to, value=0, data, gas, from} = params[0];
+          const tokenFee = (0.5*10**18).toString();
+
+          gasalt.gaslessExecute(gstTokenAddress, 0, tokenFee, value, to, data, {from: masterAddress}).then((res: any) => {
+            console.log("gasless executed", {res})
+            webViewRef?.current?.injectJavaScript(`window.ethereum.resolveQuery(${id}, ${JSON.stringify(res)})`)
+          })
+          return
+        }
+        if( method === "eth_signTypedData_v4") {
+          const {types: _types, domain, message} = JSON.parse(params[1]);
+          const {EIP712Domain, ...types} = _types;
+          console.log({types})
+          masterSigner.signTypedData(domain, types, message).then((res: any) => {
+            console.log("signTypedData_v4", {res})
+            webViewRef?.current?.injectJavaScript(`window.ethereum.resolveQuery(${id}, ${JSON.stringify([res])})`)
+          }).catch(e => {
+            console.log("error signing typed data", e)
+            webViewRef?.current?.injectJavaScript(`window.ethereum.resolveQuery(${id}, ${JSON.stringify(["0x0"])})`)
+          })
+          return
+        }
         gsnProvider.send(method, params).then((res) => {
           console.log("provider responded!", method, id, res)
           webViewRef?.current?.injectJavaScript(`window.ethereum.resolveQuery(${id}, ${JSON.stringify(res)})`)
+        }).catch((e:any) => {
+          console.log("error sending", method, id, e)
+          webViewRef?.current?.injectJavaScript(`window.ethereum.rejectQuery(${id}, ${JSON.stringify(["0x0"])})`)
         })
       }
     }

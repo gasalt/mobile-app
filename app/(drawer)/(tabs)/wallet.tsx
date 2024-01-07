@@ -144,7 +144,7 @@ export default function App() {
               ) : (
                 <Copy
                   onPress={() =>
-                    copyToClipboard("0xE7E2cB8c81c10...C9Ce62EC754")
+                    copyToClipboard(address)
                   }
                 />
               )}

@@ -17,11 +17,11 @@ import {
     // GasaltPaymaster__factory
 } from '../../typechain-types';
 import bytecode from "./bytecode";
-import { zeroAddress } from "@/utils/constants";
+import { paymasterAddress, preferredRelays, rpcURL, walletFactoryAddress, zeroAddress } from "@/utils/constants";
 
 
 
-const _provider = new JsonRpcProvider("https://rpc.ankr.com/eth_goerli")
+const _provider = new JsonRpcProvider(rpcURL)
 
 function buildCreate2Address(creatorAddress = "", saltHex = "", byteCode = "") {
     return `0x${keccak256(
@@ -40,15 +40,13 @@ function calcSalt(sender = "", index = 0) {
     );
 }
 
-const walletFactoryAddress = "0xBE463ba8a009256aE7711532dE6d030AB8719e27"
-const paymasterAddress = "0x8579c062A2229acBc5D397Db8679Fd4A21FcC8aF"
-const preferredRelays = ["https://gsn-v3-beta-goerli.prjct.dev"]
+
 
 export default function useWeb3() {
     const { privateKey, setKeyValue, masterAddress, address } = useGlobalState()
     const [provider] = useState(_provider)
     const [signer, setSigner] = useState<Wallet | null>(null)
-    const [{ gsnProvider, gsnSigner, relayProvider }, setGsn] = useState<{ gsnProvider?: BrowserProvider, gsnSigner?: SignerV6, relayProvider?: RelayProvider }>({})
+    const [{ gsnProvider, gsnSigner }, setGsn] = useState<{ gsnProvider?: BrowserProvider, gsnSigner?: SignerV6, relayProvider?: RelayProvider }>({})
 
     useEffect(() => {
         // get gasalt address balance
@@ -67,9 +65,8 @@ export default function useWeb3() {
                 const address = getAddress(buildCreate2Address(walletFactoryAddress, calcSalt(masterAddress, 0), bytecode))
                 console.log("address", address, masterAddress)
                 setKeyValue("address", address)
-                const walletFactory = WalletFactory__factory.connect(walletFactoryAddress, gsnSigner)
-                const gasaltAddr = await walletFactory.getGaslessAddress(masterAddress, 0)
-                console.log("gasalt address==>", gasaltAddr)
+                const gasalt = WalletFactory__factory.connect(walletFactoryAddress, gsnSigner)
+                setKeyValue("gasalt", gasalt)
             }
         })()
 
@@ -102,6 +99,7 @@ export default function useWeb3() {
                     setKeyValue("gsnProvider", _gsnProvider)
                     setKeyValue("gsnSigner", _gsnSigner)
                     setKeyValue("relayProvider", _relayProvider)
+                    setKeyValue("masterSigner", _signer)
                 } catch (error) {
                     console.log("gsn error => ", error)
                 }

@@ -33,7 +33,7 @@ class Ethereum {
                 //   reject("request timed out")
               }
           }, 10000)
-          this.pendingRequests[id] = { resolve, timeout }
+          this.pendingRequests[id] = { resolve, timeout, reject }
       })
   }
 
@@ -51,6 +51,17 @@ class Ethereum {
       resolve(result)
       delete this.pendingRequests[id]
       console.print("resolved request: "+id)
+  }
+  rejectQuery(id, error) {
+        if(!this.pendingRequests[id]) {
+            console.print("request already resolved: ", id)
+            return;
+        }
+        const { reject, timeout } = this.pendingRequests[id]
+        clearTimeout(timeout)
+        reject(error)
+        delete this.pendingRequests[id]
+        console.print("resolved request: "+id)
   }
 }
   
