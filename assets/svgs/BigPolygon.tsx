@@ -1,4 +1,5 @@
 
+import { View } from "react-native"
 import Svg, {
   SvgProps,
   G,
@@ -10,10 +11,13 @@ import Svg, {
   ClipPath,
 } from "react-native-svg"
 const BigPolygon = (props: SvgProps) => (
+
+  <View style={{aspectRatio:1, display:"flex", height: props.height as number || 24, width: props.width as number || 24 }}>
   <Svg
-    width={24}
-    height={24}
+    width="100%"
+    height="100%"
     fill="none"
+    viewBox="0 0 24 24"
     {...props}
   >
     <G clipPath="url(#a)">
@@ -55,6 +59,7 @@ const BigPolygon = (props: SvgProps) => (
       </ClipPath>
     </Defs>
   </Svg>
+  </View>
 )
 export default BigPolygon
 

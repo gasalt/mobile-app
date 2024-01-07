@@ -31,6 +31,7 @@ const defaultState = {
     relayProvider,
     gasalt,
     masterSigner,
+    selectedNetwork: 5,
 }
 
 export type DefaultState = typeof defaultState

@@ -4,22 +4,29 @@ import FloatingTextInput from "@/components/inputs/FloatingInput";
 import { cryptoData } from "@/utils/data";
 import CircleChecked from "@/assets/svgs/CircleChecked";
 import { useState } from "react";
+import { useGlobalState } from "@/sdk/state";
+import { ModalScreen } from "@/types/enums";
 
 export default function Crypto() {
-  const [selected, setSelected] = useState<number | undefined>();
+  const {selectedNetwork, setKeyValue} = useGlobalState();
   const [search, setSearch] = useState("");
 
   const renderItem = ({ item }: { [key: string]: any }) => (
-    <Pressable style={styles.btn} onPress={() => setSelected(item.id)}>
+    <Pressable style={[styles.btn, {opacity: item.active ? 1 : 0.5}]} onPress={() => {
+      if(item.active){
+        setKeyValue("selectedNetwork", item.id)
+        setKeyValue("modalComponent", { screen: ModalScreen.None, values: {} });
+      }
+    }}>
       <DefaultView
         style={{ flexDirection: "row", gap: 8, alignItems: "center" }}
       >
-        {item.logo}
+        {item.logo()}
         <DefaultText style={{ color: "#A69FFF", fontSize: 16 }}>
           {item.name}
         </DefaultText>
       </DefaultView>
-      {item.id === selected && <CircleChecked />}
+      {item.id === selectedNetwork && <CircleChecked />}
     </Pressable>
   );
   return (
@@ -33,7 +40,7 @@ export default function Crypto() {
       />
 
       <FlatList
-        data={cryptoData}
+        data={search ? cryptoData.filter((item) => item.name.toLowerCase().includes(search.toLowerCase())) : cryptoData}
         contentContainerStyle={{ paddingHorizontal: 10, marginTop: 10 }}
         renderItem={renderItem}
         keyExtractor={(item) => `${item.id}`}
