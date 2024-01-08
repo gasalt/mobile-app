@@ -4,7 +4,6 @@ import { DefaultText } from "@/components/Defaults";
 import styles from "@/styles";
 import Icon from "@/components/Icon";
 import Avatar from "@/components/Avatar";
-import Polygon from "@/assets/svgs/Polygon";
 import CryptoDropdown from "@/components/CryptoDrown";
 import { useGlobalState } from "@/sdk/state";
 import { ModalScreen } from "@/types/enums";
@@ -28,7 +27,7 @@ export default function Main() {
     Platform.OS === "ios" ? 40 : styles.tabBarStyle.marginBottom;
 
   const onPress = () => {
-    setKeyValue("modalComponent", { screen: ModalScreen.Crypto, values: {} });
+    setKeyValue("modalComponent", { screen: ModalScreen.Crypto, values: {type: "network"} });
   };
 
   const Logo = network.logo(16)

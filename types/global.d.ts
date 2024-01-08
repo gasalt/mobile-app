@@ -15,3 +15,12 @@ interface ModalsValue {
 }
 
 type Nullable<T> = T | null;
+
+interface CurrencyData {
+    id: string;
+    name: string;
+    logo: null;
+    active: boolean;
+    balance: string;
+    decimals: number;
+}

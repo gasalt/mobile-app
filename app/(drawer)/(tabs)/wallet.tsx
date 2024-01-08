@@ -28,16 +28,17 @@ import Eye from "@/assets/svgs/Eye";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import useWeb3 from "@/sdk/web3";
 import formatAddress from "@/utils/formatAddress";
+import { formatUnits } from "ethers";
 
 const { width, height } = Dimensions.get("window");
 
 const Tab = createMaterialTopTabNavigator();
 
 export default function App() {
-  const { setKeyValue, address } = useGlobalState();
+  const { setKeyValue, address, selectedCurrency, currencyData } = useGlobalState();
   useWeb3()
-
-  const [hideBalance, setHideBalance] = useState(false);
+  const currency = currencyData.find((item) => item.id === selectedCurrency)!;
+  const [hideBalance, setHideBalance] = useState(true);
   const [copied, setCopied] = useState(false);
 
   const copyToClipboard = async (value: string) => {
@@ -102,17 +103,17 @@ export default function App() {
                 <DefaultText
                   style={{ fontSize: 32, lineHeight: 32, fontWeight: "600" }}
                 >
-                  3,530.84
+                  {Number(formatUnits(currency.balance, currency.decimals)).toFixed(currency.decimals < 6 ? currency.decimals : 4)}
                 </DefaultText>
               )}
               <CryptoDropdown
                 onPress={() =>
                   setKeyValue("modalComponent", {
                     screen: ModalScreen.Crypto,
-                    values: {},
+                    values: {type: "currency"},
                   })
                 }
-                text="MATIC"
+                text={currency.name}
                 logo={<Polygon />}
               />
             </DefaultView>

@@ -6,7 +6,8 @@ import {
     Signer as SignerV6,
     keccak256,
     AbiCoder,
-    getAddress
+    getAddress,
+    formatUnits
 } from "ethers";
 import { useGlobalState } from "../state";
 
@@ -18,6 +19,8 @@ import {
 } from '../../typechain-types';
 import bytecode from "./bytecode";
 import { paymasterAddress, preferredRelays, rpcURL, walletFactoryAddress, zeroAddress } from "@/utils/constants";
+import axios from "axios";
+import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 
 
 
@@ -40,23 +43,86 @@ function calcSalt(sender = "", index = 0) {
     );
 }
 
+async function getAddressTokens(address: string) {
+    const res = await axios.post(
+      "https://eth-goerli.g.alchemy.com/v2/vBE5Q3AtXuqJNU9XWCb6ajgN8fQHXjty",
+      {
+        "jsonrpc": "2.0",
+        "method": "alchemy_getTokenBalances",
+        "params": [
+          address
+        ],
+        "id": 42
+      }
+    )
+    const addrTokens = res.data?.result?.tokenBalances
+    return addrTokens
+  }
+
+  async function getTokenDetails(tokendAddress: string) {
+    const res = await axios.post(
+      "https://eth-goerli.g.alchemy.com/v2/vBE5Q3AtXuqJNU9XWCb6ajgN8fQHXjty",
+      {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "method": "alchemy_getTokenMetadata",
+        "params": [
+          tokendAddress
+        ]
+      }
+    )
+    const tokenDetails = res.data?.result
+    return tokenDetails
+  }
+
 
 
 export default function useWeb3() {
-    const { privateKey, setKeyValue, masterAddress, address } = useGlobalState()
+    const { privateKey, setKeyValue, masterAddress, address, selectedNetwork } = useGlobalState()
     const [provider] = useState(_provider)
     const [signer, setSigner] = useState<Wallet | null>(null)
     const [{ gsnProvider, gsnSigner }, setGsn] = useState<{ gsnProvider?: BrowserProvider, gsnSigner?: SignerV6, relayProvider?: RelayProvider }>({})
 
     useEffect(() => {
         // get gasalt address balance
-        if (gsnProvider && address !== zeroAddress) {
-            console.log("gasalt address", address)
-            gsnProvider.getBalance(address).then(balance => {
-                console.log("balance", balance.toString())
-            })
-        }
-    }, [gsnProvider, address])
+        
+        (async () => {
+            const currencyData = [
+                {
+                    id: zeroAddress,
+                    name: "ETH",
+                    logo: null,
+                    active: true,
+                    balance: "0",
+                    decimals: 18,
+                }
+            ]
+
+            if (gsnProvider && address !== zeroAddress && selectedNetwork) {
+                console.log("gasalt address", address)
+
+                gsnProvider.getBalance(address).then(balance => {
+                    console.log("balance", balance.toString())
+                    currencyData[0].balance = balance.toString(10)
+                })
+                const addrTokens = await getAddressTokens(address)
+                for(const addrToken of addrTokens) {
+                    const tokenDetails = await getTokenDetails(addrToken.contractAddress)
+                    currencyData.push({
+                        id: addrToken.contractAddress,
+                        name: tokenDetails?.symbol,
+                        logo: tokenDetails?.logo,
+                        active: true,
+                        balance: (Number(addrToken?.tokenBalance)).toString(),
+                        decimals: tokenDetails?.decimals
+                    })
+                }
+                setKeyValue("currencyData", currencyData)
+                console.log("currencyData", currencyData)
+
+            }
+        })()
+    }, [gsnProvider, address, selectedNetwork])
 
     useEffect(() => {
         // get gasalt address

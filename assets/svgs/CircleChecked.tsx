@@ -1,9 +1,10 @@
 import Svg, { SvgProps, Circle, Path } from "react-native-svg"
 const CircleChecked = (props: SvgProps) => (
   <Svg
-    width={25}
-    height={24}
+    width={20}
+    height={20}
     fill="none"
+    viewBox="0 0 25 25"
     {...props}
   >
     <Circle cx={12.5} cy={12} r={8.5} fill="#4A41C7" />

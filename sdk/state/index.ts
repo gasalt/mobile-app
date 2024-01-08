@@ -10,7 +10,18 @@ let gsnProvider: BrowserProvider = null as unknown as BrowserProvider,
     gsnSigner: SignerV6 = null as unknown as SignerV6 ,
     relayProvider: RelayProvider = null as unknown as RelayProvider,
     gasalt: WalletFactory = null as unknown as WalletFactory,
-    masterSigner: Wallet = null as unknown as Wallet;
+    masterSigner: Wallet = null as unknown as Wallet,
+    currencyData: CurrencyData[] = [
+        {
+            id: zeroAddress,
+            name: "ETH",
+            logo: null,
+            active: true,
+            balance: "0",
+            decimals: 18,
+        }
+    ];
+
 
 
 const defaultState = {
@@ -32,6 +43,9 @@ const defaultState = {
     gasalt,
     masterSigner,
     selectedNetwork: 5,
+    currencyData,
+    selectedCurrency: zeroAddress,
+    selectedFeeCurrency: "",
 }
 
 export type DefaultState = typeof defaultState

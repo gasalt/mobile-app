@@ -1,11 +1,7 @@
-// import BigArbitrum from "@/assets/svgs/BigArbi";
 import BigAvalanche from "@/assets/svgs/BigAvalanche";
-// import BigCelo from "@/assets/svgs/BigCelo";
 import BigEth from "@/assets/svgs/BigEth";
-// import BigOptimism from "@/assets/svgs/BigOptimism";
 import BigPolygon from "@/assets/svgs/BigPolygon";
-// import BigSolana from "@/assets/svgs/BigSolana";
-import Polygon from "@/assets/svgs/Polygon";
+
 
 export const cryptoData = [
   {
@@ -25,6 +21,11 @@ export const cryptoData = [
     name: "Ethereum",
     logo: (size=24) => <BigEth width={size} height={size} />,
   },
+  {
+    id: 43114,
+    name: "Avalanche",
+    logo: (size=24) => <BigAvalanche width={size} height={size} />,
+  },
   // {
   //   id: 3,
   //   name: "Arbitrum",
@@ -40,11 +41,6 @@ export const cryptoData = [
   //   name: "Solana",
   //   logo: <BigSolana />,
   // },
-  {
-    id: 43114,
-    name: "Avalanche",
-    logo: (size=24) => <BigAvalanche width={size} height={size} />,
-  },
   // {
   //   id: 7,
   //   name: "Celo",

@@ -1,27 +1,35 @@
 import { FlatList, Pressable, StyleSheet } from "react-native";
 import { DefaultText, DefaultView } from "../Defaults";
 import FloatingTextInput from "@/components/inputs/FloatingInput";
-import { cryptoData } from "@/utils/data";
+import { cryptoData as networkData } from "@/utils/data";
 import CircleChecked from "@/assets/svgs/CircleChecked";
 import { useState } from "react";
 import { useGlobalState } from "@/sdk/state";
 import { ModalScreen } from "@/types/enums";
 
 export default function Crypto() {
-  const {selectedNetwork, setKeyValue} = useGlobalState();
+  const {selectedNetwork, setKeyValue, currencyData, modalComponent: {values}} = useGlobalState();
   const [search, setSearch] = useState("");
+
+  const type = (values as {type: "network"|"currency"|"feeCurrency"}).type
+
+  const cryptoData = type === "network" ? networkData : currencyData
 
   const renderItem = ({ item }: { [key: string]: any }) => (
     <Pressable style={[styles.btn, {opacity: item.active ? 1 : 0.5}]} onPress={() => {
       if(item.active){
-        setKeyValue("selectedNetwork", item.id)
+        type === "network"
+        ? setKeyValue("selectedNetwork", item.id)
+        : type === "currency"
+        ? setKeyValue("selectedCurrency", item.id)
+        : setKeyValue("selectedFeeCurrency", item.id)
         setKeyValue("modalComponent", { screen: ModalScreen.None, values: {} });
       }
     }}>
       <DefaultView
         style={{ flexDirection: "row", gap: 8, alignItems: "center" }}
       >
-        {item.logo()}
+        {item.logo && item.logo(24)}
         <DefaultText style={{ color: "#A69FFF", fontSize: 16 }}>
           {item.name}
         </DefaultText>
