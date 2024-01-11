@@ -27,15 +27,17 @@ import { ModalScreen } from "@/types/enums";
 import Eye from "@/assets/svgs/Eye";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import useWeb3 from "@/sdk/web3";
-import formatAddress from "@/utils/formatAddress";
+import { formatAddress, formatCurrency } from "@/utils/formatAddress";
 
 const { width, height } = Dimensions.get("window");
 
 const Tab = createMaterialTopTabNavigator();
 
 export default function App() {
-  const { setKeyValue, address } = useGlobalState();
+  const { setKeyValue, address, tokenBalances, selectedToken, selectedNetwork } = useGlobalState();
   useWeb3()
+  
+  const tokenBalance = (selectedNetwork.name === selectedToken.name ? tokenBalances.find(tb => tb.contractAddress === "0x0")?.tokenBalance : tokenBalances.find(tb => tb.contractAddress === selectedToken.id)?.tokenBalance) || 0
 
   const [hideBalance, setHideBalance] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -102,18 +104,19 @@ export default function App() {
                 <DefaultText
                   style={{ fontSize: 32, lineHeight: 32, fontWeight: "600" }}
                 >
-                  3,530.84
+                  {formatCurrency(+tokenBalance)}
+                  {/* 3,530.84 */}
                 </DefaultText>
               )}
               <CryptoDropdown
                 onPress={() =>
                   setKeyValue("modalComponent", {
                     screen: ModalScreen.Crypto,
-                    values: {},
+                    values: { name: 'selected-token' },
                   })
                 }
-                text="MATIC"
-                logo={<Polygon />}
+                text={selectedToken.name}
+                logo={!selectedToken.logo ? <Polygon /> : selectedToken.logo}
               />
             </DefaultView>
             {hideBalance ? (
@@ -122,7 +125,8 @@ export default function App() {
               </DefaultText>
             ) : (
               <DefaultText style={{ color: "#9DF190", marginLeft: 36 }}>
-                ~2,234.77 USD
+                {/* ~2,234.77 USD */}
+                ~ {formatCurrency(+tokenBalance)} USD
               </DefaultText>
             )}
 
@@ -144,7 +148,7 @@ export default function App() {
               ) : (
                 <Copy
                   onPress={() =>
-                    copyToClipboard("0xE7E2cB8c81c10...C9Ce62EC754")
+                    copyToClipboard(address)
                   }
                 />
               )}

@@ -20,12 +20,12 @@ const Label = ({ name, focused }: { name: string; focused: boolean }) => (
 );
 
 export default function Main() {
-  const { setKeyValue } = useGlobalState();
+  const { setKeyValue, selectedNetwork } = useGlobalState();
   const marginBottom =
     Platform.OS === "ios" ? 40 : styles.tabBarStyle.marginBottom;
 
   const onPress = () => {
-    setKeyValue("modalComponent", { screen: ModalScreen.Crypto, values: {} });
+    setKeyValue("modalComponent", { screen: ModalScreen.Crypto, values: { name: "selected-network" } });
   };
 
   return (
@@ -52,8 +52,8 @@ export default function Main() {
           headerRight: () => (
             <CryptoDropdown
               onPress={onPress}
-              text="Polygon"
-              logo={<Polygon />}
+              text={selectedNetwork.name}
+              logo={!selectedNetwork.logo ? <Polygon /> : selectedNetwork.logo}
             />
           ),
         }}
