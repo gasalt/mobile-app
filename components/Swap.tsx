@@ -39,7 +39,7 @@ export default function Swap() {
             <CryptoDropdown
               btnStyle={styles.btnStyle}
               onPress={onPress}
-              text="MATIC"
+              text="Polygon"
               logo={<Polygon />}
             />
           </DefaultView>
@@ -96,7 +96,7 @@ export default function Swap() {
               textStyle={styles.textStyle}
               btnStyle={styles.btnStyle}
               onPress={onPress}
-              text="MATIC"
+              text="Polygon"
               showLogo={false}
               logo={<Polygon />}
             />

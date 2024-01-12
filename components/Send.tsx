@@ -13,12 +13,11 @@ import { useGlobalState } from "@/sdk/state";
 import { ModalScreen } from "@/types/enums";
 
 export default function Send() {
-  const { setKeyValue } = useGlobalState();
+  const { setKeyValue, selectedFee } = useGlobalState();
   const [address, setAddress] = useState("");
   const [amount, setAmount] = useState("");
 
-  const onPress = () =>
-    setKeyValue("modalComponent", { values: {}, screen: ModalScreen.Crypto });
+  const onPress = () => setKeyValue("modalComponent", { values: { name: 'selected-fee'}, screen: ModalScreen.Crypto });
 
   return (
     <DefaultView style={styles.container}>
@@ -95,7 +94,7 @@ export default function Send() {
               textStyle={styles.textStyle}
               btnStyle={styles.btnStyle}
               onPress={onPress}
-              text="MATIC"
+              text={selectedFee.name}
               showLogo={false}
               logo={<Polygon />}
             />

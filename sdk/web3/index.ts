@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { JsonRpcProvider, Wallet, BrowserProvider, Signer as SignerV6,  } from "ethers";
+import { Alchemy, Network } from "alchemy-sdk";
+import axios from 'axios'
 import { useGlobalState } from "../state";
+import { alchemyWeb3 } from './alchemy'
 // /Users/orewoley/prjct/apps/gasalt/gasalt_mobile_app/node_modules/@opengsn/provider/dist/RelayProvider.js
 // Change dynamic import in newEthersV6Provider to const { BrowserProvider } = require('ethers-v6/providers');
 
@@ -30,10 +33,11 @@ export default function useWeb3() {
             if (privateKey) {
                 const _signer = new Wallet(privateKey, provider)
                 setSigner(_signer)
-                const masterAddress = await _signer?.getAddress()
-                console.log("masterAddress", masterAddress)
-                setKeyValue("masterAddress", masterAddress)
-                setKeyValue("address", masterAddress)
+                const masterAddress = await _signer?.getAddress();
+                const balances = await alchemyWeb3.getTokens(masterAddress) as { contractAddress: string; tokenBalance: string }[];
+                setKeyValue("tokenBalances", balances);
+                setKeyValue("masterAddress", masterAddress);
+                setKeyValue("address", masterAddress);
                 try {
                     const {relayProvider:_relayProvider, gsnProvider:_gsnProvider, gsnSigner:_gsnSigner} = await RelayProvider.newEthersV6Provider({
                         provider: _signer,
@@ -53,3 +57,6 @@ export default function useWeb3() {
         })()
     }, [privateKey, provider])
 }
+
+
+export { alchemyWeb3 }
