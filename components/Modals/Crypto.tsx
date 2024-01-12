@@ -3,14 +3,30 @@ import { DefaultText, DefaultView } from "../Defaults";
 import FloatingTextInput from "@/components/inputs/FloatingInput";
 import { cryptoData } from "@/utils/data";
 import CircleChecked from "@/assets/svgs/CircleChecked";
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import { useGlobalState } from "@/sdk/state";
 
-export default function Crypto() {
-  const [selected, setSelected] = useState<number | undefined>();
+type TItem = { [key: string]: any }
+
+export default function Crypto({ values }: { values: any }) {
   const [search, setSearch] = useState("");
+  const { setKeyValue, selectedToken, selectedNetwork, selectedFee } = useGlobalState();
 
-  const renderItem = ({ item }: { [key: string]: any }) => (
-    <Pressable style={styles.btn} onPress={() => setSelected(item.id)}>
+  const selectOptions = {
+    'selected-network': "selectedNetwork",
+    'selected-token': "selectedToken",
+    'selected-fee': "selectedFee",
+  } as any;
+
+  const selectionOption = useMemo(() => selectOptions[values.name], []);
+  const selectedItem = selectionOption === 'selectedNetwork' ? selectedNetwork : selectionOption === 'selectedToken' ? selectedToken : selectedFee;
+
+  const handlePress = (item: TItem) => {
+    setKeyValue(selectionOption, item);
+  }
+
+  const renderItem = ({ item }: TItem) => (
+    <Pressable disabled={item.id > 2} style={item.id > 2 ? styles.disabledBtn : styles.btn} onPress={() => handlePress(item)}>
       <DefaultView
         style={{ flexDirection: "row", gap: 8, alignItems: "center" }}
       >
@@ -19,7 +35,7 @@ export default function Crypto() {
           {item.name}
         </DefaultText>
       </DefaultView>
-      {item.id === selected && <CircleChecked />}
+      {item.id === selectedItem.id && <CircleChecked />}
     </Pressable>
   );
   return (
@@ -55,4 +71,15 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
+  disabledBtn: {
+    flexDirection: "row",
+    opacity: 0.4,
+    padding: 16,
+    marginVertical: 6,
+    borderRadius: 8,
+    borderColor: "#47475F",
+    borderWidth: 1,
+    justifyContent: "space-between",
+    alignItems: "center",
+  }
 });
