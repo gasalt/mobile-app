@@ -17,7 +17,6 @@ import { useGlobalState } from "@/sdk/state";
 
 import Copy from "@/assets/svgs/Copy";
 import Info from "@/assets/svgs/Info";
-import Polygon from "@/assets/svgs/Polygon";
 import CryptoDropdown from "@/components/CryptoDrown";
 import Send from "@/components/Send";
 import Swap from "@/components/Swap";
@@ -29,6 +28,7 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import useWeb3 from "@/sdk/web3";
 import formatAddress from "@/utils/formatAddress";
 import { formatUnits } from "ethers";
+import CoinLogo from "@/assets/svgs/CoinLogo";
 
 const { width, height } = Dimensions.get("window");
 
@@ -37,7 +37,7 @@ const Tab = createMaterialTopTabNavigator();
 export default function App() {
   const { setKeyValue, address, selectedCurrency, currencyData } = useGlobalState();
   useWeb3()
-  const currency = currencyData.find((item) => item.id === selectedCurrency)!;
+  const currency = currencyData.find((item) => item.address === selectedCurrency.address)!;
   const [hideBalance, setHideBalance] = useState(true);
   const [copied, setCopied] = useState(false);
 
@@ -113,8 +113,8 @@ export default function App() {
                     values: {type: "currency"},
                   })
                 }
-                text={currency.name}
-                logo={<Polygon />}
+                text={currency.symbol}
+                logo={<CoinLogo image={currency.logo} symbol={currency.symbol} />}
               />
             </DefaultView>
             {hideBalance ? (
@@ -123,7 +123,7 @@ export default function App() {
               </DefaultText>
             ) : (
               <DefaultText style={{ color: "#9DF190", marginLeft: 36 }}>
-                ~2,234.77 USD
+                ~ {(Number(formatUnits(currency.balance, currency.decimals))*Number(currency.price)).toFixed(2)} USD
               </DefaultText>
             )}
 
