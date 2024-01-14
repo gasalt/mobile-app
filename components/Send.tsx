@@ -13,7 +13,7 @@ import { useGlobalState } from "@/sdk/state";
 import { ModalScreen } from "@/types/enums";
 
 export default function Send() {
-  const { setKeyValue } = useGlobalState();
+  const { setKeyValue, selectedFeeCurrency } = useGlobalState();
   const [address, setAddress] = useState("");
   const [amount, setAmount] = useState("");
 
@@ -95,7 +95,7 @@ export default function Send() {
               textStyle={styles.textStyle}
               btnStyle={styles.btnStyle}
               onPress={onPress}
-              text="MATIC"
+              text={selectedFeeCurrency.symbol}
               showLogo={false}
               logo={<Polygon />}
             />
@@ -103,7 +103,7 @@ export default function Send() {
         </DefaultView>
         <DefaultView style={styles.item}>
           <DefaultText>Total</DefaultText>
-          <DefaultText>1,000.00MATIC</DefaultText>
+          <DefaultText>1,000.00 MATIC</DefaultText>
         </DefaultView>
       </DefaultView>
 
