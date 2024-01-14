@@ -20,7 +20,7 @@ let gsnProvider: BrowserProvider = null as unknown as BrowserProvider,
             logo: null,
             active: true,
             balance: "0",
-            value: '----',
+            price: '0',
             decimals: 18,
         }
     ];

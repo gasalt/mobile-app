@@ -17,7 +17,6 @@ import { useGlobalState } from "@/sdk/state";
 
 import Copy from "@/assets/svgs/Copy";
 import Info from "@/assets/svgs/Info";
-import Polygon from "@/assets/svgs/Polygon";
 import CryptoDropdown from "@/components/CryptoDrown";
 import Send from "@/components/Send";
 import Swap from "@/components/Swap";
@@ -124,7 +123,7 @@ export default function App() {
               </DefaultText>
             ) : (
               <DefaultText style={{ color: "#9DF190", marginLeft: 36 }}>
-                ~ {currency.value} USD
+                ~ {(Number(formatUnits(currency.balance, currency.decimals))*Number(currency.price)).toFixed(2)} USD
               </DefaultText>
             )}
 

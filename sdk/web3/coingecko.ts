@@ -8,8 +8,8 @@ export const getTokenLogoAndPrice = async (tokenId: string) => {
     const { image, market_data } =  prices.data;
     return { logo: image.large, price: market_data.current_price.usd }
   } catch(e: any) {
-    console.log('error', e)
-    return { logo: null, price: '----'}
+    console.log('getTokenLogoAndPrice error', e.response.data)
+    return { logo: null, price: '0'}
   }
 }
 
@@ -32,7 +32,7 @@ export const getTokenPrice = async (tokens: string[]) => {
     const prices = await axios.get(`https://api.coingecko.com/api/v3/simple/price?ids=${tokens.join('%')}&vs_currencies=usd&precision=4`)
     return prices.data;
   } catch(e: any) {
-    console.log(e)
+    console.log("get price err:",e)
     return {}
   }
 }

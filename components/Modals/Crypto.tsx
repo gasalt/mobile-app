@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useGlobalState } from "@/sdk/state";
 import { ModalScreen } from "@/types/enums";
 import CoinLogo from "@/assets/svgs/CoinLogo";
+import { formatUnits } from "ethers";
 
 export default function Crypto() {
   const {
@@ -43,14 +44,17 @@ export default function Crypto() {
         <DefaultView
           style={{ flexDirection: "row", gap: 8, alignItems: "center" }}
         >
-          {typeof item.logo === "string" && (
+          {typeof item.logo === "string" 
+          ? (
             <CoinLogo image={item.logo} symbol={item.symbol} />
-          )}
+          )
+          : item.logo && item.logo(24)
+        }
           <DefaultText style={{ color: "#A69FFF", fontSize: 16 }}>
-            {item.symbol}
+            {item.symbol || item.name}
           </DefaultText>
           <DefaultText style={{ color: "#A69FFF", fontSize: 12, fontStyle: "italic" }}>
-            {item.balance}
+            {item.balance && formatUnits(item.balance, item.decimals)}
           </DefaultText>
         </DefaultView>
         {item.id === selectedNetwork && <CircleChecked />}

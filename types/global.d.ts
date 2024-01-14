@@ -23,7 +23,7 @@ interface CurrencyData {
     symbol: string;
     logo: null | string;
     active: boolean;
-    value: string,
+    price: string,
     balance: string;
     decimals: number;
 }

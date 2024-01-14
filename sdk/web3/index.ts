@@ -76,11 +76,6 @@ async function getAddressTokens(address: string) {
     return tokenDetails
   }
 
-  const callback = (item: string) => {
-    return item
-  }
-
-
 
 export default function useWeb3() {
     const { privateKey, setKeyValue, masterAddress, address, selectedNetwork , currencyData: stateCurrencyData } = useGlobalState()
@@ -100,7 +95,7 @@ export default function useWeb3() {
                     symbol: "ETH",
                     logo: 'https://assets.coingecko.com/coins/images/279/large/ethereum.png?1696501628',
                     active: true,
-                    value: "0",
+                    price: "0",
                     balance: "0",
                     decimals: 18,
                 }
@@ -112,23 +107,23 @@ export default function useWeb3() {
                 gsnProvider.getBalance(address).then(balance => {
                     console.log("balance", balance.toString())
                     currencyData[0].balance = balance.toString(10)
-                    currencyData[0].value = (Number(currencyData[0].balance) * price).toFixed(2)
+                    currencyData[0].price = price
                 })
                 const addrTokens = await getAddressTokens(address)
 
                 for(const addrToken of addrTokens) {
                     const tokenDetails = await getTokenDetails(addrToken.contractAddress)
                     const tokenId = CG.findTokenId(tokenDetails?.symbol);
-                    const { logo, price } = tokenId ? await CG.getTokenLogoAndPrice(tokenId) : { logo: '', price: '---'}
+                    const { logo, price } = tokenId ? await CG.getTokenLogoAndPrice(tokenId) : { logo: '', price: '0'}
                     const data = {
                         id: tokenId || tokenDetails?.symbol.toLowerCase(),
                         address: addrToken.contractAddress,
                         name: tokenDetails?.name,
                         symbol: tokenDetails?.symbol,
                         logo,
-                        value: !isNaN(price) ? (Number(addrToken?.tokenBalance) * price).toFixed(2) : price,
+                        price,
                         active: true,
-                        balance: (Number(addrToken?.tokenBalance)).toFixed(4),
+                        balance: (Number(addrToken?.tokenBalance)).toString(),
                         decimals: tokenDetails?.decimals
                     }
 
@@ -137,10 +132,10 @@ export default function useWeb3() {
                             data.logo = logoBase64;
                         })
                     }
+                    currencyData.push(data)
                 }
-                // currencyData[0].
                 setKeyValue("currencyData", currencyData)
-                console.log("currencyData", currencyData)
+                console.log("currencyData loaded")
 
             }
         })()
