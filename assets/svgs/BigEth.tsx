@@ -1,9 +1,13 @@
+import { View } from "react-native"
 import Svg, { SvgProps, G, Path, Defs, ClipPath } from "react-native-svg"
 const BigEth = (props: SvgProps) => (
+
+  <View style={{ aspectRatio:1, display:"flex", height: props.height as number, width: props.width as number }}>
   <Svg
-    width={25}
-    height={24}
+    width={"100%"}
+    height={"100%"}
     fill="none"
+    viewBox="0 0 24 24"
     {...props}
   >
     <G clipPath="url(#a)">
@@ -40,6 +44,7 @@ const BigEth = (props: SvgProps) => (
       </ClipPath>
     </Defs>
   </Svg>
+  </View>
 )
 export default BigEth
 

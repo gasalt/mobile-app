@@ -4,10 +4,11 @@ import { DefaultText } from "@/components/Defaults";
 import styles from "@/styles";
 import Icon from "@/components/Icon";
 import Avatar from "@/components/Avatar";
-import Polygon from "@/assets/svgs/Polygon";
 import CryptoDropdown from "@/components/CryptoDrown";
 import { useGlobalState } from "@/sdk/state";
 import { ModalScreen } from "@/types/enums";
+import { cryptoData } from "@/utils/data";
+
 
 export const unstable_settings = {
   initialRouteName: "/wallet",
@@ -20,13 +21,16 @@ const Label = ({ name, focused }: { name: string; focused: boolean }) => (
 );
 
 export default function Main() {
-  const { setKeyValue } = useGlobalState();
+  const { setKeyValue, selectedNetwork } = useGlobalState();
+  const network = cryptoData.find((item) => item.id === selectedNetwork)!;
   const marginBottom =
     Platform.OS === "ios" ? 40 : styles.tabBarStyle.marginBottom;
 
   const onPress = () => {
-    setKeyValue("modalComponent", { screen: ModalScreen.Crypto, values: {} });
+    setKeyValue("modalComponent", { screen: ModalScreen.Crypto, values: {type: "network"} });
   };
+
+  const Logo = network.logo(16)
 
   return (
  
@@ -52,8 +56,8 @@ export default function Main() {
           headerRight: () => (
             <CryptoDropdown
               onPress={onPress}
-              text="Polygon"
-              logo={<Polygon />}
+              text={network.name}
+              logo={Logo}
             />
           ),
         }}

@@ -1,3 +1,4 @@
+import { View } from "react-native"
 import Svg, {
   SvgProps,
   Path,
@@ -7,10 +8,13 @@ import Svg, {
   Image,
 } from "react-native-svg"
 const BigAvalanche = (props: SvgProps) => (
+  <View style={{aspectRatio:1, display:"flex", height: props.height as number || 24, width: props.width as number || 24 }}>
+
   <Svg
-    width={25}
-    height={24}
+    width={"100%"}
+    height={"100%"}
     fill="none"
+    viewBox="0 0 24 24"
     {...props}
   >
     <Path fill="url(#a)" d="M.5 0h24v24H.5z" />
@@ -31,5 +35,6 @@ const BigAvalanche = (props: SvgProps) => (
       />
     </Defs>
   </Svg>
+  </View>
 )
 export default BigAvalanche

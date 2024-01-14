@@ -17,7 +17,6 @@ import { useGlobalState } from "@/sdk/state";
 
 import Copy from "@/assets/svgs/Copy";
 import Info from "@/assets/svgs/Info";
-import Polygon from "@/assets/svgs/Polygon";
 import CryptoDropdown from "@/components/CryptoDrown";
 import Send from "@/components/Send";
 import Swap from "@/components/Swap";
@@ -28,16 +27,18 @@ import Eye from "@/assets/svgs/Eye";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import useWeb3 from "@/sdk/web3";
 import formatAddress from "@/utils/formatAddress";
+import { formatUnits } from "ethers";
+import CoinLogo from "@/assets/svgs/CoinLogo";
 
 const { width, height } = Dimensions.get("window");
 
 const Tab = createMaterialTopTabNavigator();
 
 export default function App() {
-  const { setKeyValue, address } = useGlobalState();
+  const { setKeyValue, address, selectedCurrency, currencyData } = useGlobalState();
   useWeb3()
-
-  const [hideBalance, setHideBalance] = useState(false);
+  const currency = currencyData.find((item) => item.address === selectedCurrency.address)!;
+  const [hideBalance, setHideBalance] = useState(true);
   const [copied, setCopied] = useState(false);
 
   const copyToClipboard = async (value: string) => {
@@ -102,18 +103,18 @@ export default function App() {
                 <DefaultText
                   style={{ fontSize: 32, lineHeight: 32, fontWeight: "600" }}
                 >
-                  3,530.84
+                  {Number(formatUnits(currency.balance, currency.decimals)).toFixed(currency.decimals < 6 ? currency.decimals : 4)}
                 </DefaultText>
               )}
               <CryptoDropdown
                 onPress={() =>
                   setKeyValue("modalComponent", {
                     screen: ModalScreen.Crypto,
-                    values: {},
+                    values: {type: "currency"},
                   })
                 }
-                text="MATIC"
-                logo={<Polygon />}
+                text={currency.symbol}
+                logo={<CoinLogo image={currency.logo} symbol={currency.symbol} />}
               />
             </DefaultView>
             {hideBalance ? (
@@ -122,7 +123,7 @@ export default function App() {
               </DefaultText>
             ) : (
               <DefaultText style={{ color: "#9DF190", marginLeft: 36 }}>
-                ~2,234.77 USD
+                ~ {(Number(formatUnits(currency.balance, currency.decimals))*Number(currency.price)).toFixed(2)} USD
               </DefaultText>
             )}
 
@@ -144,7 +145,7 @@ export default function App() {
               ) : (
                 <Copy
                   onPress={() =>
-                    copyToClipboard("0xE7E2cB8c81c10...C9Ce62EC754")
+                    copyToClipboard(address)
                   }
                 />
               )}

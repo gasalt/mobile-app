@@ -1,9 +1,10 @@
 import Svg, { SvgProps, Path } from "react-native-svg"
 const Copy = (props: SvgProps) => (
   <Svg
-    width={17}
-    height={16}
+    width={20}
+    height={20}
     fill="none"
+    viewBox="0 0 17 16"
     {...props}
   >
     <Path
