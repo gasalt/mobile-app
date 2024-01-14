@@ -20,7 +20,8 @@ import {
 import bytecode from "./bytecode";
 import { paymasterAddress, preferredRelays, rpcURL, walletFactoryAddress, zeroAddress } from "@/utils/constants";
 import axios from "axios";
-import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
+import * as CG from './coingecko'
+import { convertToBase64 } from "@/utils/image";
 
 
 
@@ -75,10 +76,14 @@ async function getAddressTokens(address: string) {
     return tokenDetails
   }
 
+  const callback = (item: string) => {
+    return item
+  }
+
 
 
 export default function useWeb3() {
-    const { privateKey, setKeyValue, masterAddress, address, selectedNetwork } = useGlobalState()
+    const { privateKey, setKeyValue, masterAddress, address, selectedNetwork , currencyData: stateCurrencyData } = useGlobalState()
     const [provider] = useState(_provider)
     const [signer, setSigner] = useState<Wallet | null>(null)
     const [{ gsnProvider, gsnSigner }, setGsn] = useState<{ gsnProvider?: BrowserProvider, gsnSigner?: SignerV6, relayProvider?: RelayProvider }>({})
@@ -89,10 +94,13 @@ export default function useWeb3() {
         (async () => {
             const currencyData = [
                 {
-                    id: zeroAddress,
-                    name: "ETH",
-                    logo: null,
+                    id: 'ethereum',
+                    address: zeroAddress,
+                    name: "Ethereum",
+                    symbol: "ETH",
+                    logo: 'https://assets.coingecko.com/coins/images/279/large/ethereum.png?1696501628',
                     active: true,
+                    value: "0",
                     balance: "0",
                     decimals: 18,
                 }
@@ -100,23 +108,37 @@ export default function useWeb3() {
 
             if (gsnProvider && address !== zeroAddress && selectedNetwork) {
                 console.log("gasalt address", address)
-
+                const { price } = await CG.getTokenLogoAndPrice(currencyData[0].id)
                 gsnProvider.getBalance(address).then(balance => {
                     console.log("balance", balance.toString())
                     currencyData[0].balance = balance.toString(10)
+                    currencyData[0].value = (Number(currencyData[0].balance) * price).toFixed(2)
                 })
                 const addrTokens = await getAddressTokens(address)
+
                 for(const addrToken of addrTokens) {
                     const tokenDetails = await getTokenDetails(addrToken.contractAddress)
-                    currencyData.push({
-                        id: addrToken.contractAddress,
-                        name: tokenDetails?.symbol,
-                        logo: tokenDetails?.logo,
+                    const tokenId = CG.findTokenId(tokenDetails?.symbol);
+                    const { logo, price } = tokenId ? await CG.getTokenLogoAndPrice(tokenId) : { logo: '', price: '---'}
+                    const data = {
+                        id: tokenId || tokenDetails?.symbol.toLowerCase(),
+                        address: addrToken.contractAddress,
+                        name: tokenDetails?.name,
+                        symbol: tokenDetails?.symbol,
+                        logo,
+                        value: !isNaN(price) ? (Number(addrToken?.tokenBalance) * price).toFixed(2) : price,
                         active: true,
-                        balance: (Number(addrToken?.tokenBalance)).toString(),
+                        balance: (Number(addrToken?.tokenBalance)).toFixed(4),
                         decimals: tokenDetails?.decimals
-                    })
+                    }
+
+                    if(data.logo) {
+                        await convertToBase64(logo, function(logoBase64: string) {
+                            data.logo = logoBase64;
+                        })
+                    }
                 }
+                // currencyData[0].
                 setKeyValue("currencyData", currencyData)
                 console.log("currencyData", currencyData)
 
