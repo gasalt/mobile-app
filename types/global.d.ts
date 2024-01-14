@@ -18,9 +18,12 @@ type Nullable<T> = T | null;
 
 interface CurrencyData {
     id: string;
+    address: string;
     name: string;
-    logo: null;
+    symbol: string;
+    logo: null | string;
     active: boolean;
+    value: string,
     balance: string;
     decimals: number;
 }

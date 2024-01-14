@@ -13,11 +13,14 @@ let gsnProvider: BrowserProvider = null as unknown as BrowserProvider,
     masterSigner: Wallet = null as unknown as Wallet,
     currencyData: CurrencyData[] = [
         {
-            id: zeroAddress,
-            name: "ETH",
+            id: 'ethereum',
+            address: zeroAddress,
+            name: "Ethereum",
+            symbol: "ETH",
             logo: null,
             active: true,
             balance: "0",
+            value: '----',
             decimals: 18,
         }
     ];
@@ -44,8 +47,8 @@ const defaultState = {
     masterSigner,
     selectedNetwork: 5,
     currencyData,
-    selectedCurrency: zeroAddress,
-    selectedFeeCurrency: "",
+    selectedCurrency: currencyData[0],
+    selectedFeeCurrency: currencyData[0],
 }
 
 export type DefaultState = typeof defaultState
