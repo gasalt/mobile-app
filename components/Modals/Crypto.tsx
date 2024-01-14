@@ -6,37 +6,57 @@ import CircleChecked from "@/assets/svgs/CircleChecked";
 import { useState } from "react";
 import { useGlobalState } from "@/sdk/state";
 import { ModalScreen } from "@/types/enums";
+import CoinLogo from "@/assets/svgs/CoinLogo";
 
 export default function Crypto() {
-  const {selectedNetwork, setKeyValue, currencyData, modalComponent: {values}} = useGlobalState();
+  const {
+    selectedNetwork,
+    setKeyValue,
+    currencyData,
+    modalComponent: { values },
+  } = useGlobalState();
   const [search, setSearch] = useState("");
 
-  const type = (values as {type: "network"|"currency"|"feeCurrency"}).type
+  const type = (values as { type: "network" | "currency" | "feeCurrency" })
+    .type;
 
-  const cryptoData = type === "network" ? networkData : currencyData
+  const cryptoData = type === "network" ? networkData : currencyData;
 
-  const renderItem = ({ item }: { [key: string]: any }) => (
-    <Pressable style={[styles.btn, {opacity: item.active ? 1 : 0.5}]} onPress={() => {
-      if(item.active){
-        type === "network"
-        ? setKeyValue("selectedNetwork", item.id)
-        : type === "currency"
-        ? setKeyValue("selectedCurrency", item.id)
-        : setKeyValue("selectedFeeCurrency", item.id)
-        setKeyValue("modalComponent", { screen: ModalScreen.None, values: {} });
-      }
-    }}>
-      <DefaultView
-        style={{ flexDirection: "row", gap: 8, alignItems: "center" }}
+  const renderItem = ({ item }: { [key: string]: any }) => {
+    return (
+      <Pressable
+        style={[styles.btn, { opacity: item.active ? 1 : 0.5 }]}
+        onPress={() => {
+          if (item.active) {
+            type === "network"
+              ? setKeyValue("selectedNetwork", item.id)
+              : type === "currency"
+              ? setKeyValue("selectedCurrency", item)
+              : setKeyValue("selectedFeeCurrency", item);
+            setKeyValue("modalComponent", {
+              screen: ModalScreen.None,
+              values: {},
+            });
+          }
+        }}
       >
-        {item.logo && item.logo(24)}
-        <DefaultText style={{ color: "#A69FFF", fontSize: 16 }}>
-          {item.name}
-        </DefaultText>
-      </DefaultView>
-      {item.id === selectedNetwork && <CircleChecked />}
-    </Pressable>
-  );
+        <DefaultView
+          style={{ flexDirection: "row", gap: 8, alignItems: "center" }}
+        >
+          {typeof item.logo === "string" && (
+            <CoinLogo image={item.logo} symbol={item.symbol} />
+          )}
+          <DefaultText style={{ color: "#A69FFF", fontSize: 16 }}>
+            {item.symbol}
+          </DefaultText>
+          <DefaultText style={{ color: "#A69FFF", fontSize: 12, fontStyle: "italic" }}>
+            {item.balance}
+          </DefaultText>
+        </DefaultView>
+        {item.id === selectedNetwork && <CircleChecked />}
+      </Pressable>
+    );
+  };
   return (
     <DefaultView style={styles.container}>
       <FloatingTextInput
@@ -44,11 +64,17 @@ export default function Crypto() {
         value={search}
         onChangeText={(text) => setSearch(text)}
         placeholder="Search"
-        inputStyle={{marginHorizontal: 8}}
+        inputStyle={{ marginHorizontal: 8 }}
       />
 
       <FlatList
-        data={search ? cryptoData.filter((item) => item.name.toLowerCase().includes(search.toLowerCase())) : cryptoData}
+        data={
+          search
+            ? cryptoData.filter((item) =>
+                item.name.toLowerCase().includes(search.toLowerCase())
+              )
+            : cryptoData
+        }
         contentContainerStyle={{ paddingHorizontal: 10, marginTop: 10 }}
         renderItem={renderItem}
         keyExtractor={(item) => `${item.id}`}
