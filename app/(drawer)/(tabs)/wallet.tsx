@@ -35,9 +35,9 @@ const { width, height } = Dimensions.get("window");
 const Tab = createMaterialTopTabNavigator();
 
 export default function App() {
-  const { setKeyValue, address, selectedCurrency, currencyData } = useGlobalState();
+  const { setKeyValue, address, selectedCurrency } = useGlobalState();
   useWeb3()
-  const currency = currencyData.find((item) => item.address === selectedCurrency.address)!;
+  const currency = selectedCurrency;
   const [hideBalance, setHideBalance] = useState(true);
   const [copied, setCopied] = useState(false);
 

@@ -78,7 +78,7 @@ async function getAddressTokens(address: string) {
 
 
 export default function useWeb3() {
-    const { privateKey, setKeyValue, masterAddress, address, selectedNetwork , currencyData: stateCurrencyData } = useGlobalState()
+    const { privateKey, setKeyValue, masterAddress, address, selectedNetwork , selectedCurrency, selectedFeeCurrency } = useGlobalState()
     const [provider] = useState(_provider)
     const [signer, setSigner] = useState<Wallet | null>(null)
     const [{ gsnProvider, gsnSigner }, setGsn] = useState<{ gsnProvider?: BrowserProvider, gsnSigner?: SignerV6, relayProvider?: RelayProvider }>({})
@@ -135,6 +135,14 @@ export default function useWeb3() {
                     currencyData.push(data)
                 }
                 setKeyValue("currencyData", currencyData)
+                const updatedSelectedCurrency = currencyData.find((currency) => currency.address === selectedCurrency.address)
+                const updatedSelectedFeeCurrency = currencyData.find((currency) => currency.address === selectedFeeCurrency.address)
+                if(updatedSelectedCurrency){
+                    setKeyValue("selectedCurrency", updatedSelectedCurrency)
+                }
+                if(updatedSelectedFeeCurrency){
+                    setKeyValue("selectedFeeCurrency", updatedSelectedFeeCurrency)
+                }
                 console.log("currencyData loaded")
 
             }

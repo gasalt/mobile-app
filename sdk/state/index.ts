@@ -49,6 +49,7 @@ const defaultState = {
     currencyData,
     selectedCurrency: currencyData[0],
     selectedFeeCurrency: currencyData[0],
+    feeValue: 0.5
 }
 
 export type DefaultState = typeof defaultState
