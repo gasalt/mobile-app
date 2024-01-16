@@ -66,7 +66,7 @@ export default function Send() {
         onChangeText={(text) => setAddress(text)}
         inputStyle={{marginHorizontal: 8}}
       />
-      <Pressable
+      {/* <Pressable
         style={styles.multiple}
         onPress={() =>
           setKeyValue("modalComponent", {
@@ -77,7 +77,7 @@ export default function Send() {
       >
         <AddMultiple />
         <DefaultText>Send to multiple addresses</DefaultText>
-      </Pressable>
+      </Pressable> */}
 
       <FloatingTextInput
         label="Amount"

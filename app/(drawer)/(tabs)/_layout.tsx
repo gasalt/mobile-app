@@ -66,7 +66,8 @@ export default function Main() {
         name="txhistory"
         options={{
           headerShown: true,
-          href: "/txhistory",
+          // href: "/txhistory",
+          href: "/wallet",
           tabBarIcon: (props) => (
             <Icon focused={props.focused} name="history" />
           ),
