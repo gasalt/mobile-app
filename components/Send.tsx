@@ -38,6 +38,8 @@ export default function Send() {
   const onPress = () =>
     setKeyValue("modalComponent", { values: {type: "feeCurrency"}, screen: ModalScreen.Crypto });
 
+  const isSameToken = selectedFeeCurrency.symbol.toLowerCase() === selectedCurrency.symbol.toLowerCase()
+  
   return (
     <DefaultView style={styles.container}>
       <FloatingTextInput
@@ -124,7 +126,7 @@ export default function Send() {
         </DefaultView>
         <DefaultView style={styles.item}>
           <DefaultText>Total</DefaultText>
-          <DefaultText>{`${amount} ${selectedCurrency.symbol}`}</DefaultText>
+          <DefaultText>{isSameToken ? `${(+amount+(+feeValueDisp))} ${selectedCurrency.symbol}` : `${amount} ${selectedCurrency.symbol} + ${feeValueDisp} ${selectedFeeCurrency.symbol}`}</DefaultText>
         </DefaultView>
       </DefaultView>
 
