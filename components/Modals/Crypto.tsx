@@ -32,8 +32,8 @@ export default function Crypto() {
             type === "network"
               ? setKeyValue("selectedNetwork", item.id)
               : type === "currency"
-              ? setKeyValue("selectedCurrency", item)
-              : setKeyValue("selectedFeeCurrency", item);
+              ? setKeyValue("selectedCurrency", item.address)
+              : setKeyValue("selectedFeeCurrency", item.address);
             setKeyValue("modalComponent", {
               screen: ModalScreen.None,
               values: {},

@@ -12,11 +12,14 @@ import Polygon from "@/assets/svgs/Polygon";
 import { useGlobalState } from "@/sdk/state";
 import { ModalScreen } from "@/types/enums";
 import { formatUnits } from "ethers";
+import useSelected from "@/hooks/useSelected";
 
 export default function Send() {
-  const { setKeyValue, selectedFeeCurrency, feeValue, selectedCurrency, modalCallback } = useGlobalState();
+  const { setKeyValue, feeValue, modalCallback } = useGlobalState();
   const [address, setAddress] = useState("");
   const [amount, setAmount] = useState("");
+
+  const {selectedCurrency, selectedFeeCurrency} = useSelected()
 
   const formattedBalance = formatUnits(selectedCurrency.balance, selectedCurrency.decimals);
   const _maxAmount = Number(formattedBalance) - feeValue;

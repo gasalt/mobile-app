@@ -135,14 +135,6 @@ export default function useWeb3() {
                     currencyData.push(data)
                 }
                 setKeyValue("currencyData", currencyData)
-                const updatedSelectedCurrency = currencyData.find((currency) => currency.address === selectedCurrency.address)
-                const updatedSelectedFeeCurrency = currencyData.find((currency) => currency.address === selectedFeeCurrency.address)
-                if(updatedSelectedCurrency){
-                    setKeyValue("selectedCurrency", updatedSelectedCurrency)
-                }
-                if(updatedSelectedFeeCurrency){
-                    setKeyValue("selectedFeeCurrency", updatedSelectedFeeCurrency)
-                }
                 console.log("currencyData loaded")
 
             }

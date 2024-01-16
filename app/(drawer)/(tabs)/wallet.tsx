@@ -29,15 +29,17 @@ import useWeb3 from "@/sdk/web3";
 import formatAddress from "@/utils/formatAddress";
 import { formatUnits } from "ethers";
 import CoinLogo from "@/assets/svgs/CoinLogo";
+import useSelected from "@/hooks/useSelected";
 
 const { width, height } = Dimensions.get("window");
 
 const Tab = createMaterialTopTabNavigator();
 
 export default function App() {
-  const { setKeyValue, address, selectedCurrency } = useGlobalState();
+  const { setKeyValue, address } = useGlobalState();
   useWeb3()
-  const currency = selectedCurrency;
+  const {selectedCurrency: currency} = useSelected()
+
   const [hideBalance, setHideBalance] = useState(true);
   const [copied, setCopied] = useState(false);
 

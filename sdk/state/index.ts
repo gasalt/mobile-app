@@ -49,8 +49,8 @@ const defaultState = {
     masterSigner,
     selectedNetwork: 5,
     currencyData,
-    selectedCurrency: currencyData[0],
-    selectedFeeCurrency: currencyData[0],
+    selectedCurrency: zeroAddress,
+    selectedFeeCurrency: zeroAddress,
     feeValue: 0.5
 }
 
