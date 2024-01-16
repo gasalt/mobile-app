@@ -24,14 +24,6 @@ export default function SendModal() {
 
   const { receiver, value } = values as { receiver: "", value: "" }
 
-  useEffect(() => {
-    let timer: NodeJS.Timeout;
-    if (status === "loading") {
-      timer = setTimeout(() => setStatus("done"), 3000);
-    }
-    return () => clearTimeout(timer);
-  }, [status]);
-
   const onSend = async () => {
     setStatus("loading");
     try {
