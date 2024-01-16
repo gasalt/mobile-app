@@ -8,15 +8,19 @@ import DoneCircle from "../../assets/svgs/DoneCircle";
 import RightCaret from "../../assets/svgs/RightCaret";
 import CoinLogo from "@/assets/svgs/CoinLogo";
 import { zeroAddress } from "@/utils/constants";
-import { parseEther, parseUnits } from "ethers";
+import { formatUnits, parseEther, parseUnits } from "ethers";
 import { ERC20__factory } from "@/typechain-types";
+import useSelected from "@/hooks/useSelected";
 
 export default function SendModal() {
-  const { setKeyValue, gsnSigner, gasalt, masterAddress, modalComponent: { values }, selectedCurrency, feeValue, selectedFeeCurrency, selectedNetwork } = useGlobalState();
-
+  const { setKeyValue, gsnSigner, gasalt, masterAddress, modalComponent: { values }, feeValue } = useGlobalState();
+  const {selectedCurrency, selectedFeeCurrency} = useSelected()
   const [status, setStatus] = useState<"loading" | "done" | undefined>(
     undefined
   );
+
+  const _feeValue = formatUnits(feeValue, selectedFeeCurrency.decimals)
+  const feeValueDisp = selectedCurrency.decimals > 6 ? Number(_feeValue).toFixed(6) : _feeValue
 
   const { receiver, value } = values as { receiver: "", value: "" }
 
@@ -33,12 +37,12 @@ export default function SendModal() {
     try {
       let data = "0x"
       if (selectedCurrency.address === zeroAddress) {
-        const tx = await gasalt.gaslessExecute(selectedFeeCurrency.address, 0, parseUnits(feeValue.toString(), selectedFeeCurrency.decimals), parseEther(value), receiver, data, { from: masterAddress })
+        const tx = await gasalt.gaslessExecute(selectedFeeCurrency.address, 0, feeValue, parseEther(value), receiver, data, { from: masterAddress })
         console.log({ tx })
       } else {
         const token = ERC20__factory.connect(selectedFeeCurrency.address, gsnSigner)
         data = token.interface.encodeFunctionData("transfer", [receiver, parseUnits(value, selectedCurrency.decimals)])
-        const tx = await gasalt.gaslessExecute(selectedFeeCurrency.address, 0, parseUnits(feeValue.toString(), selectedFeeCurrency.decimals), "0", selectedCurrency.address, data, { from: masterAddress })
+        const tx = await gasalt.gaslessExecute(selectedFeeCurrency.address, 0, feeValue, "0", selectedCurrency.address, data, { from: masterAddress })
         console.log({ tx })
       }
     } catch (error) {
@@ -50,7 +54,7 @@ export default function SendModal() {
   const onClose = () =>
     setKeyValue("modalComponent", {
       screen: ModalScreen.None,
-      values: {},
+      values: null,
     });
 
   if (status === "loading") {
@@ -117,7 +121,7 @@ export default function SendModal() {
         </DefaultView>
         <DefaultView style={styles.item}>
           <DefaultText style={styles.label}>Transaction fee:</DefaultText>
-          <DefaultText style={styles.value}>{`${feeValue} ${selectedFeeCurrency.symbol}`}</DefaultText>
+          <DefaultText style={styles.value}>{`${feeValueDisp} ${selectedFeeCurrency.symbol}`}</DefaultText>
         </DefaultView>
       </DefaultView>
 
@@ -131,6 +135,13 @@ export default function SendModal() {
             setKeyValue("modalComponent", {
               screen: ModalScreen.Crypto,
               values: { type: "feeCurrency" },
+              from: {
+                screen: ModalScreen.SendModal,
+                values: {
+                  receiver,
+                  value,
+                },
+              }
             })
           }
         >

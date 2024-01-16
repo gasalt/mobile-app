@@ -15,14 +15,16 @@ import { formatUnits } from "ethers";
 import useSelected from "@/hooks/useSelected";
 
 export default function Send() {
-  const { setKeyValue, feeValue, modalCallback } = useGlobalState();
+  const { setKeyValue, feeValue: _fee, modalCallback } = useGlobalState();
   const [address, setAddress] = useState("");
   const [amount, setAmount] = useState("");
-
   const {selectedCurrency, selectedFeeCurrency} = useSelected()
+  const feeValue = formatUnits(_fee, selectedFeeCurrency.decimals)
+  const feeValueDisp = selectedCurrency.decimals > 6 ? Number(feeValue).toFixed(6) : feeValue
+
 
   const formattedBalance = formatUnits(selectedCurrency.balance, selectedCurrency.decimals);
-  const _maxAmount = Number(formattedBalance) - feeValue;
+  const _maxAmount = Number(formattedBalance) - Number(feeValue);
   const maxAmount = _maxAmount > 0 ? _maxAmount : 0;
 
   useEffect(() => {
@@ -109,7 +111,7 @@ export default function Send() {
               marginRight: -20,
             }}
           >
-            <DefaultText style={{ left: 15 }}>{feeValue}</DefaultText>
+            <DefaultText style={{ left: 15 }}>{feeValueDisp}</DefaultText>
             <CryptoDropdown
               textStyle={styles.textStyle}
               btnStyle={styles.btnStyle}

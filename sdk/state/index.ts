@@ -24,15 +24,16 @@ let gsnProvider: BrowserProvider = null as unknown as BrowserProvider,
             price: '0',
             decimals: 18,
         }
-    ];
+    ],
+    modalComponent = {
+        screen: ModalScreen.None,
+        values: null,
+    } as unknown as ModalComponent;
 
 
 
 const defaultState = {
-    modalComponent: {
-        screen: ModalScreen.None,
-        values: {} as unknown
-    },
+    modalComponent,
     session: {
         completedOnboarding: false,
         isLoggedIn: false,
@@ -51,7 +52,7 @@ const defaultState = {
     currencyData,
     selectedCurrency: zeroAddress,
     selectedFeeCurrency: zeroAddress,
-    feeValue: 0.5
+    feeValue: "100000000000000000"
 }
 
 export type DefaultState = typeof defaultState

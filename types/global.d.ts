@@ -27,3 +27,12 @@ interface CurrencyData {
     balance: string;
     decimals: number;
 }
+
+interface ModalComponent {
+    screen: ModalScreen,
+    values: any,
+    from?: undefined | {
+        screen: ModalScreen,
+        values: any
+    }
+}
