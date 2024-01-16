@@ -11,6 +11,7 @@ let gsnProvider: BrowserProvider = null as unknown as BrowserProvider,
     relayProvider: RelayProvider = null as unknown as RelayProvider,
     gasalt: WalletFactory = null as unknown as WalletFactory,
     masterSigner: Wallet = null as unknown as Wallet,
+    modalCallback: {type: ModalScreen, value: any} = {type: ModalScreen.None, value: null},
     currencyData: CurrencyData[] = [
         {
             id: 'ethereum',
@@ -36,6 +37,7 @@ const defaultState = {
         completedOnboarding: false,
         isLoggedIn: false,
     },
+    modalCallback,
     privateKey: "",
     email: "",
     masterAddress: zeroAddress,

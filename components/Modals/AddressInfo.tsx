@@ -5,6 +5,7 @@ import QRCode from "react-native-qrcode-svg";
 import { guide } from "@/styles";
 import CustomButton from "@/components/CustomButton";
 import { useState } from "react";
+import { useGlobalState } from "@/sdk/state";
 
 const buttons = [
   { label: "Address (0x)", value: "address" },
@@ -12,9 +13,12 @@ const buttons = [
 ] as const;
 
 export default function AddressInfo({ values }: ModalProps) {
+  const {address} = useGlobalState()
   const [selectedButton, setSelectedButton] = useState<"address" | "eth">(
     "address"
   );
+
+  const [copied, setCopied] = useState(false);
 
   const copyToClipboard = async (value: string) => {
     await Clipboard.setStringAsync(value);
@@ -85,7 +89,7 @@ export default function AddressInfo({ values }: ModalProps) {
           alignItems: "center",
         }}
       >
-        <QRCode value="https://" size={200} />
+        <QRCode value={address} size={200} />
       </DefaultView>
 
       <DefaultView
@@ -99,16 +103,20 @@ export default function AddressInfo({ values }: ModalProps) {
           justifyContent: "center",
         }}
       >
-        <DefaultText style={{ color: guide.primary, lineHeight: 24 }}>
-          TRY2Pczuiuadsak3VcQSmupPwtVUTYPq2X
+        <DefaultText style={{ color: guide.primary, fontSize: 13, lineHeight: 24 }}>
+          {address}
         </DefaultText>
       </DefaultView>
 
       <DefaultView style={{ paddingHorizontal: 16, marginTop: 24 }}>
         <CustomButton
-          label="Copy address"
+          label={copied ? "Copied!" : "Copy address"}
           variant="primary"
-          onPress={() => copyToClipboard("TRY2Pczuiuadsak3VcQSmupPwtVUTYPq2X")}
+          onPress={() => {
+            copyToClipboard(address);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 1000);
+          }}
         />
       </DefaultView>
     </DefaultView>

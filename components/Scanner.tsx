@@ -2,10 +2,13 @@ import React, { useState, useEffect } from "react";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { DefaultText, DefaultView } from "@/components/Defaults";
 import CustomButton from "@/components/CustomButton";
+import { useGlobalState } from "@/sdk/state";
+import { ModalScreen } from "@/types/enums";
 
 export default function Scanner({ onClose }: ModalProps) {
   const [hasPermission, setHasPermission] = useState(false);
   const [scanned, setScanned] = useState(false);
+  const {setKeyValue} = useGlobalState()
 
   useEffect(() => {
     const getBarCodeScannerPermissions = async () => {
@@ -24,7 +27,7 @@ export default function Scanner({ onClose }: ModalProps) {
     data: unknown;
   }) => {
     setScanned(true);
-    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    setKeyValue("modalCallback", {type: ModalScreen.QRCodeScan, value: data})
     onClose && onClose();
   };
 

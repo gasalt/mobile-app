@@ -14,13 +14,20 @@ import { ModalScreen } from "@/types/enums";
 import { formatUnits } from "ethers";
 
 export default function Send() {
-  const { setKeyValue, selectedFeeCurrency, feeValue, selectedCurrency } = useGlobalState();
+  const { setKeyValue, selectedFeeCurrency, feeValue, selectedCurrency, modalCallback } = useGlobalState();
   const [address, setAddress] = useState("");
   const [amount, setAmount] = useState("");
 
   const formattedBalance = formatUnits(selectedCurrency.balance, selectedCurrency.decimals);
   const _maxAmount = Number(formattedBalance) - feeValue;
   const maxAmount = _maxAmount > 0 ? _maxAmount : 0;
+
+  useEffect(() => {
+    if(modalCallback.type === ModalScreen.QRCodeScan && modalCallback.value){
+      setAddress(modalCallback.value)
+      setKeyValue("modalCallback", {type: ModalScreen.None, value: null})
+    }
+  }, [modalCallback])
 
 
   const onPress = () =>
