@@ -43,6 +43,7 @@ export default function Send() {
   return (
     <DefaultView style={styles.container}>
       <FloatingTextInput
+        
         label="Recipient's Address"
         rightElement={
           address === "" ? (
@@ -64,7 +65,7 @@ export default function Send() {
         }
         value={address}
         onChangeText={(text) => setAddress(text)}
-        inputStyle={{marginHorizontal: 8}}
+        inputStyle={{marginHorizontal: 8, fontSize: 13, paddingTop: 5 }}
       />
       {/* <Pressable
         style={styles.multiple}
@@ -92,7 +93,7 @@ export default function Send() {
         value={amount}
         onChangeText={(text) => setAmount(text)}
         mode="decimal"
-        inputStyle={{marginHorizontal: 8}}
+        inputStyle={{marginHorizontal: 8, fontSize: 13, paddingTop: 5 }}
       />
 
       <DefaultView
