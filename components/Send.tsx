@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Pressable, StyleSheet } from "react-native";
 
 import Close from "@/assets/svgs/Close";
@@ -11,14 +11,32 @@ import CryptoDropdown from "@/components/CryptoDrown";
 import Polygon from "@/assets/svgs/Polygon";
 import { useGlobalState } from "@/sdk/state";
 import { ModalScreen } from "@/types/enums";
+import { formatUnits } from "ethers";
+import useSelected from "@/hooks/useSelected";
 
 export default function Send() {
-  const { setKeyValue, selectedFeeCurrency } = useGlobalState();
+  const { setKeyValue, feeValue: _fee, modalCallback } = useGlobalState();
   const [address, setAddress] = useState("");
   const [amount, setAmount] = useState("");
+  const {selectedCurrency, selectedFeeCurrency} = useSelected()
+  const feeValue = formatUnits(_fee, selectedFeeCurrency.decimals)
+  const feeValueDisp = selectedCurrency.decimals > 6 ? Number(feeValue).toFixed(6) : feeValue
+
+
+  const formattedBalance = formatUnits(selectedCurrency.balance, selectedCurrency.decimals);
+  const _maxAmount = Number(formattedBalance) - Number(feeValue);
+  const maxAmount = _maxAmount > 0 ? _maxAmount : 0;
+
+  useEffect(() => {
+    if(modalCallback.type === ModalScreen.QRCodeScan && modalCallback.value){
+      setAddress(modalCallback.value)
+      setKeyValue("modalCallback", {type: ModalScreen.None, value: null})
+    }
+  }, [modalCallback])
+
 
   const onPress = () =>
-    setKeyValue("modalComponent", { values: {}, screen: ModalScreen.Crypto });
+    setKeyValue("modalComponent", { values: {type: "feeCurrency"}, screen: ModalScreen.Crypto });
 
   return (
     <DefaultView style={styles.container}>
@@ -62,7 +80,10 @@ export default function Send() {
       <FloatingTextInput
         label="Amount"
         rightElement={
-          <Pressable>
+          <Pressable
+            onPress={() => setAmount(maxAmount.toString())}
+            style={{ flexDirection: "row", alignItems: "center" }}
+          >
             <DefaultText style={{ color: "#9DF190" }}>MAX</DefaultText>
           </Pressable>
         }
@@ -90,7 +111,7 @@ export default function Send() {
               marginRight: -20,
             }}
           >
-            <DefaultText style={{ left: 15 }}>0.05</DefaultText>
+            <DefaultText style={{ left: 15 }}>{feeValueDisp}</DefaultText>
             <CryptoDropdown
               textStyle={styles.textStyle}
               btnStyle={styles.btnStyle}
@@ -103,7 +124,7 @@ export default function Send() {
         </DefaultView>
         <DefaultView style={styles.item}>
           <DefaultText>Total</DefaultText>
-          <DefaultText>1,000.00 MATIC</DefaultText>
+          <DefaultText>{`${amount} ${selectedCurrency.symbol}`}</DefaultText>
         </DefaultView>
       </DefaultView>
 
@@ -111,11 +132,16 @@ export default function Send() {
         <CustomButton
           label="Send"
           variant="primary"
-          onPress={() =>
-            setKeyValue("modalComponent", {
-              screen: ModalScreen.SendModal,
-              values: {},
-            })
+          onPress={() => {
+              if(address === "" || amount === "") return;
+              setKeyValue("modalComponent", {
+                screen: ModalScreen.SendModal,
+                values: {
+                  receiver: address,
+                  value: amount,
+                },
+              })
+            }
           }
         />
       </DefaultView>

@@ -13,12 +13,12 @@ import { useGlobalState } from "../state";
 
 import { RelayProvider, } from "@opengsn/provider"
 import {
+    ERC20__factory,
+    GasaltPaymaster__factory,
     WalletFactory__factory,
-    // ERC20__factory,
-    // GasaltPaymaster__factory
 } from '../../typechain-types';
 import bytecode from "./bytecode";
-import { paymasterAddress, preferredRelays, rpcURL, walletFactoryAddress, zeroAddress } from "@/utils/constants";
+import { paymasterAddress, preferredRelays, rpcURL, walletFactoryAddress, weth, zeroAddress } from "@/utils/constants";
 import axios from "axios";
 import * as CG from './coingecko'
 import { convertToBase64 } from "@/utils/image";
@@ -46,46 +46,106 @@ function calcSalt(sender = "", index = 0) {
 
 async function getAddressTokens(address: string) {
     const res = await axios.post(
-      "https://eth-goerli.g.alchemy.com/v2/vBE5Q3AtXuqJNU9XWCb6ajgN8fQHXjty",
-      {
-        "jsonrpc": "2.0",
-        "method": "alchemy_getTokenBalances",
-        "params": [
-          address
-        ],
-        "id": 42
-      }
+        "https://eth-goerli.g.alchemy.com/v2/vBE5Q3AtXuqJNU9XWCb6ajgN8fQHXjty",
+        {
+            "jsonrpc": "2.0",
+            "method": "alchemy_getTokenBalances",
+            "params": [
+                address
+            ],
+            "id": 42
+        }
     )
     const addrTokens = res.data?.result?.tokenBalances
     return addrTokens
-  }
+}
 
-  async function getTokenDetails(tokendAddress: string) {
+async function getTokenDetails(tokendAddress: string) {
     const res = await axios.post(
-      "https://eth-goerli.g.alchemy.com/v2/vBE5Q3AtXuqJNU9XWCb6ajgN8fQHXjty",
-      {
-        "id": 1,
-        "jsonrpc": "2.0",
-        "method": "alchemy_getTokenMetadata",
-        "params": [
-          tokendAddress
-        ]
-      }
+        "https://eth-goerli.g.alchemy.com/v2/vBE5Q3AtXuqJNU9XWCb6ajgN8fQHXjty",
+        {
+            "id": 1,
+            "jsonrpc": "2.0",
+            "method": "alchemy_getTokenMetadata",
+            "params": [
+                tokendAddress
+            ]
+        }
     )
     const tokenDetails = res.data?.result
     return tokenDetails
-  }
+}
+
+async function getBalance(signer: SignerV6, address: string, contractAddress: string) {
+    let balance = "0"
+
+    if (contractAddress === zeroAddress) {
+        balance = (await signer.provider?.getBalance(address))?.toString() || "0"
+    } else {
+        balance = (await ERC20__factory.connect(contractAddress, signer).balanceOf(address)).toString()
+
+    }
+    return balance
+}
+
+async function getFee(signer: SignerV6, selectedFeeCurrency: string) {
+
+    const { maxFeePerGas, maxPriorityFeePerGas } = await signer.provider!.getFeeData()
+    let fee = ((Number(maxFeePerGas) + Number(maxPriorityFeePerGas)) * 420_897).toString()
+
+    if (selectedFeeCurrency === zeroAddress || selectedFeeCurrency.toLowerCase() === weth.toLowerCase()) {
+        return fee
+    }
+    try {
+        const feeQuote = (await GasaltPaymaster__factory.connect(paymasterAddress, signer).getQuote(
+            "0x1F98431c8aD98523631AE4a59f267346ea31F984",
+            "3000",
+            weth,
+            selectedFeeCurrency,
+            fee,
+            "1800"
+        )).toString() as string
+        return feeQuote  
+    } catch (error) {
+        console.log("error", error)
+        return "0"
+    }
+}
 
 
 export default function useWeb3() {
-    const { privateKey, setKeyValue, masterAddress, address, selectedNetwork , currencyData: stateCurrencyData } = useGlobalState()
+    const { privateKey, setKeyValue, masterAddress, feeValue, address, selectedNetwork, currencyData, selectedCurrency, selectedFeeCurrency } = useGlobalState()
     const [provider] = useState(_provider)
     const [signer, setSigner] = useState<Wallet | null>(null)
     const [{ gsnProvider, gsnSigner }, setGsn] = useState<{ gsnProvider?: BrowserProvider, gsnSigner?: SignerV6, relayProvider?: RelayProvider }>({})
 
+
+    useEffect(() => {
+        // update address balance
+        let interval: any;
+        if (!gsnSigner || address === zeroAddress) return;
+        (async () => {
+            interval = setInterval(async () => {
+                const balance = await getBalance(gsnSigner!, address, selectedCurrency)
+                const fee = await getFee(gsnSigner!, selectedFeeCurrency)
+                const selectedCurrencyIndex = currencyData.findIndex((currency) => currency.address === selectedCurrency)
+                if (currencyData[selectedCurrencyIndex].balance !== balance){
+                    currencyData[selectedCurrencyIndex].balance = balance
+                    setKeyValue("currencyData", currencyData)
+                }
+                if (feeValue !== fee) {
+                    setKeyValue("feeValue", fee)
+                }
+            }, 2000)
+        })()
+        return () => {
+            interval && clearInterval(interval)
+        }
+    }, [gsnSigner, address, selectedCurrency, selectedFeeCurrency])
+
     useEffect(() => {
         // get gasalt address balance
-        
+
         (async () => {
             const currencyData = [
                 {
@@ -111,10 +171,10 @@ export default function useWeb3() {
                 })
                 const addrTokens = await getAddressTokens(address)
 
-                for(const addrToken of addrTokens) {
+                for (const addrToken of addrTokens) {
                     const tokenDetails = await getTokenDetails(addrToken.contractAddress)
                     const tokenId = CG.findTokenId(tokenDetails?.symbol);
-                    const { logo, price } = tokenId ? await CG.getTokenLogoAndPrice(tokenId) : { logo: '', price: '0'}
+                    const { logo, price } = tokenId ? await CG.getTokenLogoAndPrice(tokenId) : { logo: '', price: '0' }
                     const data = {
                         id: tokenId || tokenDetails?.symbol.toLowerCase(),
                         address: addrToken.contractAddress,
@@ -127,8 +187,8 @@ export default function useWeb3() {
                         decimals: tokenDetails?.decimals
                     }
 
-                    if(data.logo) {
-                        await convertToBase64(logo, function(logoBase64: string) {
+                    if (data.logo) {
+                        await convertToBase64(logo, function (logoBase64: string) {
                             data.logo = logoBase64;
                         })
                     }

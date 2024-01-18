@@ -14,7 +14,7 @@ export default function Crypto() {
     selectedNetwork,
     setKeyValue,
     currencyData,
-    modalComponent: { values },
+    modalComponent: { values, from },
   } = useGlobalState();
   const [search, setSearch] = useState("");
 
@@ -32,11 +32,11 @@ export default function Crypto() {
             type === "network"
               ? setKeyValue("selectedNetwork", item.id)
               : type === "currency"
-              ? setKeyValue("selectedCurrency", item)
-              : setKeyValue("selectedFeeCurrency", item);
+              ? setKeyValue("selectedCurrency", item.address)
+              : setKeyValue("selectedFeeCurrency", item.address);
             setKeyValue("modalComponent", {
-              screen: ModalScreen.None,
-              values: {},
+              screen: from?.screen || ModalScreen.None,
+              values: from?.values || null,
             });
           }
         }}

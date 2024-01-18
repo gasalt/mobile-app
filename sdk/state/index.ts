@@ -11,6 +11,7 @@ let gsnProvider: BrowserProvider = null as unknown as BrowserProvider,
     relayProvider: RelayProvider = null as unknown as RelayProvider,
     gasalt: WalletFactory = null as unknown as WalletFactory,
     masterSigner: Wallet = null as unknown as Wallet,
+    modalCallback: {type: ModalScreen, value: any} = {type: ModalScreen.None, value: null},
     currencyData: CurrencyData[] = [
         {
             id: 'ethereum',
@@ -23,19 +24,21 @@ let gsnProvider: BrowserProvider = null as unknown as BrowserProvider,
             price: '0',
             decimals: 18,
         }
-    ];
+    ],
+    modalComponent = {
+        screen: ModalScreen.None,
+        values: null,
+    } as unknown as ModalComponent;
 
 
 
 const defaultState = {
-    modalComponent: {
-        screen: ModalScreen.None,
-        values: {} as unknown
-    },
+    modalComponent,
     session: {
         completedOnboarding: false,
         isLoggedIn: false,
     },
+    modalCallback,
     privateKey: "",
     email: "",
     masterAddress: zeroAddress,
@@ -47,8 +50,9 @@ const defaultState = {
     masterSigner,
     selectedNetwork: 5,
     currencyData,
-    selectedCurrency: currencyData[0],
-    selectedFeeCurrency: currencyData[0],
+    selectedCurrency: zeroAddress,
+    selectedFeeCurrency: zeroAddress,
+    feeValue: "100000000000000000"
 }
 
 export type DefaultState = typeof defaultState
