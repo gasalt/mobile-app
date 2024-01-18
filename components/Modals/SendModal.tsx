@@ -1,7 +1,7 @@
-import { ActivityIndicator, Pressable, StyleSheet } from "react-native";
+import { ActivityIndicator, Linking, Pressable, StyleSheet } from "react-native";
 import { DefaultText, DefaultView } from "../Defaults";
 import CustomButton from "../CustomButton";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useGlobalState } from "../../sdk/state";
 import { ModalScreen } from "../../types/enums";
 import DoneCircle from "../../assets/svgs/DoneCircle";
@@ -13,11 +13,14 @@ import { ERC20__factory } from "@/typechain-types";
 import useSelected from "@/hooks/useSelected";
 
 export default function SendModal() {
-  const { setKeyValue, gsnSigner, gasalt, masterAddress, modalComponent: { values }, feeValue } = useGlobalState();
+  const { setKeyValue, gsnSigner, relayProvider, gasalt, masterAddress, modalComponent: { values }, feeValue } = useGlobalState();
   const {selectedCurrency, selectedFeeCurrency} = useSelected()
+  const [hash, setHash] = useState<string>("")
   const [status, setStatus] = useState<"loading" | "done" | undefined>(
     undefined
   );
+
+  const previewLink = `https://goerli.etherscan.io/tx/${hash}`
 
   const _feeValue = formatUnits(feeValue, selectedFeeCurrency.decimals)
   const feeValueDisp = selectedCurrency.decimals > 6 ? Number(_feeValue).toFixed(6) : _feeValue
@@ -35,7 +38,8 @@ export default function SendModal() {
         const token = ERC20__factory.connect(selectedFeeCurrency.address, gsnSigner)
         data = token.interface.encodeFunctionData("transfer", [receiver, parseUnits(value, selectedCurrency.decimals)])
         const tx = await gasalt.gaslessExecute(selectedFeeCurrency.address, 0, feeValue, "0", selectedCurrency.address, data, { from: masterAddress })
-        console.log({ tx })
+        const hash = await relayProvider.getTransactionHashFromRequestId((tx as any).hash)
+        setHash(hash)
       }
     } catch (error) {
       console.log(error)
@@ -92,8 +96,10 @@ export default function SendModal() {
           >
             Transaction completed
           </DefaultText>
+          
         </DefaultView>
-        <CustomButton label="Close" variant="primary" onPress={onClose} />
+        {/* <CustomButton label="Close" variant="primary" onPress={onClose} /> */}
+        <CustomButton label="View in explorer" variant="primary" onPress={() => Linking.openURL(previewLink)} />
       </DefaultView>
     );
   }
