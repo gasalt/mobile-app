@@ -38,9 +38,12 @@ export default function Send() {
   const onPress = () =>
     setKeyValue("modalComponent", { values: {type: "feeCurrency"}, screen: ModalScreen.Crypto });
 
+  const isSameToken = selectedFeeCurrency.symbol.toLowerCase() === selectedCurrency.symbol.toLowerCase()
+  
   return (
     <DefaultView style={styles.container}>
       <FloatingTextInput
+        
         label="Recipient's Address"
         rightElement={
           address === "" ? (
@@ -62,9 +65,9 @@ export default function Send() {
         }
         value={address}
         onChangeText={(text) => setAddress(text)}
-        inputStyle={{marginHorizontal: 8}}
+        inputStyle={{marginHorizontal: 8, fontSize: 13, paddingTop: 5 }}
       />
-      <Pressable
+      {/* <Pressable
         style={styles.multiple}
         onPress={() =>
           setKeyValue("modalComponent", {
@@ -75,7 +78,7 @@ export default function Send() {
       >
         <AddMultiple />
         <DefaultText>Send to multiple addresses</DefaultText>
-      </Pressable>
+      </Pressable> */}
 
       <FloatingTextInput
         label="Amount"
@@ -90,7 +93,7 @@ export default function Send() {
         value={amount}
         onChangeText={(text) => setAmount(text)}
         mode="decimal"
-        inputStyle={{marginHorizontal: 8}}
+        inputStyle={{marginHorizontal: 8, fontSize: 13, paddingTop: 5 }}
       />
 
       <DefaultView
@@ -124,7 +127,7 @@ export default function Send() {
         </DefaultView>
         <DefaultView style={styles.item}>
           <DefaultText>Total</DefaultText>
-          <DefaultText>{`${amount} ${selectedCurrency.symbol}`}</DefaultText>
+          <DefaultText>{isSameToken ? `${(+amount+(+feeValueDisp))} ${selectedCurrency.symbol}` : `${amount} ${selectedCurrency.symbol} + ${feeValueDisp} ${selectedFeeCurrency.symbol}`}</DefaultText>
         </DefaultView>
       </DefaultView>
 

@@ -38,7 +38,8 @@ export default function Swap() {
 
             <CryptoDropdown
               btnStyle={styles.btnStyle}
-              onPress={onPress}
+              // onPress={onPress}
+              onPress={() => {}}
               text="MATIC"
               logo={<Polygon />}
             />
@@ -65,7 +66,8 @@ export default function Swap() {
             />
             <CryptoDropdown
               btnStyle={styles.btnStyle}
-              onPress={onPress}
+              // onPress={onPress}
+              onPress={() => {}}
               text="BNB"
               logo={<BNB />}
             />
@@ -95,7 +97,8 @@ export default function Swap() {
             <CryptoDropdown
               textStyle={styles.textStyle}
               btnStyle={styles.btnStyle}
-              onPress={onPress}
+              // onPress={onPress}
+              onPress={() => {}}
               text="MATIC"
               showLogo={false}
               logo={<Polygon />}
@@ -112,7 +115,7 @@ export default function Swap() {
 }
 
 const styles = StyleSheet.create({
-  container: { paddingHorizontal: 12, marginTop: 10 },
+  container: { paddingHorizontal: 12, marginTop: 10, opacity: 0.5 },
   multiple: {
     flexDirection: "row",
     gap: 4,

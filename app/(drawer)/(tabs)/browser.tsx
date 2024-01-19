@@ -17,41 +17,49 @@ import MetaMask from "@/assets/svgs/MetaMask";
 import LargePolygon from "@/assets/svgs/LargePolygon";
 import UpRight from "@/assets/svgs/UpRight";
 import { useRouter } from "expo-router";
-
+import { openBrowserAsync } from 'expo-web-browser'
 const { width } = Dimensions.get("window");
 
 const sites = [
-  { name: "Uniswap", logo: <Uniswap /> },
-  { name: "Polygon", logo: <LargePolygon /> },
-  { name: "Coinbase", logo: <Coinbase /> },
-  { name: "MetaMask", logo: <MetaMask /> },
-  { name: "Uniswap", logo: <Uniswap /> },
-  { name: "Polygon", logo: <LargePolygon /> },
-  { name: "Coinbase", logo: <Coinbase /> },
-  { name: "MetaMask", logo: <MetaMask /> },
-  { name: "Uniswap", logo: <Uniswap /> },
-  { name: "Polygon", logo: <LargePolygon /> },
-  { name: "Coinbase", logo: <Coinbase /> },
-  { name: "MetaMask", logo: <MetaMask /> },
-  { name: "Uniswap", logo: <Uniswap /> },
-  { name: "Polygon", logo: <LargePolygon /> },
-  { name: "Coinbase", logo: <Coinbase /> },
-  { name: "MetaMask", logo: <MetaMask /> },
+  { name: "Uniswap", logo: <Uniswap />, url: "https://uniswap.org/" },
+  { name: "Polygon", logo: <LargePolygon />, url: "https://polygon.technology/" },
+  { name: "Coinbase", logo: <Coinbase />, url: "https://www.coinbase.com/" },
+  { name: "Metamask", logo: <MetaMask />, url: "https://www.metamask.io/" },
+  // { name: "Uniswap", logo: <Uniswap /> },
+  // { name: "Polygon", logo: <LargePolygon /> },
+  // { name: "Coinbase", logo: <Coinbase /> },
+  // { name: "MetaMask", logo: <MetaMask /> },
+  // { name: "Uniswap", logo: <Uniswap /> },
+  // { name: "Polygon", logo: <LargePolygon /> },
+  // { name: "Coinbase", logo: <Coinbase /> },
+  // { name: "MetaMask", logo: <MetaMask /> },
+  // { name: "Uniswap", logo: <Uniswap /> },
+  // { name: "Polygon", logo: <LargePolygon /> },
+  // { name: "Coinbase", logo: <Coinbase /> },
+  // { name: "MetaMask", logo: <MetaMask /> },
 ];
 
 const visited = [
-  { name: "Uniswap", logo: <Uniswap />, url: "https://uniswap.com/" },
-  { name: "Polygon", logo: <LargePolygon />, url: "https://polygonscan.com/" },
+  { name: "Uniswap", logo: <Uniswap />, url: "https://uniswap.org/" },
+  { name: "Polygon", logo: <LargePolygon />, url: "https://polygon.technology/" },
   { name: "Coinbase", logo: <Coinbase />, url: "https://www.coinbase.com/" },
-  { name: "Uniswap", logo: <Uniswap />, url: "https://uniswap.com/" },
-  { name: "Polygon", logo: <LargePolygon />, url: "https://polygonscan.com/" },
-  { name: "Coinbase", logo: <Coinbase />, url: "https://www.coinbase.com/" },
+  { name: "Metamask", logo: <MetaMask />, url: "https://www.metamask.io/" },
+  // { name: "Uniswap", logo: <Uniswap />, url: "https://uniswap.com/" },
+  // { name: "Polygon", logo: <LargePolygon />, url: "https://polygonscan.com/" },
+  // { name: "Coinbase", logo: <Coinbase />, url: "https://www.coinbase.com/" },
 ];
 
 export default function Browser() {
   const [search, setSearch] = useState("");
   const router = useRouter();
 
+  const handleWebRedirect = async (url: string) => {
+    await openBrowserAsync(url)
+  }
+  
+  const handlePageVisit = async () => {
+    await openBrowserAsync(search)
+  }
 
   const renderItem = ({ item }: { [key: string]: any }) => (
     <DefaultView
@@ -62,6 +70,7 @@ export default function Browser() {
         marginLeft: -4,
         marginRight: 5,
       }}
+      onTouchEnd={async() => await handleWebRedirect(item.url)}
     >
       <DefaultView
         style={{
@@ -130,6 +139,7 @@ export default function Browser() {
           label=""
           value={search}
           onChangeText={(text) => setSearch(text)}
+          onSubmitEditing={handlePageVisit}
           placeholder="Site name or URL"
           rightElement={
             search ? (
@@ -167,7 +177,7 @@ export default function Browser() {
             contentContainerStyle={{
               paddingHorizontal: 10,
             }}
-            data={visited}
+            data={[] as typeof visited}
             renderItem={renderVisitedItem}
             keyExtractor={(item, i) => `${item.url}-${i}`}
           />

@@ -68,7 +68,7 @@ export default function App() {
            {/* Balance view */}
            <DefaultView style={styles.balanceContainer}>
             <DefaultView style={styles.totalBalanceContainer}>
-              <DefaultText style={{ fontSize: 16, fontWeight: "400" }}>
+              <DefaultText style={{ fontSize: 16, fontWeight: "400", borderWidth: 3, borderColor: "transparent" }}>
                 Total balance
               </DefaultText>
               {hideBalance ? (
@@ -97,13 +97,14 @@ export default function App() {
                     lineHeight: 32,
                     top: 8,
                     fontWeight: "600",
+                    width: 110
                   }}
                 >
                   ******
                 </DefaultText>
               ) : (
                 <DefaultText
-                  style={{ fontSize: 32, lineHeight: 32, fontWeight: "600" }}
+                  style={{ fontSize: 32, lineHeight: 32, fontWeight: "600", width: 110 }}
                 >
                   {Number(formatUnits(currency.balance, currency.decimals)).toFixed(currency.decimals < 6 ? currency.decimals : 4)}
                 </DefaultText>
